@@ -15,5 +15,6 @@ public class User {
    //write your logic here
    Long id;
    String username;
+   String password;
     
 }
