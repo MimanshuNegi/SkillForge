@@ -10,11 +10,6 @@ import javax.persistence.Id;
 public class JobApplication {
    
    //write your logic here
-   Long id;
    
-   Long jobId;
-
-   Long userId;
-
-   LocalDateTime appliedAt;
+    
 }

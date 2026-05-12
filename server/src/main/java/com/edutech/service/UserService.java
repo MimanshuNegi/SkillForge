@@ -17,10 +17,10 @@ import com.edutech.repository.UserRepository;
 
 
 public class UserService {
-    User registerUser(User user){
-             
+
+    //Write your logic here
+
     }
-}
     
 
 

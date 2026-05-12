@@ -12,29 +12,7 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 public class User {
-   // write your logic here
+   //write your logic here
    Long id;
-
-   String username;
-
-   String password;
-
-   String email;
-
-   Long contactNumber;
-
-   String skills;
-
-   String bio;
-   
-   Role Role;
-
-   List<Proposal> proposals;
-
-
-   public enum Role {
-      ADMIN,
-      CLIENT,
-      FREELANCER;
-   }
+    
 }

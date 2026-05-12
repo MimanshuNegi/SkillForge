@@ -1,6 +1,4 @@
 package com.edutech.entity;
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -14,18 +12,5 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 public class Job {
-    Long id;
-
-    String title;
-
-    String description;
-
-    Double budget;
-
-    User client;
-
-    String status;
-
-    
-
+//Write your logic here
 }

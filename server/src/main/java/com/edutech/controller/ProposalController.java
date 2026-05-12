@@ -22,6 +22,5 @@ import com.edutech.service.ProposalService;
 public class ProposalController {
 
    //Write your logic here
-   
-   
+
 }

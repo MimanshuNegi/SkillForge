@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.integration.IntegrationProperties.RSocket.Client;
 import org.springframework.stereotype.Service;
 
 import com.edutech.dto.JobDTO;
@@ -21,10 +20,7 @@ import com.edutech.repository.UserRepository;
 
 
 public class JobService {
-    @Autowired
-    private JobApplicationRepository jobApplicationRepository;
-    Job createJob(Long clientId,Job job){
-        Client client = 
-    }
+	
+//Write your logic here
 
 }
