@@ -1,5 +1,10 @@
 import { User } from './user';
 
 export interface Job {
-  //Write your logic or code here
+id?: number;
+  title: string;
+  description: string;
+  budget: number;
+  status: string;
+  client?: User;
 }

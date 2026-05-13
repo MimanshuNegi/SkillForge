@@ -23,7 +23,6 @@ public class JobDTO {
         this.budget = budget;
     }
 
-    // ✅ Getters & Setters
     public String getTitle() {
         return title;
     }

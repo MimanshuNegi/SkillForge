@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
-import { Role, User } from '../model/user';
+import { environment } from '../../environments/environment';
 import { LoginRequest } from '../model/loginrequest';
 import { LoginResponse } from '../model/login-response';
+import { Role } from '../model/user';
 
 @Injectable({
   providedIn: 'root'
@@ -12,36 +12,92 @@ import { LoginResponse } from '../model/login-response';
 export class AuthService {
 
   private token: string | null = null;
-  private baseUrl = environment.apiUrl;
+  private baseUrl: string = `${environment.apiUrl}/auth`;
 
   constructor(private http: HttpClient) {}
 
-  login(request: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.baseUrl}/auth/login`, request).pipe(
-      tap((response: LoginResponse) => {
-        this.token = response.token;
-        localStorage.setItem('authToken', response.token);
-        localStorage.setItem('role', response.role);
-      })
-    );
+  registerUser(user: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.getToken()}`
+    });
+
+    return this.http.post(`${this.baseUrl}/register`, user, { headers });
   }
 
-  logout(): void {
-    this.token = null;
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('role');
+  login(loginRequest: LoginRequest): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.baseUrl}/login`, loginRequest)
+      .pipe(
+        tap((response: LoginResponse) => {
+          this.saveToken(response.token);
+          this.setRole(response.role);
+        })
+      );
+  }
+
+  saveToken(token: string): void {
+    this.token = token;
+    localStorage.setItem('token', token);
   }
 
   getToken(): string | null {
-    return this.token || localStorage.getItem('authToken');
+    return this.token || localStorage.getItem('token');
+  }
+
+  setRole(role: string): void {
+    localStorage.setItem('role', role);
   }
 
   getRole(): Role | null {
     const role = localStorage.getItem('role');
-    return role ? role as Role : null;
+    return role ? (role as Role) : null;
   }
 
-  isAuthenticated(): boolean {
+  saveUserId(userId: number): void {
+    localStorage.setItem('userId', userId.toString());
+  }
+
+  getUserId(): number | null {
+    const id = localStorage.getItem('userId');
+    return id ? Number(id) : null;
+  }
+
+  getLoginStatus(): boolean {
     return !!this.getToken();
+  }
+
+  logout(): void {
+    this.token = null;
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    localStorage.removeItem('userId');
+  }
+
+  isAdmin(): boolean {
+    return this.getRole() === 'ADMIN';
+  }
+
+  isManager(): boolean {
+    return this.getRole() === 'CLIENT';
+  }
+
+  isCustomer(): boolean {
+    return this.getRole() === 'FREELANCER';
+  }
+
+  getLoggedInUser(userId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.getToken()}`
+    });
+
+    return this.http.get(`${this.baseUrl}/user/${userId}`, { headers });
+  }
+
+  getUsers(): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.getToken()}`
+    });
+
+    return this.http.get(`${this.baseUrl}`, { headers });
   }
 }
