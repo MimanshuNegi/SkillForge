@@ -29,18 +29,18 @@ public class ProposalService {
     @Autowired
     private JobRepository jobRepository;
 
-    // ✅ 1. Create Proposal
+    //  1. Create Proposal
     public Proposal createProposal(Long freelancerId, Proposal proposal) {
 
-        // ✅ Find freelancer
+        //  Find freelancer
         User freelancer = userRepository.findById(freelancerId)
                 .orElseThrow(() -> new RuntimeException("Freelancer not found"));
 
-        // ✅ Find job
+        //  Find job
         Job job = jobRepository.findById(proposal.getJob().getId())
                 .orElseThrow(() -> new RuntimeException("Job not found"));
 
-        // ✅ Set data
+        //  Set data
         proposal.setFreelancer(freelancer);
         proposal.setJob(job);
         proposal.setStatus("PENDING");
@@ -48,13 +48,13 @@ public class ProposalService {
         return proposalRepository.save(proposal);
     }
 
-    // ✅ 2. Get all proposals
+    //  2. Get all proposals
     public List<Proposal> getAllProposals() {
 
         return proposalRepository.findAll();
     }
 
-    // ✅ 3. Get proposal by ID
+    //  3. Get proposal by ID
     public Proposal getProposalById(Long id) {
 
         return proposalRepository.findById(id)
@@ -66,7 +66,7 @@ public Proposal updateProposal(Long id, Proposal proposalDetails) {
 
     Proposal proposal = getProposalById(id);
 
-    // ✅ Only update fields that exist
+    //  Only update fields that exist
     proposal.setBidAmount(proposalDetails.getBidAmount());
     proposal.setStatus(proposalDetails.getStatus());
 
@@ -77,7 +77,7 @@ public Proposal updateProposal(Long id, Proposal proposalDetails) {
 }
 
 
-    // ✅ 5. Delete proposal
+    //  5. Delete proposal
     public void deleteProposal(Long id) {
 
         if (!proposalRepository.existsById(id)) {
@@ -87,7 +87,7 @@ public Proposal updateProposal(Long id, Proposal proposalDetails) {
         proposalRepository.deleteById(id);
     }
 
-    // ✅ 6. Get proposals by freelancer username
+    //  6. Get proposals by freelancer username
     
 public List<Proposal> getProposalsByFreelancerUsername(String username) {
 
