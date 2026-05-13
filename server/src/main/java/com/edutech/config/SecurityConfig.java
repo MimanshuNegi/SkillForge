@@ -1,5 +1,6 @@
 package com.edutech.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,8 +17,62 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.edutech.util.JwtRequestFilter;
 
-public class SecurityConfig  {
-    //Write your logic here
-    //sdaks
-    
+@Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final UserDetailsService userDetailsService;
+    private final JwtRequestFilter jwtRequestFilter;
+    private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public SecurityConfig(UserDetailsService userDetailsService,
+            JwtRequestFilter jwtRequestFilter,
+            PasswordEncoder passwordEncoder) {
+        this.userDetailsService = userDetailsService;
+        this.jwtRequestFilter = jwtRequestFilter;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .cors().and().csrf().disable()
+                .authorizeRequests()
+
+                // ✅ 6.4 AUTH
+                .antMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/auth/**").hasAnyAuthority("FREELANCER", "ADMIN")
+
+                // ✅ 6.4 JOBS
+                .antMatchers(HttpMethod.GET, "/api/jobs/**").hasAnyAuthority("CLIENT", "FREELANCER", "ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/jobs/**/apply").hasAnyAuthority("FREELANCER")
+                .antMatchers(HttpMethod.POST, "/api/jobs/**").hasAnyAuthority("CLIENT", "FREELANCER")
+                .antMatchers(HttpMethod.PUT, "/api/jobs/**").hasAnyAuthority("CLIENT")
+                .antMatchers(HttpMethod.DELETE, "/api/jobs/**").hasAnyAuthority("ADMIN", "CLIENT")
+
+                // ✅ 6.4 PROPOSALS
+                .antMatchers(HttpMethod.GET, "/api/proposals/**").hasAnyAuthority("FREELANCER")
+                .antMatchers(HttpMethod.POST, "/api/proposals/**").hasAnyAuthority("CLIENT")
+
+                // ✅ All other requests - authenticated
+                .anyRequest().authenticated()
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
 }
