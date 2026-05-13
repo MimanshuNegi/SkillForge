@@ -1,1 +1,25 @@
-//Write your logic here
+<h2>Profile</h2>
+
+<!-- Freelancer Profile -->
+<div *ngIf="roleName === 'FREELANCER' && profile">
+  <p>{{profile.username}}</p>
+  <p>{{profile.email}}</p>
+  <p>{{profile.contactNumber}}</p>
+</div>
+
+<!-- Admin Users -->
+<table *ngIf="roleName === 'ADMIN'">
+  <tr>
+    <th>Username</th>
+    <th>Email</th>
+    <th>Contact</th>
+    <th>Role</th>
+  </tr>
+
+  <tr *ngFor="let u of users">
+    <td>{{u.username}}</td>
+    <td>{{u.email}}</td>
+    <td>{{u.contactNumber}}</td>
+    <td>{{u.role}}</td>
+  </tr>
+</table>

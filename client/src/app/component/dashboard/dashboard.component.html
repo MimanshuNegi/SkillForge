@@ -1,1 +1,28 @@
-//Write your logic here
+<h2>Dashboard</h2>
+
+<div class="menu">
+
+  <!-- ADMIN -->
+  <div *ngIf="roleName === 'ADMIN'">
+    <a routerLink="/users">Users</a>
+    <a routerLink="/job-list">Jobs</a>
+    <a routerLink="/reports">Reports</a>
+  </div>
+
+  <!-- CLIENT -->
+  <div *ngIf="roleName === 'CLIENT'">
+    <a routerLink="/job-list">Jobs</a>
+    <a routerLink="/job-create">Create Job</a>
+    <a routerLink="/my-job">My Jobs</a>
+  </div>
+
+  <!-- FREELANCER -->
+  <div *ngIf="roleName === 'FREELANCER'">
+    <a routerLink="/browse-jobs">Browse Jobs</a>
+    <a routerLink="/my-proposals">My Proposals</a>
+    <a routerLink="/my-profile">Profile</a>
+  </div>
+
+</div>
+
+<button (click)="logout()">Logout</button>

@@ -1,1 +1,10 @@
-//Write your logic here
+<h2>My Proposals</h2>
+
+<div *ngIf="proposals.length === 0">No proposals found.</div>
+
+<div *ngFor="let p of proposals">
+  <h3>{{p.job.title}}</h3>
+  <p>{{p.job.description}}</p>
+  <p>Status: {{p.status}}</p>
+  <p>Applied At: {{p.appliedAt | date}}</p>
+</div>

@@ -6,5 +6,11 @@ id?: number;
   contactNumber?: number;
   skills?: string;
   bio?: string;
-  role: string;
+  role: Role;
+}
+
+export enum Role {
+  ADMIN = 'ADMIN',
+  CLIENT = 'CLIENT',
+  FREELANCER = 'FREELANCER'
 }

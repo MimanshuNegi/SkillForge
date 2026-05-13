@@ -1,1 +1,20 @@
-//Write your logic here
+<h2>Job List</h2>
+
+<input [(ngModel)]="searchTitle" placeholder="Search">
+<button (click)="searchJobs()">Search</button>
+
+<button *ngIf="roleName === 'CLIENT'" routerLink="/job-create">
+  Create Job
+</button>
+
+<div class="card" *ngFor="let j of job">
+  <h3>{{j.title}}</h3>
+  <p>{{j.description}}</p>
+  <p>Budget: {{j.budget}}</p>
+  <p>Status: {{j.status}}</p>
+
+  <button *ngIf="roleName === 'FREELANCER'" (click)="applyJob(j.id)">
+    Apply
+  </button>
+</div>
+``

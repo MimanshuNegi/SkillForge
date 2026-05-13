@@ -6,8 +6,16 @@ import { JobService } from '../../services/job.service';
   templateUrl: './report.component.html',
   styleUrls: ['./report.component.scss']
 })
-export class ReportComponent {
+export class ReportComponent implements OnInit{
 
-//Write your logic here
+userReport: any;
+
+  constructor(private service: JobService) {}
+
+  ngOnInit() {
+    this.service.getUserReport().subscribe(res => {
+      this.userReport = res;
+    });
+  }
 
 }
