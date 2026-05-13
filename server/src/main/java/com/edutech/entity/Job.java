@@ -1,4 +1,5 @@
 package com.edutech.entity;
+import javax.management.relation.Role;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,7 +11,15 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
+@Entity
 public class Job {
-//Write your logic here
+
+    private Long id;
+    private String username;
+    private String password;
+    private String email;
+    private Long contactNumber;
+    private String skills;
+    private String bio;
+    private enum role; 
 }
