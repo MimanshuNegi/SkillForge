@@ -42,7 +42,7 @@ public class ProposalController {
     @GetMapping("/{id}")
     public ResponseEntity<Proposal> getProposalById(@PathVariable Long id) {
 
-        Proposal proposal = proposalService.getProposalById(id);
+        Proposal proposal = proposalService.getProposalById(id).get();
 
         return ResponseEntity.ok(proposal);
     }

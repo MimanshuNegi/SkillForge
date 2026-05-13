@@ -37,8 +37,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
 
         final String authorizationHeader = request.getHeader("Authorization");
 
@@ -61,13 +61,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
 
         try {
-            //  Validate + extract claims
+            // Validate + extract claims
             Claims claims = jwtUtil.extractAllClaims(jwt);
 
-            //  Extract role from claim "role"
+            // Extract role from claim "role"
             String role = (String) claims.get("role");
 
-            //  Extract username/subject (recommended)
+            // Extract username/subject (recommended)
             String username = claims.getSubject(); // make sure you set subject in token
 
             // If you do NOT store subject, you can extract username from another claim
@@ -75,7 +75,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             if (role != null && username != null) {
 
-                //  Load user (recommended)
+                // Load user (recommended)
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
                 // OPTIONAL but recommended: validate token against user details
@@ -85,15 +85,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                     // Convert role claim to GrantedAuthorities
                     // If your role claim is "CLIENT" / "ADMIN" / "FREELANCER" -> OK
                     // If it is "ROLE_CLIENT" etc -> keep as-is or normalize (see note below)
-                    Collection<? extends GrantedAuthority> authorities =
-                            AuthorityUtils.createAuthorityList(role);
 
-                    UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+                    Collection<? extends GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(role);
 
-                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                            username, null, authorities);
 
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+
                 }
             }
 
