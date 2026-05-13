@@ -6,7 +6,7 @@ import { AuthService } from './services/auth.service';
   selector: 'app-root',
   templateUrl: './app.component.html'
 })
-export class AppComponent implements  {
+export class AppComponent {
   //Write your logic here
 }
  

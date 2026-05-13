@@ -1,18 +1,9 @@
 package com.edutech.dto;
-
-<<<<<<< HEAD
-
-=======
->>>>>>> f0719eb9f42f9ee2c5fa534355d6829409e91468
 import com.edutech.entity.User.Role;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class LoginResponse {
-
-<<<<<<< HEAD
-   //Write your logic here
-=======
     private final String token;
     private final Role role;
 
@@ -31,5 +22,4 @@ public class LoginResponse {
     public Role getRole() {
         return role;
     }
->>>>>>> f0719eb9f42f9ee2c5fa534355d6829409e91468
 }

@@ -1,1 +1,50 @@
-<!--enter the code here-->
+<div class="login-container">
+
+  <div class="login-card">
+    <h2>Login</h2>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+
+      <!-- ✅ Username -->
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input
+          type="text"
+          id="username"
+          formControlName="username"
+          placeholder="Enter username"
+        />
+        <small class="error" *ngIf="f.username.touched && f.username.invalid">
+          Username is required
+        </small>
+      </div>
+
+      <!-- ✅ Password -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          placeholder="Enter password"
+        />
+        <small class="error" *ngIf="f.password.touched && f.password.invalid">
+          Password is required
+        </small>
+      </div>
+
+      <!-- ✅ Error Message -->
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <!-- ✅ Submit Button -->
+      <button type="submit" [disabled]="loginForm.invalid">
+        Login
+      </button>
+
+    </form>
+  </div>
+
+</div>
+``
