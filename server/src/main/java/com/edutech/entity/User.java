@@ -15,5 +15,10 @@ public class User {
    //write your logic here
    Long id;
    String username;
+   String password;
+   String email;
+   String contactNumber;
+   String skills;
+   String bio;
     
 }
