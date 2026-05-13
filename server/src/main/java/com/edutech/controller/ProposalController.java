@@ -1,26 +1,80 @@
 package com.edutech.controller;
 
+import java.util.*;
 
-import java.util.List;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.edutech.entity.Proposal;
 import com.edutech.service.ProposalService;
 
-
+@RestController
+@RequestMapping("/api/proposals")
 public class ProposalController {
 
-   //Write your logic here
+    @Autowired
+    private ProposalService proposalService;
 
+    // ✅ 1. POST /api/proposals/freelancer/{freelancerId} - Create a proposal
+    @PostMapping("/freelancer/{freelancerId}")
+    public ResponseEntity<Proposal> createProposal(
+            @PathVariable Long freelancerId,
+            @Valid @RequestBody Proposal proposal) {
+
+        Proposal created = proposalService.createProposal(freelancerId, proposal);
+
+        return ResponseEntity.ok(created);
+    }
+
+    // ✅ 2. GET /api/proposals - Get all proposals (403 for non-permitted roles)
+    @GetMapping
+    public ResponseEntity<List<Proposal>> getAllProposals() {
+
+        List<Proposal> proposals = proposalService.getAllProposals();
+
+        return ResponseEntity.ok(proposals);
+    }
+
+    // ✅ 3. GET /api/proposals/{id} - Get proposal by ID (403 for non-permitted roles)
+    @GetMapping("/{id}")
+    public ResponseEntity<Proposal> getProposalById(@PathVariable Long id) {
+
+        Proposal proposal = proposalService.getProposalById(id);
+
+        return ResponseEntity.ok(proposal);
+    }
+
+    // ✅ 4. PUT /api/proposals/{id} - Update a proposal
+    @PutMapping("/{id}")
+    public ResponseEntity<Proposal> updateProposal(
+            @PathVariable Long id,
+            @Valid @RequestBody Proposal proposalDetails) {
+
+        Proposal updated = proposalService.updateProposal(id, proposalDetails);
+
+        return ResponseEntity.ok(updated);
+    }
+
+    // ✅ 5. DELETE /api/proposals/{id} - Delete a proposal
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProposal(@PathVariable Long id) {
+
+        proposalService.deleteProposal(id);
+
+        return ResponseEntity.ok().build();
+    }
+
+    // ✅ 6. GET /api/proposals/myProposal - Get proposals of logged-in freelancer
+    @GetMapping("/myProposal")
+    public ResponseEntity<List<Proposal>> getMyProposals(
+            @RequestParam String username) {
+
+        List<Proposal> proposals = proposalService
+                .getProposalsByFreelancerUsername(username);
+
+        return ResponseEntity.ok(proposals);
+    }
 }

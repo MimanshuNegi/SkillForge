@@ -1,14 +1,8 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-<<<<<<< HEAD
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Role, User } from '../model/user';
-import { Observable } from 'rxjs';
-=======
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Role, User } from '../model/user';
->>>>>>> f0719eb9f42f9ee2c5fa534355d6829409e91468
 import { LoginRequest } from '../model/loginrequest';
 import { LoginResponse } from '../model/login-response';
 
@@ -16,15 +10,6 @@ import { LoginResponse } from '../model/login-response';
   providedIn: 'root'
 })
 export class AuthService {
-<<<<<<< HEAD
-  
- 
-  private token: string | null = null;
-  private baseUrl = environment.apiUrl;
-
-  //Write your logic here
-
-=======
 
   private token: string | null = null;
   private baseUrl = environment.apiUrl;
@@ -59,5 +44,4 @@ export class AuthService {
   isAuthenticated(): boolean {
     return !!this.getToken();
   }
->>>>>>> f0719eb9f42f9ee2c5fa534355d6829409e91468
 }

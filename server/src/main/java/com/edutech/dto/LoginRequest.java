@@ -29,5 +29,5 @@ public class LoginRequest {
     public String getPassword() {
         return password;
     }
->>>>>>> f0719eb9f42f9ee2c5fa534355d6829409e91468
+
 }
