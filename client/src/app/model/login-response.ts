@@ -1,5 +1,9 @@
 export interface LoginResponse {
-   //Write your logic or code here
+userId: number;
+  token: string;
+  username: string;
+  email: string;
+  role: string;
 }
 
 

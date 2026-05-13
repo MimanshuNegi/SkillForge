@@ -1,5 +1,6 @@
 export interface LoginRequest {
-   //Write your logic or code here
+username: string;
+  password: string
 }
 
 export interface AssignManagerRequest {
