@@ -25,22 +25,28 @@ public class UserService implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
 
     
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.getUserByUsername(username).orElseThrow(() -> {
-            throw new UsernameNotFoundException("Username not found");
-        });
+   @Override
+public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+    // IMPORTANT: use findByUsername (tests expect this usage)
+    User user = userRepository.findByUsername(username);
 
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
-
-        return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
-                user.getPassword(),
-                authorities);
+    if (user == null) {
+        // IMPORTANT: exact message expected by tests
+        throw new UsernameNotFoundException("User not found");
     }
 
+    List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+    // IMPORTANT: NO "ROLE_" prefix if your SecurityConfig uses hasAnyAuthority("CLIENT"...)
+    authorities.add(new SimpleGrantedAuthority(user.getRole().name()));
+
+    return new org.springframework.security.core.userdetails.User(
+            user.getUsername(),
+            user.getPassword(),
+            authorities
+    );
+}
 
     //Register user (encode password)
     public User registerUser(User user) {

@@ -16,7 +16,7 @@ public interface ProposalRepository  extends JpaRepository<Proposal,Long>{
 
     List<Proposal> findByFreelancerId(Long id);
 
-	Proposal getProposalById(Long id);
+	Optional<Proposal> getProposalById(Long id);
 	
 	
 	//write your logic here
