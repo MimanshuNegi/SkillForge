@@ -2,5 +2,10 @@ import { Job } from './job';
 import { User } from './user';
 
 export interface Proposal {
-   //Write your logic or code here
+id?: number;
+  bidAmount: number;
+  status: string;
+  job: Job;
+  freelancer: User;
+  appliedAt?: Date;
 }

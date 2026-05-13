@@ -1,3 +1,10 @@
 export interface User {
-   //Write your logic or code here
+id?: number;
+  username: string;
+  password?: string;
+  email: string;
+  contactNumber?: number;
+  skills?: string;
+  bio?: string;
+  role: string;
 }
