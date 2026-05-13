@@ -1,1 +1,7 @@
-<!--enter the code here-->
+<h2>Browse Jobs</h2>
+
+<div *ngFor="let j of jobs" class="card">
+  <h3>{{j.title}}</h3>
+  <p>{{j.description}}</p>
+  <p>Budget: {{j.budget}}</p>
+</div>

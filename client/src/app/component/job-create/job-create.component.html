@@ -1,1 +1,13 @@
-//Write your logic here
+<h2>Create Job</h2>
+
+<form [formGroup]="jobForm" (ngSubmit)="create()">
+  <input formControlName="title" placeholder="Title">
+  <textarea formControlName="description"></textarea>
+  <input type="number" formControlName="budget">
+
+  <select formControlName="status">
+    <option value="OPEN">OPEN</option>
+  </select>
+
+  <button>Create</button>
+</form>

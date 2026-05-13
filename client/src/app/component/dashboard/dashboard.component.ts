@@ -8,6 +8,17 @@ import { Router } from '@angular/router';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent  {
- //Write your logic here
+roleName: string | null = '';
+
+  constructor(private auth: AuthService, private router: Router) {}
+
+  ngOnInit() {
+    this.roleName = this.auth.getRole();
+  }
+
+  logout() {
+    this.auth.logout();
+    this.router.navigate(['/login']);
+  }
 
 }

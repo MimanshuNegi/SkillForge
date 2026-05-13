@@ -7,9 +7,17 @@ import { Proposal } from '../../model/proposal';
   templateUrl: './my-proposal.component.html',
   styleUrls: ['./my-proposal.component.scss']
 })
-export class MyProposalComponent  {
+export class MyProposalComponent implements OnInit{
 
-//Write your logic here
+  proposals: any[] = [];
+
+  constructor(private service: ProposalService) {}
+
+  ngOnInit() {
+    this.service.getMyProposals().subscribe((res: any) => {
+      this.proposals = res;
+    });
+  }
 
 
 }

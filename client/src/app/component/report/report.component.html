@@ -1,1 +1,16 @@
-//Write your logic here
+<h2>Report</h2>
+
+<div *ngIf="userReport">
+  <p>Total Clients: {{userReport.totalClients}}</p>
+  <p>Total Freelancers: {{userReport.totalFreelancers}}</p>
+
+  <h3>Clients</h3>
+  <div *ngFor="let c of userReport.clients">
+    {{c.username}} - {{c.email}}
+  </div>
+
+  <h3>Freelancers</h3>
+  <div *ngFor="let f of userReport.freelancers">
+    {{f.username}} - {{f.email}} - {{f.skills}} - {{f.bio}}
+  </div>
+</div>
