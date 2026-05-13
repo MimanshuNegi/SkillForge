@@ -29,7 +29,7 @@ public class JobController {
     @Autowired
     private JobService jobService;
 
-    // ✅ 1. POST /api/jobs/client/{clientId} - Create a new job
+    //  1. POST /api/jobs/client/{clientId} - Create a new job
     @PostMapping("/client/{clientId}")
     public ResponseEntity<Job> createJob(@PathVariable Long clientId,
                                          @Valid @RequestBody Job job) {
@@ -39,7 +39,7 @@ public class JobController {
         return ResponseEntity.ok(createdJob);
     }
 
-    // ✅ 2. GET /api/jobs - Get all jobs as JobDTO list
+    //  2. GET /api/jobs - Get all jobs as JobDTO list
     @GetMapping
     public ResponseEntity<List<JobDTO>> getAllJobs() {
 
@@ -48,7 +48,7 @@ public class JobController {
         return ResponseEntity.ok(jobs);
     }
 
-    // ✅ 3. GET /api/jobs/{id} - Get job by ID
+    //  3. GET /api/jobs/{id} - Get job by ID
     @GetMapping("/{id}")
     public ResponseEntity<Job> getJobById(@PathVariable Long id) {
 
@@ -57,7 +57,7 @@ public class JobController {
         return ResponseEntity.ok(job);
     }
 
-    // ✅ 4. PUT /api/jobs/status/{jobId}?status= - Update job status
+    //  4. PUT /api/jobs/status/{jobId}?status= - Update job status
     @PutMapping("/status/{jobId}")
     public ResponseEntity<Job> updateJobStatus(@PathVariable Long jobId,
                                                @RequestParam String status) {
@@ -67,7 +67,7 @@ public class JobController {
         return ResponseEntity.ok(updatedJob);
     }
 
-    // ✅ 5. POST /api/jobs/{jobId}/apply - Apply to a job
+    //  5. POST /api/jobs/{jobId}/apply - Apply to a job
     @PostMapping("/{jobId}/apply")
     public ResponseEntity<Map<String, String>> applyToJob(
             @PathVariable Long jobId,
@@ -75,7 +75,7 @@ public class JobController {
 
         Map<String, String> response = new HashMap<>();
 
-        // ✅ Check duplicate
+        //  Check duplicate
         if (jobService.hasUserAlreadyApplied(jobId, userId)) {
             response.put("message", "Already Applied.");
             return ResponseEntity.ok(response);
@@ -87,7 +87,7 @@ public class JobController {
         return ResponseEntity.ok(response);
     }
 
-    // ✅ 6. GET /api/jobs/my-jobs - Get jobs posted by logged-in client
+    //  6. GET /api/jobs/my-jobs - Get jobs posted by logged-in client
     @GetMapping("/my-jobs")
     public ResponseEntity<List<JobDTO>> getMyJobs(@RequestParam String username) {
 
@@ -96,7 +96,7 @@ public class JobController {
         return ResponseEntity.ok(jobs);
     }
 
-    // ✅ 7. DELETE /api/jobs/{id} - Delete a job
+    //  7. DELETE /api/jobs/{id} - Delete a job
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteJob(@PathVariable Long id) {
 
@@ -105,7 +105,7 @@ public class JobController {
         return ResponseEntity.ok().build();
     }
 
-    // ✅ 8. GET /api/jobs/report/users - Get user report
+    //  8. GET /api/jobs/report/users - Get user report
     @GetMapping("/report/users")
     public ResponseEntity<Map<String, Object>> getUserReport() {
 

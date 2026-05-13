@@ -80,7 +80,7 @@ public User getUserByUsername(String username) {
 
     //  6. Find by username (direct repo call)
     
-// ✅ CHANGED: No more .orElseThrow()
+//  CHANGED: No more .orElseThrow()
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
