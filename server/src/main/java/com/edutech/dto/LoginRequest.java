@@ -1,26 +1,23 @@
 package com.edutech.dto;
 
-<<<<<<< HEAD
+import javax.validation.constraints.NotBlank;
 
-
-=======
->>>>>>> f0719eb9f42f9ee2c5fa534355d6829409e91468
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class LoginRequest {
-<<<<<<< HEAD
-//Write your logic here
-    
-=======
 
+    @NotBlank
     private final String username;
+
+    @NotBlank
     private final String password;
 
     @JsonCreator
     public LoginRequest(
         @JsonProperty("username") String username,
         @JsonProperty("password") String password) {
+
         this.username = username;
         this.password = password;
     }
