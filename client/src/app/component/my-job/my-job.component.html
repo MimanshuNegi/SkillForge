@@ -3,15 +3,14 @@
 <div *ngIf="jobs.length === 0">No applied jobs found.</div>
 
 <div *ngFor="let j of jobs">
-  <h3>{{j.title}}</h3>
-  <p>Status: {{j.status}}</p>
+  <h3>{{ j.title }}</h3>
+  <p>Status: {{ j.status }}</p>
 
-  <button *ngIf="j.status === 'APPLIED'" (click)="updateStatus(j.id,'ACCEPTED')">
+  <button *ngIf="j.status === 'APPLIED'" (click)="updateStatus(j.id!, 'ACCEPTED')">
     Accept
   </button>
 
-  <button *ngIf="j.status === 'APPLIED'" (click)="updateStatus(j.id,'REJECTED')">
+  <button *ngIf="j.status === 'APPLIED'" (click)="updateStatus(j.id!, 'REJECTED')">
     Reject
   </button>
 </div>
-``

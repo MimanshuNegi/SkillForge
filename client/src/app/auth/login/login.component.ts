@@ -28,36 +28,39 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  onLogin(): void {
-    if (this.loginForm.invalid) {
-      return;
-    }
-
-    this.loginRequest = {
-      username: this.loginForm.value.username,
-      password: this.loginForm.value.password
-    };
-
-    this.authService.login(this.loginRequest).subscribe(
-      (response) => {
-        // this.authService.saveToken(response.token);
-        // this.authService.setRole(response.role);
-        if (response.role === 'ADMIN') {
-          this.router.navigate(['/admin']);
-        } else if (response.role === 'CLIENT') {
-          this.router.navigate(['/client']);
-        } else if (response.role === 'FREELANCER') {
-          this.router.navigate(['/freelancer']);
-        } else {
-          this.router.navigate(['/']);
-        }
-      },
-      (error) => {
-        console.error(error);
-        this.errorMessage = 'Invalid username or password';
-      }
-    );
+ onLogin(): void {
+  if (this.loginForm.invalid) {
+    return;
   }
+
+  this.loginRequest = {
+    username: this.loginForm.value.username,
+    password: this.loginForm.value.password
+  };
+
+  this.authService.login(this.loginRequest).subscribe(
+    (response) => {
+
+      // Uncomment ONLY if AuthService.login() does not save these already
+      // this.authService.saveToken(response.token);
+      // this.authService.setRole(response.role);
+
+      if (response.role === 'ADMIN') {
+        this.router.navigate(['/users']);
+      } else if (response.role === 'CLIENT') {
+        this.router.navigate(['/job-create']);
+      } else if (response.role === 'FREELANCER') {
+        this.router.navigate(['/job-list']);
+      } else {
+        this.router.navigate(['/dashboard']);
+      }
+    },
+    (error) => {
+      console.error(error);
+      this.errorMessage = 'Invalid username or password';
+    }
+  );
+}
 
   get f() {
     return this.loginForm.controls;
