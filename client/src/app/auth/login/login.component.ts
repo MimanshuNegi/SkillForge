@@ -40,8 +40,8 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(this.loginRequest).subscribe(
       (response) => {
-        this.authService.saveToken(response.token);
-        this.authService.setRole(response.role);
+        // this.authService.saveToken(response.token);
+        // this.authService.setRole(response.role);
         if (response.role === 'ADMIN') {
           this.router.navigate(['/admin']);
         } else if (response.role === 'CLIENT') {
