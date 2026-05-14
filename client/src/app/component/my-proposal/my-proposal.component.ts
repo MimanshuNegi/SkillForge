@@ -13,11 +13,19 @@ export class MyProposalComponent implements OnInit{
 
   constructor(private service: ProposalService) {}
 
-  ngOnInit() {
-    this.service.getMyProposals().subscribe((res: any) => {
-      this.proposals = res;
-    });
-  }
+ 
+ngOnInit(): void {
+  this.service.getMyProposals().subscribe({
+    next: (res: any) => {
+      this.proposals = res || [];
+    },
+    error: (err: any) => {
+      console.error('Error fetching proposals', err);
+      this.proposals = []; 
+    }
+  });
+}
+
 
 
 }

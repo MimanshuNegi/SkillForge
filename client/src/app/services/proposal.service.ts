@@ -15,7 +15,7 @@ export class ProposalService {
   constructor(
     private http: HttpClient,
     private authService: AuthService
-  ) {}
+  ) { }
 
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({
@@ -23,7 +23,7 @@ export class ProposalService {
     });
   }
 
-  create(freelancerId: number, data: Proposal): Observable<any> {
+  create(freelancerId: number, data: Partial<Proposal>): Observable<any> {
     return this.http.post(
       `${this.api}/freelancer/${freelancerId}`,
       data,

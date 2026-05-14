@@ -1,5 +1,5 @@
 export interface User {
-id?: number;
+  id?: number;
   username: string;
   password?: string;
   email: string;
@@ -9,8 +9,5 @@ id?: number;
   role: Role;
 }
 
-export enum Role {
-  ADMIN = 'ADMIN',
-  CLIENT = 'CLIENT',
-  FREELANCER = 'FREELANCER'
-}
+export type Role = 'USER' | 'ADMIN' | 'CLIENT' | 'FREELANCER';
+

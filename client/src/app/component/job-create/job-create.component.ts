@@ -8,8 +8,8 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-job-create',
   templateUrl: './job-create.component.html'
 })
-export class JobCreateComponent  {
-    jobForm = this.fb.group({
+export class JobCreateComponent {
+  jobForm = this.fb.group({
     title: ['', Validators.required],
     description: ['', Validators.required],
     budget: [0, [Validators.required, Validators.min(0)]],
@@ -18,7 +18,13 @@ export class JobCreateComponent  {
 
   clientId: number = this.auth.getUserId()!;
 
-  constructor(private fb: FormBuilder, private service: JobService, private auth: AuthService, private router: Router) {}
+  constructor(private fb: FormBuilder, private service: JobService, private auth: AuthService, private router: Router) { }
+
+
+  onSubmit(): void {
+    this.create();
+  }
+
 
   create() {
     if (this.jobForm.invalid) return;
