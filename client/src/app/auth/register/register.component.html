@@ -1,13 +1,13 @@
 <form [formGroup]="freelancerForm" (ngSubmit)="onSubmit()">
 
   <input placeholder="Username" formControlName="username" />
-  <div *ngIf="f.username.touched && f.username.invalid">Required</div>
+  <div *ngIf="f['username']?.touched && f['username']?.invalid">Required</div>
 
   <input placeholder="Email" formControlName="email" />
-  <div *ngIf="f.email.touched && f.email.invalid">Valid email required</div>
+  <div *ngIf="f['email']?.touched && f['email']?.invalid">Valid email required</div>
 
   <input type="password" placeholder="Password" formControlName="password" />
-  <div *ngIf="f.password.touched && f.password.invalid">Required</div>
+  <div *ngIf="f['password']?.touched && f['password']?.invalid">Required</div>
 
   <select formControlName="role">
     <option value="">Select Role</option>
@@ -15,7 +15,7 @@
     <option value="CLIENT">CLIENT</option>
     <option value="FREELANCER">FREELANCER</option>
   </select>
-  <div *ngIf="f.role.touched && f.role.invalid">Required</div>
+  <div *ngIf="f['role']?.touched && f['role']?.invalid">Required</div>
 
   <input placeholder="Contact Number" formControlName="contactNumber" />
 

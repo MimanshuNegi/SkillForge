@@ -1,5 +1,21 @@
-.menu a {
-  display: block;
-  margin: 10px 0;
-  color: blue;
+.card {
+  border-radius: 8px;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+li {
+  margin-bottom: 8px;
+}
+
+a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+a:hover {
+  text-decoration: underline;
 }

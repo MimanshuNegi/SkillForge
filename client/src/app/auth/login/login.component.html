@@ -1,11 +1,10 @@
 <div class="login-container">
-
   <div class="login-card">
     <h2>Login</h2>
 
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
 
-      <!-- ✅ Username -->
+      <!-- Username -->
       <div class="form-group">
         <label for="username">Username</label>
         <input
@@ -14,12 +13,12 @@
           formControlName="username"
           placeholder="Enter username"
         />
-        <small class="error" *ngIf="f.username.touched && f.username.invalid">
+        <small class="error" *ngIf="f['username']?.touched && f['username']?.invalid">
           Username is required
         </small>
       </div>
 
-      <!-- ✅ Password -->
+      <!-- Password -->
       <div class="form-group">
         <label for="password">Password</label>
         <input
@@ -28,23 +27,23 @@
           formControlName="password"
           placeholder="Enter password"
         />
-        <small class="error" *ngIf="f.password.touched && f.password.invalid">
+        <small class="error" *ngIf="f['password']?.touched && f['password']?.invalid">
           Password is required
         </small>
       </div>
 
-      <!-- ✅ Error Message -->
+      <!-- Error Message -->
       <div class="error-message" *ngIf="errorMessage">
         {{ errorMessage }}
       </div>
 
-      <!-- ✅ Submit Button -->
-      <button type="submit" [disabled]="loginForm.invalid">
-        Login
-      </button>
+      <button type="submit" [disabled]="loginForm.invalid">Login</button>
 
+      <!-- ✅ Register link -->
+      <div class="register-link">
+        <span>Don't have an account?</span>
+        <a routerLink="/register">Register</a>
+      </div>
     </form>
   </div>
-
 </div>
-``

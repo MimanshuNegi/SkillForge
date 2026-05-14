@@ -6,10 +6,13 @@ import { CanActivate, Router } from "@angular/router";
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private router: Router) {}
+
+constructor(private router: Router) {}
 
   canActivate(): boolean {
-    const token = localStorage.getItem('authToken');
+    // ✅ use the same key used by AuthService
+    const token = localStorage.getItem('token');
+
     if (token) {
       return true;
     } else {
@@ -17,4 +20,5 @@ export class AuthGuard implements CanActivate {
       return false;
     }
   }
+
 }

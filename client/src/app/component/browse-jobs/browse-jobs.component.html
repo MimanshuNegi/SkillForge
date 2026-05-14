@@ -1,7 +1,35 @@
-<h2>Browse Jobs</h2>
+<div class="container mt-3">
 
-<div *ngFor="let j of jobs" class="card">
-  <h3>{{j.title}}</h3>
-  <p>{{j.description}}</p>
-  <p>Budget: {{j.budget}}</p>
+  <h3 class="mb-3">Browse Jobs</h3>
+
+  <!-- ✅ No jobs message -->
+  <div *ngIf="jobs.length === 0" class="alert alert-info">
+    No jobs available.
+  </div>
+
+  <!-- ✅ Job list -->
+  <div *ngIf="jobs.length > 0">
+    <div class="card mb-3" *ngFor="let job of jobs">
+      <div class="card-body">
+
+        <h5 class="card-title">
+          {{ job.title }}
+        </h5>
+
+        <p class="card-text">
+          {{ job.description || 'No description provided' }}
+        </p>
+
+        <p>
+          <strong>Budget:</strong> {{ job.budget || 'Not specified' }}
+        </p>
+
+        <p>
+          <strong>Status:</strong> {{ job.status }}
+        </p>
+
+      </div>
+    </div>
+  </div>
+
 </div>
