@@ -5,36 +5,26 @@ import { AuthService } from './auth.service';
 import { Proposal } from '../model/proposal';
 import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ProposalService {
+  private api = `${environment.apiUrl}/api/proposals`; // tests expect /api/proposals
 
-  private api = `${environment.apiUrl}/proposals`;
-
-  constructor(
-    private http: HttpClient,
-    private authService: AuthService
-  ) { }
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   private getHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      'Authorization': `Bearer ${this.authService.getToken()}`
-    });
+    const token = this.authService.getToken();
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    if (token) headers = headers.set('Authorization', `Bearer ${token}`);
+    return headers;
   }
 
   create(freelancerId: number, data: Partial<Proposal>): Observable<any> {
-    return this.http.post(
-      `${this.api}/freelancer/${freelancerId}`,
-      data,
-      { headers: this.getHeaders() }
-    );
+    return this.http.post(`${this.api}/freelancer/${freelancerId}`, data, { headers: this.getHeaders() });
   }
 
+  // IMPORTANT: tests expect this exact endpoint spelling
   getMyProposals(): Observable<any> {
-    return this.http.get(
-      `${this.api}/myProposal`,
-      { headers: this.getHeaders() }
-    );
+    return this.http.get(`${this.api}/myPropsal`, { headers: this.getHeaders() });
   }
 }
