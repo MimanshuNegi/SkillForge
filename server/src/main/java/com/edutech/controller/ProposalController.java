@@ -18,7 +18,6 @@ public class ProposalController {
     @Autowired
     private ProposalService proposalService;
 
-    //  1. POST /api/proposals/freelancer/{freelancerId} - Create a proposal
     @PostMapping("/freelancer/{freelancerId}")
     public ResponseEntity<Proposal> createProposal(
             @PathVariable Long freelancerId,
@@ -29,7 +28,7 @@ public class ProposalController {
         return ResponseEntity.ok(created);
     }
 
-    //  2. GET /api/proposals - Get all proposals (403 for non-permitted roles)
+    // 2. GET /api/proposals - Get all proposals (403 for non-permitted roles)
     @GetMapping
     public ResponseEntity<List<Proposal>> getAllProposals() {
 
@@ -38,7 +37,7 @@ public class ProposalController {
         return ResponseEntity.ok(proposals);
     }
 
-    //  3. GET /api/proposals/{id} - Get proposal by ID (403 for non-permitted roles)
+    // 3. GET /api/proposals/{id} - Get proposal by ID (403 for non-permitted roles)
     @GetMapping("/{id}")
     public ResponseEntity<Proposal> getProposalById(@PathVariable Long id) {
 
@@ -47,7 +46,7 @@ public class ProposalController {
         return ResponseEntity.ok(proposal);
     }
 
-    //  4. PUT /api/proposals/{id} - Update a proposal
+    // 4. PUT /api/proposals/{id} - Update a proposal
     @PutMapping("/{id}")
     public ResponseEntity<Proposal> updateProposal(
             @PathVariable Long id,
@@ -58,7 +57,7 @@ public class ProposalController {
         return ResponseEntity.ok(updated);
     }
 
-    //  5. DELETE /api/proposals/{id} - Delete a proposal
+    // 5. DELETE /api/proposals/{id} - Delete a proposal
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProposal(@PathVariable Long id) {
 
@@ -67,7 +66,7 @@ public class ProposalController {
         return ResponseEntity.ok().build();
     }
 
-    //  6. GET /api/proposals/myProposal - Get proposals of logged-in freelancer
+    // 6. GET /api/proposals/myProposal - Get proposals of logged-in freelancer
     @GetMapping("/myProposal")
     public ResponseEntity<List<Proposal>> getMyProposals(
             @RequestParam String username) {

@@ -49,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // ✅ 6.4 AUTH
                 .antMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/auth/**").hasAnyAuthority("FREELANCER", "ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/auth/**").hasAnyAuthority("FREELANCER", "ADMIN", "CLIENT")
 
                 // ✅ 6.4 JOBS
                 .antMatchers(HttpMethod.GET, "/api/jobs/**").hasAnyAuthority("CLIENT", "FREELANCER", "ADMIN")
