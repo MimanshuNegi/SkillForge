@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import com.edutech.entity.Proposal;
@@ -66,14 +67,19 @@ public class ProposalController {
         return ResponseEntity.ok().build();
     }
 
-    // 6. GET /api/proposals/myProposal - Get proposals of logged-in freelancer
-    @GetMapping("/myProposal")
-    public ResponseEntity<List<Proposal>> getMyProposals(
-            @RequestParam String username) {
+    // 6. GET /api/proposals/myPropsal - Get proposals of logged-in freelancer
+    
+@GetMapping("/myPropsal")
+public ResponseEntity<List<Proposal>> getMyProposals() {
 
-        List<Proposal> proposals = proposalService
-                .getProposalsByFreelancerUsername(username);
+    String username = SecurityContextHolder
+            .getContext()
+            .getAuthentication()
+            .getName(); // ✅ gets username from JWT
 
-        return ResponseEntity.ok(proposals);
-    }
-}
+    List<Proposal> proposals = proposalService
+            .getProposalsByFreelancerUsername(username);
+return ResponseEntity.ok(proposals);
+   
+
+}}

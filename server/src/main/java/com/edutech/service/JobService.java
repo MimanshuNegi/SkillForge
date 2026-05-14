@@ -19,7 +19,6 @@ import com.edutech.repository.JobRepository;
 import com.edutech.repository.ProposalRepository;
 import com.edutech.repository.UserRepository;
 
-
 @Service
 public class JobService {
 
@@ -54,14 +53,14 @@ public class JobService {
                 .collect(Collectors.toList());
     }
 
-    //  3. Get job by ID
+    // 3. Get job by ID
     public Job getJobById(Long id) {
 
         return jobRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Job not found"));
     }
 
-    //  4. Update Job
+    // 4. Update Job
     public Job updateJob(Long id, Job updatedJob) {
 
         Job job = getJobById(id);
@@ -73,17 +72,13 @@ public class JobService {
         return jobRepository.save(job);
     }
 
-    //  5. Delete Job
+    // 5. Delete Job
     public void deleteJob(Long id) {
-
-        if (!jobRepository.existsById(id)) {
-            throw new RuntimeException("Job not found");
-        }
 
         jobRepository.deleteById(id);
     }
 
-    //  6. Apply to job
+    // 6. Apply to job
     public Proposal applyToJob(Long jobId, Long userId) {
 
         Job job = getJobById(jobId);
@@ -91,7 +86,7 @@ public class JobService {
         User freelancer = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        //  Prevent duplicate apply
+        // Prevent duplicate apply
         if (hasUserAlreadyApplied(jobId, userId)) {
             throw new RuntimeException("User already applied for this job");
         }
@@ -101,7 +96,10 @@ public class JobService {
         proposal.setFreelancer(freelancer);
         proposal.setStatus("APPLIED");
 
-        //  Update job status
+        proposal.setBidAmount(0.0); 
+        proposal.setAppliedAt(LocalDateTime.now());
+
+        // Update job status
         job.setStatus("IN_PROGRESS");
 
         proposalRepository.save(proposal);
@@ -110,13 +108,13 @@ public class JobService {
         return proposal;
     }
 
-    //  7. Check already applied
+    // 7. Check already applied
     public boolean hasUserAlreadyApplied(Long jobId, Long freelancerId) {
 
         return proposalRepository.existsByJobIdAndFreelancerId(jobId, freelancerId);
     }
 
-    //  8. Get jobs posted by client
+    // 8. Get jobs posted by client
     public List<JobDTO> getJobsPostedByClient(String username) {
 
         List<Job> jobs = jobRepository.findByClientUsername(username);
@@ -126,7 +124,7 @@ public class JobService {
                 .collect(Collectors.toList());
     }
 
-    //  9. Update job status
+    // 9. Update job status
     public Job updateJobStatus(Long jobId, String status) {
 
         Job job = getJobById(jobId);
@@ -136,7 +134,7 @@ public class JobService {
         return jobRepository.save(job);
     }
 
-    //  10. User Report
+    // 10. User Report
     public Map<String, Object> getUserReport() {
 
         Map<String, Object> report = new HashMap<>();
@@ -159,7 +157,7 @@ public class JobService {
         return report;
     }
 
-    //  Helper method: convert to DTO
+    // Helper method: convert to DTO
     private JobDTO convertToDTO(Job job) {
 
         JobDTO dto = new JobDTO();

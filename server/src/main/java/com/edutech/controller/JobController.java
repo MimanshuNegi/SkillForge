@@ -8,10 +8,12 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import com.edutech.dto.JobDTO;
 import com.edutech.entity.Job;
+import com.edutech.entity.JobApplication;
 import com.edutech.service.JobService;
 
 @RestController
@@ -53,16 +55,16 @@ public class JobController {
     @PostMapping("/{jobId}/apply")
     public ResponseEntity<Map<String, String>> applyToJob(
             @PathVariable Long jobId,
-            @RequestParam Long userId) {
+            @RequestBody JobApplication jobApplication) {
 
         Map<String, String> response = new HashMap<>();
 
-        if (jobService.hasUserAlreadyApplied(jobId, userId)) {
+        if (jobService.hasUserAlreadyApplied(jobId, jobApplication.getUserId())) {
             response.put("message", "Already Applied.");
             return ResponseEntity.ok(response);
         }
 
-        jobService.applyToJob(jobId, userId);
+        jobService.applyToJob(jobId, jobApplication.getUserId());
 
         response.put("message", "Applied successfully.");
         return ResponseEntity.ok(response);
@@ -70,7 +72,11 @@ public class JobController {
 
     // ✅ Get My Jobs (client)
     @GetMapping("/my-jobs")
-    public ResponseEntity<List<JobDTO>> getMyJobs(@RequestParam String username) {
+    public ResponseEntity<List<JobDTO>> getMyJobs() {
+        String username = SecurityContextHolder
+            .getContext()
+            .getAuthentication()
+            .getName();
         return ResponseEntity.ok(jobService.getJobsPostedByClient(username));
     }
 

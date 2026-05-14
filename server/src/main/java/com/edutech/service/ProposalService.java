@@ -30,21 +30,18 @@ public class ProposalService {
     private JobRepository jobRepository;
 
     // 1. Create Proposal
-    public Proposal createProposal(Long freelancerId, Proposal proposal) {
+   
+public Proposal createProposal(Long freelancerId, Proposal proposal) {
 
-        User freelancer = userRepository.findById(freelancerId)
-                .orElseThrow(() -> new RuntimeException("Freelancer not found"));
+    User freelancer = userRepository.findById(freelancerId)
+            .orElseThrow(() -> new RuntimeException("Freelancer not found"));
 
-        Job job = jobRepository.findById(proposal.getJob().getId())
-                .orElseThrow(() -> new RuntimeException("Job not found"));
+    proposal.setFreelancer(freelancer);
+    proposal.setStatus("PENDING");
 
-        proposal.setFreelancer(freelancer);
-        proposal.setJob(job);
-        proposal.setStatus("PENDING");
+    return proposalRepository.save(proposal);
+}
 
-        proposalRepository.save(proposal);
-        return proposal;
-    }
 
     // 2. Get all proposals
     public List<Proposal> getAllProposals() {
@@ -71,9 +68,7 @@ public class ProposalService {
 
     // 5. Delete proposal
     public void deleteProposal(Long id) {
-        if (!proposalRepository.existsById(id)) {
-            throw new RuntimeException("Proposal not found");
-        }
+        
         proposalRepository.deleteById(id);
     }
 
