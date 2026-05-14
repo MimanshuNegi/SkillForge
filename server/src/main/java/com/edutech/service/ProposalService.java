@@ -42,7 +42,8 @@ public class ProposalService {
         proposal.setJob(job);
         proposal.setStatus("PENDING");
 
-        return proposalRepository.save(proposal);
+        proposalRepository.save(proposal);
+        return proposal;
     }
 
     // 2. Get all proposals
