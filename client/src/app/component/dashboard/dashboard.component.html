@@ -1,34 +1,48 @@
 <div class="app-wrapper">
   <div class="app-card">
 
+    <!-- Header -->
     <div class="header">
-      <h2>Dashboard</h2>
-      <button class="logout" (click)="logout()">Logout</button>
+      <h2 class="title">Dashboard</h2>
+      <button class="logout-btn" (click)="logout()">Logout</button>
     </div>
 
-    <p><strong>Role:</strong> {{ roleName }}</p>
+    <!-- Role Info -->
+    <p class="role-text">
+      <strong>Role:</strong> {{ roleName }}
+    </p>
 
-    <!-- ADMIN -->
+    <!-- ADMIN PANEL -->
     <div *ngIf="roleName === 'ADMIN'" class="panel">
       <h4>Admin Panel</h4>
-      <a routerLink="/users">Users</a>
-      <a routerLink="/reports">Reports</a>
+
+      <div class="links">
+        <a routerLink="/users" class="nav-link">Manage Users</a>
+        <a routerLink="/job-list" class="nav-link">View Jobs</a>
+        <a routerLink="/reports" class="nav-link">Reports</a>
+      </div>
     </div>
 
-    <!-- CLIENT -->
+    <!-- CLIENT PANEL -->
     <div *ngIf="roleName === 'CLIENT'" class="panel">
       <h4>Client Panel</h4>
-      <a routerLink="/job-create">Post Job</a>
-      <a routerLink="/job-list">Jobs</a>
-      <a routerLink="/my-job">My Jobs</a>
+
+      <div class="links">
+        <a routerLink="/job-create" class="nav-link">Post Job</a>
+        <a routerLink="/job-list" class="nav-link">View Jobs</a>
+        <a routerLink="/my-job" class="nav-link">My Jobs</a>
+      </div>
     </div>
 
-    <!-- FREELANCER -->
+    <!-- FREELANCER PANEL -->
     <div *ngIf="roleName === 'FREELANCER'" class="panel">
       <h4>Freelancer Panel</h4>
-      <a routerLink="/browse-jobs">Browse Jobs</a>
-      <a routerLink="/my-proposals">My Proposals</a>
-      <a routerLink="/my-profile">Profile</a>
+
+      <div class="links">
+        <a routerLink="/browse-jobs" class="nav-link">Browse Jobs</a>
+        <a routerLink="/my-proposals" class="nav-link">My Proposals</a>
+        <a routerLink="/my-profile" class="nav-link">Profile</a>
+      </div>
     </div>
 
   </div>

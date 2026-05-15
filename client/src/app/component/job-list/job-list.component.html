@@ -1,51 +1,65 @@
-<div class="container mt-3">
+<div class="app-wrapper">
+  <div class="app-card">
 
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h3>Job List</h3>
+    <!-- Header -->
+    <div class="header">
+      <h2 class="title">Job List</h2>
 
-    <div class="d-flex gap-2">
-      <input
-        class="form-control"
-        style="max-width: 260px;"
-        type="text"
-        placeholder="Search by title..."
-        [(ngModel)]="searchTitle"
-      />
-      <button class="btn btn-primary" (click)="searchJobs()">Search</button>
+      <div class="search-box">
+        <input
+          type="text"
+          placeholder="Search by title..."
+          [(ngModel)]="searchTitle"
+        />
+        <button (click)="searchJobs()">Search</button>
+      </div>
     </div>
-  </div>
 
-  <!-- No jobs -->
-  <div *ngIf="job.length === 0" class="alert alert-info">
-    No jobs found.
-  </div>
+    <!-- No Jobs -->
+    <div *ngIf="job.length === 0" class="empty">
+      No jobs found.
+    </div>
 
-  <!-- Jobs -->
-  <div *ngFor="let j of job" class="card mb-3">
-    <div class="card-body">
-      <h5 class="card-title">{{ j.title }}</h5>
-      <p class="card-text">{{ j.description }}</p>
+    <!-- Job Cards -->
+    <div *ngFor="let j of job" class="job-card">
 
-      <p class="mb-1"><strong>Budget:</strong> {{ j.budget }}</p>
-      <p class="mb-2"><strong>Status:</strong> {{ j.status }}</p>
+      <h4>{{ j.title }}</h4>
 
-      <!-- Apply button only for FREELANCER and only when OPEN -->
+      <p>
+        {{ j.description ? j.description : 'No description provided' }}
+      </p>
+
+      <p>
+        <strong>Budget:</strong>
+        {{ j.budget ? j.budget : 'Not specified' }}
+      </p>
+
+      <!-- Status -->
+      <p>
+        <strong>Status:</strong>
+        <span class="status-badge" [ngClass]="j.status">
+          {{ j.status }}
+        </span>
+      </p>
+
+      <!-- ✅ Apply Button -->
       <button
-        class="btn btn-success"
+        class="apply-btn"
         *ngIf="roleName === 'FREELANCER' && j.status === 'OPEN'"
         (click)="applyJob(j.id)"
       >
         Apply
       </button>
 
-      <!-- Show applied badge -->
+      <!-- ✅ Applied Indicator -->
       <span
-        class="badge bg-secondary ms-2"
+        class="applied-badge"
         *ngIf="j.status === 'APPLIED'"
       >
         Applied
       </span>
-    </div>
-  </div>
 
+    </div>
+
+  </div>
 </div>
