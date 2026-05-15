@@ -10,26 +10,46 @@ import { AuthService } from '../../services/auth.service';
 })
 export class MyJobComponent implements OnInit {
 
-  jobs: Job[] = [];
+  jobs: any[] = [];
+  roleName: string | null = '';
 
-  constructor(private service: JobService, private auth: AuthService) {}
+  constructor(private service: JobService, private auth: AuthService) { }
 
   ngOnInit(): void {
-    // tests expect priority: localStorage -> auth -> default 1
+    this.roleName = this.auth.getRole();
+
     const stored = localStorage.getItem('userId');
     const fromStorage = stored !== null ? Number(stored) : null;
     const fromService = (this.auth as any).getUserId?.() ?? null;
-
     const userId = (fromStorage ?? fromService ?? 1);
 
     this.service.getMyJobs(userId).subscribe({
-      next: (data: Job[]) => {
+      next: (data: any[]) => {
         const list = data || [];
 
-        // match your current intention (and tests already pass REJECTED exclusion in your run)
-        this.jobs = list.filter((j: Job) =>
-          j.status === 'APPLIED' || j.status === 'ACCEPTED'
-        );
+        if (this.roleName === 'CLIENT') {
+          this.jobs = list.map(j => ({ ...j, proposals: [], showApplicants: false }));
+
+          this.jobs.forEach(job => {
+            if (job.id) {
+              this.service.getProposalsForJob(job.id).subscribe({
+                next: (proposals: any[]) => {
+                  job.proposals = (proposals || []).map((p: any) => ({
+                    ...p,
+                    showProfile: false  // ✅ profile toggle per applicant
+                  }));
+                },
+                error: () => {
+                  job.proposals = [];
+                }
+              });
+            }
+          });
+        } else {
+          this.jobs = list.filter((j: Job) =>
+            j.status === 'APPLIED' || j.status === 'ACCEPTED'
+          );
+        }
       },
       error: (err: any) => {
         console.error('Error fetching jobs', err);
@@ -38,16 +58,84 @@ export class MyJobComponent implements OnInit {
     });
   }
 
-  updateStatus(jobId: number, status: string): void {
-    this.service.updateJobStatus(jobId, status).subscribe({
+  toggleApplicants(job: any): void {
+    job.showApplicants = !job.showApplicants;
+  }
+
+  // ✅ Toggle freelancer profile
+  toggleProfile(proposal: any): void {
+    proposal.showProfile = !proposal.showProfile;
+  }
+
+  acceptProposal(job: any, proposal: any): void {
+    this.service.updateProposalStatus(proposal.id, 'APPROVED').subscribe({
       next: () => {
-        const job = this.jobs.find((j: Job) => j.id === jobId);
-        if (job) job.status = status;
+        proposal.status = 'COMPLETED';
+        alert('Freelancer accepted! ✅');
       },
       error: (err: any) => {
-        // EXACT logs expected by unit tests
+        console.error('Failed to accept:', err);
+        alert('Failed to accept. Try again.');
+      }
+    });
+  }
+
+  rejectProposal(job: any, proposal: any): void {
+    this.service.updateProposalStatus(proposal.id, 'REJECTED').subscribe({
+      next: () => {
+        proposal.status = 'REJECTED';
+        alert('Proposal rejected.');
+      },
+      error: (err: any) => {
+        console.error('Failed to reject:', err);
+        alert('Failed to reject. Try again.');
+      }
+    });
+  }
+
+  // ✅ Pass the job object directly (not just jobId)
+
+  updateStatus(jobOrId: any, status: string): void {
+    // ✅ Handle both: tests pass number, UI passes object
+    let jobId: number;
+    let jobObj: any = null;
+
+    if (typeof jobOrId === 'number') {
+      // Called from tests: updateStatus(1, 'COMPLETED')
+      jobId = jobOrId;
+      jobObj = this.jobs.find(j => j.id === jobId);
+    } else {
+      // Called from UI: updateStatus(j, 'CLOSED')
+      jobId = jobOrId.id;
+      jobObj = jobOrId;
+    }
+
+    this.service.updateJobStatus(jobId, status).subscribe({
+      next: () => {
+        if (jobObj) {
+          jobObj.status = status;
+        }
+      },
+      error: (err: any) => {
         console.error('Failed to update status:', err?.message || err);
         console.error('Full error:', err);
+      }
+    });
+  }
+
+
+
+  deleteJob(jobId: number): void {
+    if (!confirm('Are you sure you want to delete this job?')) return;
+
+    this.service.deleteJob(jobId).subscribe({
+      next: () => {
+        this.jobs = this.jobs.filter(j => j.id !== jobId);
+        alert('Job deleted! 🗑️');
+      },
+      error: (err: any) => {
+        console.error('Error deleting job:', err);
+        alert('Failed to delete job.');
       }
     });
   }

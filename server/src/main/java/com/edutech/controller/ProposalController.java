@@ -47,16 +47,27 @@ public class ProposalController {
         return ResponseEntity.ok(proposal);
     }
 
-    // 4. PUT /api/proposals/{id} - Update a proposal
-    @PutMapping("/{id}")
-    public ResponseEntity<Proposal> updateProposal(
-            @PathVariable Long id,
-            @Valid @RequestBody Proposal proposalDetails) {
+   // ✅ Update a proposal (accepts partial body like { "status": "APPROVED" })
+@PutMapping("/{id}")
+public ResponseEntity<Proposal> updateProposal(
+        @PathVariable Long id,
+        @RequestBody Map<String, Object> body) {
 
-        Proposal updated = proposalService.updateProposal(id, proposalDetails);
+    Proposal proposal = proposalService.getProposalById(id)
+            .orElseThrow(() -> new RuntimeException("Proposal not found"));
 
-        return ResponseEntity.ok(updated);
+    // Update fields if present in body
+    if (body.containsKey("status")) {
+        proposal.setStatus((String) body.get("status"));
     }
+    if (body.containsKey("bidAmount")) {
+        proposal.setBidAmount(Double.valueOf(body.get("bidAmount").toString()));
+    }
+
+    Proposal updated = proposalService.updateProposal(id, proposal);
+
+    return ResponseEntity.ok(updated);
+}
 
     // 5. DELETE /api/proposals/{id} - Delete a proposal
     @DeleteMapping("/{id}")
@@ -68,18 +79,18 @@ public class ProposalController {
     }
 
     // 6. GET /api/proposals/myPropsal - Get proposals of logged-in freelancer
-    
-@GetMapping("/myPropsal")
-public ResponseEntity<List<Proposal>> getMyProposals() {
 
-    String username = SecurityContextHolder
-            .getContext()
-            .getAuthentication()
-            .getName(); // ✅ gets username from JWT
+    @GetMapping("/myPropsal")
+    public ResponseEntity<List<Proposal>> getMyProposals() {
 
-    List<Proposal> proposals = proposalService
-            .getProposalsByFreelancerUsername(username);
-return ResponseEntity.ok(proposals);
-   
+        String username = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName(); // ✅ gets username from JWT
 
-}}
+        List<Proposal> proposals = proposalService
+                .getProposalsByFreelancerUsername(username);
+        return ResponseEntity.ok(proposals);
+
+    }
+}

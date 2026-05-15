@@ -6,36 +6,28 @@ import { AuthService } from './services/auth.service';
   selector: 'app-root',
   templateUrl: './app.component.html'
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
 
-  constructor(public auth: AuthService, private router: Router) { }
+  constructor(public auth: AuthService, private router: Router) {}
 
-  ngOnInit() {
-    if (this.auth.getLoginStatus()) {
-      const role = this.auth.getRole();
+  ngOnInit(): void {
+  
+    const url = this.router.url;
 
-      if (role === 'ADMIN') {
-        this.router.navigate(['/users']);
-      } else if (role === 'CLIENT') {
-        this.router.navigate(['/job-create']);
-      } else if (role === 'FREELANCER') {
-        this.router.navigate(['/job-list']);
-      }
+    if (this.auth.getLoginStatus() && (url === '/' || url === '/login')) {
+      this.router.navigate(['/dashboard']);
     }
   }
 
-  // ✅ check login status
   isLoggedIn(): boolean {
     return this.auth.getLoginStatus();
   }
 
-  // ✅ logout
   logout(): void {
     this.auth.logout();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/landing']);
   }
 
-  // ✅ get role (optional for UI display)
   get role(): string | null {
     return this.auth.getRole();
   }
