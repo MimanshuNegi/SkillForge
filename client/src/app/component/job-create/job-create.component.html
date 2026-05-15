@@ -1,52 +1,72 @@
-<div class="container mt-3">
-
-  <h3 class="mb-3">Post a New Job</h3>
-
-  <form [formGroup]="jobForm" (ngSubmit)="onSubmit()">
+<div class="app-wrapper">
+  <div class="app-card">
 
     <!-- Title -->
-    <div class="mb-3">
-      <label class="form-label">Job Title</label>
-      <input type="text" class="form-control" formControlName="title" placeholder="Enter job title" />
-      <div class="text-danger" *ngIf="jobForm.controls['title']?.touched && jobForm.controls['title']?.invalid">
-        Title is required
+    <h2 class="title">Post a New Job</h2>
+
+    <form [formGroup]="jobForm" (ngSubmit)="onSubmit()">
+
+      <!-- Title -->
+      <div class="form-group">
+        <label>Job Title</label>
+        <input
+          type="text"
+          formControlName="title"
+          placeholder="Enter job title"
+        />
+
+        <small *ngIf="jobForm.controls['title']?.touched && jobForm.controls['title']?.invalid">
+          Title is required
+        </small>
       </div>
-    </div>
 
-    <!-- Description -->
-    <div class="mb-3">
-      <label class="form-label">Description</label>
-      <textarea class="form-control" rows="4" formControlName="description" placeholder="Enter job description"></textarea>
-      <div class="text-danger" *ngIf="jobForm.controls['description']?.touched && jobForm.controls['description']?.invalid">
-        Description is required
+      <!-- Description -->
+      <div class="form-group">
+        <label>Description</label>
+        <textarea
+          rows="4"
+          formControlName="description"
+          placeholder="Enter job description"
+        ></textarea>
+
+        <small *ngIf="jobForm.controls['description']?.touched && jobForm.controls['description']?.invalid">
+          Description is required
+        </small>
       </div>
-    </div>
 
-    <!-- Budget -->
-    <div class="mb-3">
-      <label class="form-label">Budget</label>
-      <input type="number" class="form-control" formControlName="budget" placeholder="Enter budget" />
-      <div class="text-danger" *ngIf="jobForm.controls['budget']?.touched && jobForm.controls['budget']?.invalid">
-        Budget is required and must be 0 or greater
+      <!-- Budget -->
+      <div class="form-group">
+        <label>Budget</label>
+        <input
+          type="number"
+          formControlName="budget"
+          placeholder="Enter budget"
+        />
+
+        <small *ngIf="jobForm.controls['budget']?.touched && jobForm.controls['budget']?.invalid">
+          Budget must be 0 or greater
+        </small>
       </div>
-    </div>
 
-    <!-- Status -->
-    <div class="mb-3">
-      <label class="form-label">Status</label>
-      <select class="form-control" formControlName="status">
-        <option value="OPEN">OPEN</option>
-        <option value="CLOSED">CLOSED</option>
-      </select>
-      <div class="text-danger" *ngIf="jobForm.controls['status']?.touched && jobForm.controls['status']?.invalid">
-        Status is required
+      <!-- Status -->
+      <div class="form-group">
+        <label>Status</label>
+        <select formControlName="status">
+          <option value="OPEN">OPEN</option>
+          <option value="CLOSED">CLOSED</option>
+        </select>
+
+        <small *ngIf="jobForm.controls['status']?.touched && jobForm.controls['status']?.invalid">
+          Status is required
+        </small>
       </div>
-    </div>
 
-    <button type="submit" class="btn btn-primary" [disabled]="jobForm.invalid">
-      Create Job
-    </button>
+      <!-- Submit Button -->
+      <button type="submit" [disabled]="jobForm.invalid">
+        Create Job
+      </button>
 
-  </form>
+    </form>
 
+  </div>
 </div>

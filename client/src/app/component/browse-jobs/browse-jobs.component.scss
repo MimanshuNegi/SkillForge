@@ -1,15 +1,48 @@
+.title {
+  margin-bottom: 15px;
+}
+
+/* Job Card */
 .job-card {
+  background: #f9fafb;
   border-radius: 12px;
   padding: 15px;
-  margin: 10px 0;
-  background: #f9fafb;
+  margin-bottom: 12px;
   border: 1px solid #eee;
+  transition: 0.3s;
 }
 
-.title {
-  margin-bottom: 10px;
+.job-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
 }
 
+/* Empty */
 .empty {
-  color: gray;
+  color: #888;
+  font-size: 14px;
+}
+
+/* Status Badge */
+.status-badge {
+  padding: 3px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Role-based styling (future-safe) */
+.OPEN {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.APPLIED {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.CLOSED {
+  background: #fee2e2;
+  color: #991b1b;
 }
