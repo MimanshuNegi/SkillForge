@@ -42,15 +42,20 @@ export class LoginComponent implements OnInit {
       next: (response: any) => {
         this.isLoading = false;
 
-        // Save token & role (if not already handled)
+        // Save token & role
         this.authService.saveToken(response.token);
         this.authService.setRole(response.role);
+
+        // ✅ Save username for ownership checks
+        if (response.username) {
+          localStorage.setItem('username', response.username);
+        }
 
         // Role-based navigation
         const routeMap: any = {
           ADMIN: '/users',
           CLIENT: '/dashboard',
-          FREELANCER: '/job-list'
+          FREELANCER: '/dashboard'
         };
 
         this.router.navigate([routeMap[response.role] || '/dashboard']);

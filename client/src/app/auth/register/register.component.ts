@@ -11,10 +11,9 @@ import { Router } from '@angular/router';
 export class RegisterComponent implements OnInit {
 
   freelancerForm!: FormGroup;
-
+  successMessage: string = '';
   errorMessage: string = '';
   isLoading: boolean = false;
-  showPassword: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -26,10 +25,17 @@ export class RegisterComponent implements OnInit {
     this.freelancerForm = this.fb.group({
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', Validators.required],
       role: ['', Validators.required],
-      contactNumber: ['']
+      contactNumber: [''],
+      skills: [''],       // ✅ Added
+      bio: ['']           // ✅ Added
     });
+  }
+
+  // ✅ Check if selected role is FREELANCER (to show/hide skills & bio)
+  get isFreelancer(): boolean {
+    return this.freelancerForm.get('role')?.value === 'FREELANCER';
   }
 
   onSubmit(): void {
@@ -39,24 +45,30 @@ export class RegisterComponent implements OnInit {
     }
 
     this.isLoading = true;
+    this.successMessage = '';
     this.errorMessage = '';
 
     const formData = this.freelancerForm.value;
 
     this.authService.registerUser(formData).subscribe({
-      next: () => {
+      next: (res) => {
         this.isLoading = false;
-        this.router.navigate(['/login']);
+        this.successMessage = '🎉 Registration successful! Redirecting to login...';
+
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 2000);
       },
       error: (err) => {
         this.isLoading = false;
+        console.error(err);
 
-        if (err.status === 400) {
-          this.errorMessage = err.error?.message || 'Invalid details';
-        } else if (err.status === 0) {
-          this.errorMessage = 'Server not reachable';
+        if (err?.status === 409 || err?.error?.includes?.('Duplicate')) {
+          this.errorMessage = '⚠️ Username or email already exists.';
+        } else if (err?.status === 0) {
+          this.errorMessage = '⚠️ Server not reachable.';
         } else {
-          this.errorMessage = 'Registration failed. Try again.';
+          this.errorMessage = '⚠️ Registration failed. Please try again.';
         }
       }
     });

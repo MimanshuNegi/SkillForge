@@ -13,7 +13,7 @@ export class MyJobComponent implements OnInit {
   jobs: any[] = [];
   roleName: string | null = '';
 
-  constructor(private service: JobService, private auth: AuthService) {}
+  constructor(private service: JobService, private auth: AuthService) { }
 
   ngOnInit(): void {
     this.roleName = this.auth.getRole();
@@ -28,15 +28,16 @@ export class MyJobComponent implements OnInit {
         const list = data || [];
 
         if (this.roleName === 'CLIENT') {
-          // ✅ CLIENT: show all jobs + fetch proposals for each
           this.jobs = list.map(j => ({ ...j, proposals: [], showApplicants: false }));
 
-          // Fetch proposals for each job
           this.jobs.forEach(job => {
             if (job.id) {
               this.service.getProposalsForJob(job.id).subscribe({
                 next: (proposals: any[]) => {
-                  job.proposals = proposals || [];
+                  job.proposals = (proposals || []).map((p: any) => ({
+                    ...p,
+                    showProfile: false  // ✅ profile toggle per applicant
+                  }));
                 },
                 error: () => {
                   job.proposals = [];
@@ -45,7 +46,6 @@ export class MyJobComponent implements OnInit {
             }
           });
         } else {
-          // FREELANCER: show only applied/accepted
           this.jobs = list.filter((j: Job) =>
             j.status === 'APPLIED' || j.status === 'ACCEPTED'
           );
@@ -58,16 +58,19 @@ export class MyJobComponent implements OnInit {
     });
   }
 
-  // ✅ Toggle show/hide applicants
   toggleApplicants(job: any): void {
     job.showApplicants = !job.showApplicants;
   }
 
-  // ✅ Accept a freelancer's proposal
+  // ✅ Toggle freelancer profile
+  toggleProfile(proposal: any): void {
+    proposal.showProfile = !proposal.showProfile;
+  }
+
   acceptProposal(job: any, proposal: any): void {
     this.service.updateProposalStatus(proposal.id, 'APPROVED').subscribe({
       next: () => {
-        proposal.status = 'APPROVED';
+        proposal.status = 'COMPLETED';
         alert('Freelancer accepted! ✅');
       },
       error: (err: any) => {
@@ -77,7 +80,6 @@ export class MyJobComponent implements OnInit {
     });
   }
 
-  // ✅ Reject a freelancer's proposal
   rejectProposal(job: any, proposal: any): void {
     this.service.updateProposalStatus(proposal.id, 'REJECTED').subscribe({
       next: () => {
@@ -91,16 +93,49 @@ export class MyJobComponent implements OnInit {
     });
   }
 
-  // ✅ Update job status (close/reopen)
-  updateStatus(jobId: number, status: string): void {
+  // ✅ Pass the job object directly (not just jobId)
+
+  updateStatus(jobOrId: any, status: string): void {
+    // ✅ Handle both: tests pass number, UI passes object
+    let jobId: number;
+    let jobObj: any = null;
+
+    if (typeof jobOrId === 'number') {
+      // Called from tests: updateStatus(1, 'COMPLETED')
+      jobId = jobOrId;
+      jobObj = this.jobs.find(j => j.id === jobId);
+    } else {
+      // Called from UI: updateStatus(j, 'CLOSED')
+      jobId = jobOrId.id;
+      jobObj = jobOrId;
+    }
+
     this.service.updateJobStatus(jobId, status).subscribe({
       next: () => {
-        const job = this.jobs.find((j: any) => j.id === jobId);
-        if (job) job.status = status;
+        if (jobObj) {
+          jobObj.status = status;
+        }
       },
       error: (err: any) => {
         console.error('Failed to update status:', err?.message || err);
         console.error('Full error:', err);
+      }
+    });
+  }
+
+
+
+  deleteJob(jobId: number): void {
+    if (!confirm('Are you sure you want to delete this job?')) return;
+
+    this.service.deleteJob(jobId).subscribe({
+      next: () => {
+        this.jobs = this.jobs.filter(j => j.id !== jobId);
+        alert('Job deleted! 🗑️');
+      },
+      error: (err: any) => {
+        console.error('Error deleting job:', err);
+        alert('Failed to delete job.');
       }
     });
   }

@@ -9,7 +9,7 @@ export class JobService {
 
   private api = `${environment.apiUrl}/api/jobs`;
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
   private getHeaders(): HttpHeaders {
     const token = this.authService.getToken();
@@ -39,27 +39,46 @@ export class JobService {
     return this.http.get(`${this.api}/my-jobs`, { headers: this.getHeaders() });
   }
 
-  updateJobStatus(jobId: number, status: string): Observable<any> {
-    return this.http.put(`${this.api}/status/${jobId}?status=${status}`, {}, { headers: this.getHeaders() });
-  }
+  // updateJobStatus(jobId: number, status: string): Observable<any> {
+  //   return this.http.put(`${this.api}/status/${jobId}?status=${status}`, {}, { headers: this.getHeaders() });
+  // }
 
   getUserReport(): Observable<any> {
     return this.http.get(`${this.api}/report/users`, { headers: this.getHeaders() });
   }
 
+
+  getProposalsForJob(jobId: number): Observable<any> {
+    return this.http.get(`${this.api}/${jobId}/proposals`, { headers: this.getHeaders() });
+  }
+
+  updateProposalStatus(proposalId: number, status: string): Observable<any> {
+    return this.http.put(
+      `${environment.apiUrl}/api/proposals/${proposalId}`,
+      { bidAmount: 0, status: status },
+      { headers: this.getHeaders() }
+    );
+  }
+
+
+  deleteJob(jobId: number): Observable<any> {
+    return this.http.delete(`${this.api}/${jobId}`, { headers: this.getHeaders() });
+  }
+
   
-getProposalsForJob(jobId: number): Observable<any> {
-  return this.http.get(`${this.api}/${jobId}/proposals`, { headers: this.getHeaders() });
-}
-
-
-updateProposalStatus(proposalId: number, status: string): Observable<any> {
+updateJobStatus(jobId: number, status: string): Observable<any> {
   return this.http.put(
-    `${environment.apiUrl}/api/proposals/${proposalId}`,
-    { status, bidAmount: 0, job: {}, freelancer: {} },
-    { headers: this.getHeaders() }
+    `${this.api}/status/${jobId}?status=${status}`,
+    {},
+    {
+      headers: this.getHeaders(),
+      responseType: 'text' as 'json'   // ✅ THIS FIXES IT
+    }
   );
 }
+
+
+
 
 
 }

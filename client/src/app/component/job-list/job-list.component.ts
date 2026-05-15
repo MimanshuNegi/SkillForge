@@ -18,16 +18,10 @@ export class JobListComponent implements OnInit {
   ngOnInit(): void {
     this.roleName = this.auth.getRole();
 
-    // ✅ DEBUG: check what role is stored
-    console.log('ROLE:', this.roleName);
-
     this.service.getJobList().subscribe({
       next: (data: any) => {
         this.job = data || [];
         this.allJobs = data || [];
-
-        // ✅ DEBUG: check what status jobs have
-        console.log('JOBS:', this.job);
       },
       error: (err: any) => {
         console.error('Error fetching jobs', err);
@@ -35,6 +29,29 @@ export class JobListComponent implements OnInit {
         this.allJobs = [];
       }
     });
+  }
+
+  // ✅ Check if job belongs to logged-in client
+  isMyJob(job: any): boolean {
+    const myUsername = localStorage.getItem('username') || '';
+    const myUserId = Number(localStorage.getItem('userId') || 0);
+
+    // Check by clientName (from JobDTO)
+    if (job.clientName) {
+      return job.clientName === myUsername;
+    }
+
+    // Check by client.id (from full Job object)
+    if (job.client?.id) {
+      return job.client.id === myUserId;
+    }
+
+    // Check by client.username
+    if (job.client?.username) {
+      return job.client.username === myUsername;
+    }
+
+    return false;
   }
 
   applyJob(jobId: number): void {
@@ -74,5 +91,21 @@ export class JobListComponent implements OnInit {
     this.job = this.allJobs.filter(j =>
       (j.title || '').toLowerCase().includes(term)
     );
+  }
+
+  deleteJob(jobId: number): void {
+    if (!confirm('Are you sure you want to delete this job?')) return;
+
+    this.service.deleteJob(jobId).subscribe({
+      next: () => {
+        this.job = this.job.filter(j => j.id !== jobId);
+        this.allJobs = this.allJobs.filter(j => j.id !== jobId);
+        alert('Job deleted successfully! 🗑️');
+      },
+      error: (err: any) => {
+        console.error('Error deleting job:', err);
+        alert('Failed to delete job.');
+      }
+    });
   }
 }

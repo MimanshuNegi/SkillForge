@@ -2,6 +2,7 @@ package com.edutech.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -80,4 +81,39 @@ public class UserService implements UserDetailsService {
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    public void deleteUser(Long userId) {
+        userRepository.deleteById(userId);
+    }
+
+    // ✅ Update user details
+    // ✅ Update user (accepts partial data as Map)
+public User updateUser(Long userId, Map<String, Object> updates) {
+
+    User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+    if (updates.containsKey("username") && updates.get("username") != null) {
+        user.setUsername((String) updates.get("username"));
+    }
+
+    if (updates.containsKey("email") && updates.get("email") != null) {
+        user.setEmail((String) updates.get("email"));
+    }
+
+    if (updates.containsKey("contactNumber") && updates.get("contactNumber") != null) {
+        user.setContactNumber(Long.valueOf(updates.get("contactNumber").toString()));
+    }
+
+    if (updates.containsKey("skills") && updates.get("skills") != null) {
+        user.setSkills((String) updates.get("skills"));
+    }
+
+    if (updates.containsKey("bio") && updates.get("bio") != null) {
+        user.setBio((String) updates.get("bio"));
+    }
+
+    return userRepository.save(user);
+}
+
 }

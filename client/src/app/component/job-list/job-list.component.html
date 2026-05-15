@@ -6,28 +6,21 @@
       <h2 class="fw-bold">💼 Job List</h2>
       <p class="text-muted mb-0">
         <span *ngIf="roleName === 'FREELANCER'">Find and apply to jobs that match your skills</span>
-        <span *ngIf="roleName === 'CLIENT'">View and manage all posted jobs</span>
+        <span *ngIf="roleName === 'CLIENT'">View all posted jobs on the platform</span>
         <span *ngIf="roleName === 'ADMIN'">Overview of all jobs on the platform</span>
       </p>
     </div>
 
     <!-- Create Job Button (CLIENT only) -->
-    <a *ngIf="roleName === 'CLIENT'"
-       routerLink="/job-create"
-       class="btn btn-primary rounded-pill px-4">
+    <a *ngIf="roleName === 'CLIENT'" routerLink="/job-create" class="btn btn-primary rounded-pill px-4">
       ➕ Post New Job
     </a>
   </div>
 
   <!-- ✅ Search Bar -->
   <div class="d-flex gap-2 mb-4">
-    <input
-      class="form-control"
-      style="max-width: 300px;"
-      type="text"
-      placeholder="🔍 Search by title..."
-      [(ngModel)]="searchTitle"
-    />
+    <input class="form-control" style="max-width: 300px;" type="text"
+           placeholder="🔍 Search by title..." [(ngModel)]="searchTitle" />
     <button class="btn btn-outline-primary" (click)="searchJobs()">Search</button>
   </div>
 
@@ -104,40 +97,44 @@
         <div class="card-footer bg-white border-0 pb-3">
 
           <!-- ✅ FREELANCER: Apply Button -->
-          <!-- Shows when: OPEN, null, undefined, or any status that's NOT APPLIED/CLOSED -->
           <button *ngIf="roleName === 'FREELANCER' && j.status !== 'APPLIED' && j.status !== 'CLOSED'"
-                  class="btn btn-success w-100 rounded-pill fw-bold"
+                  class="btn btn-success w-100 rounded-pill fw-bold mb-2"
                   (click)="applyJob(j.id)">
             🚀 Apply Now
           </button>
 
           <!-- ✅ FREELANCER: Already Applied -->
-          <div *ngIf="roleName === 'FREELANCER' && j.status === 'APPLIED'"
-               class="text-center">
+          <div *ngIf="roleName === 'FREELANCER' && j.status === 'APPLIED'" class="text-center mb-2">
             <span class="badge bg-info text-dark px-4 py-2 rounded-pill">
               ✅ Already Applied
             </span>
           </div>
 
           <!-- ✅ FREELANCER: Job Closed -->
-          <div *ngIf="roleName === 'FREELANCER' && j.status === 'CLOSED'"
-               class="text-center">
+          <div *ngIf="roleName === 'FREELANCER' && j.status === 'CLOSED'" class="text-center mb-2">
             <span class="badge bg-secondary px-4 py-2 rounded-pill">
               🔒 Job Closed
             </span>
           </div>
 
-          <!-- ✅ CLIENT: Manage -->
-          <a *ngIf="roleName === 'CLIENT'"
-             routerLink="/my-job"
-             class="btn btn-outline-primary w-100 rounded-pill btn-sm">
-            📋 Manage Job
-          </a>
+          <!-- ✅ CLIENT: Just show who posted (no Manage/Delete here) -->
+          <div *ngIf="roleName === 'CLIENT'" class="text-center">
+            <span class="text-muted small">
+              👤 Posted by: {{ j.clientName || 'Client' }}
+            </span>
+          </div>
+
+          <!-- ✅ ADMIN: Delete any job -->
+          <div *ngIf="roleName === 'ADMIN'">
+            <button class="btn btn-danger w-100 rounded-pill btn-sm"
+                    (click)="deleteJob(j.id)">
+              🗑️ Delete Job
+            </button>
+          </div>
 
         </div>
-
       </div>
     </div>
-
   </div>
+
 </div>

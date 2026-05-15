@@ -47,9 +47,7 @@ public class AuthController {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginRequest.getUsername(),
-                            loginRequest.getPassword()
-                    )
-            );
+                            loginRequest.getPassword()));
 
             // Generate token
             String token = jwtUtil.generateToken(loginRequest.getUsername());
@@ -89,4 +87,21 @@ public class AuthController {
 
         return ResponseEntity.ok(users);
     }
+
+    // ✅ DELETE /api/auth/user/{userId} — Delete a user (ADMIN only)
+    @DeleteMapping("/user/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.ok().build();
+    }
+
+    
+// ✅ PUT /api/auth/user/{userId} — Update user profile (accepts partial data)
+@PutMapping("/user/{userId}")
+public ResponseEntity<User> updateUser(@PathVariable Long userId,
+                                        @RequestBody Map<String, Object> body) {
+    User user = userService.updateUser(userId, body);
+    return ResponseEntity.ok(user);
+}
+
 }
