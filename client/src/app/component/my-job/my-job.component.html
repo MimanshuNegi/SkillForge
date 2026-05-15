@@ -1,3 +1,5 @@
+<div class="app-wrapper">
+  <div class="app-card">
 <h2>My Jobs</h2>
 
 <div *ngIf="jobs.length === 0">No applied jobs found.</div>
@@ -13,4 +15,6 @@
   <button *ngIf="j.status === 'APPLIED'" (click)="updateStatus(j.id!, 'REJECTED')">
     Reject
   </button>
+</div>
+</div>
 </div>
