@@ -4,49 +4,34 @@
 
   <form [formGroup]="jobForm" (ngSubmit)="onSubmit()">
 
-    <!-- ✅ Title -->
+    <!-- Title -->
     <div class="mb-3">
       <label class="form-label">Job Title</label>
-      <input
-        type="text"
-        class="form-control"
-        formControlName="title"
-        placeholder="Enter job title"
-      />
+      <input type="text" class="form-control" formControlName="title" placeholder="Enter job title" />
       <div class="text-danger" *ngIf="jobForm.controls['title']?.touched && jobForm.controls['title']?.invalid">
         Title is required
       </div>
     </div>
 
-    <!-- ✅ Description -->
+    <!-- Description -->
     <div class="mb-3">
       <label class="form-label">Description</label>
-      <textarea
-        class="form-control"
-        rows="4"
-        formControlName="description"
-        placeholder="Enter job description"
-      ></textarea>
+      <textarea class="form-control" rows="4" formControlName="description" placeholder="Enter job description"></textarea>
       <div class="text-danger" *ngIf="jobForm.controls['description']?.touched && jobForm.controls['description']?.invalid">
         Description is required
       </div>
     </div>
 
-    <!-- ✅ Budget -->
+    <!-- Budget -->
     <div class="mb-3">
       <label class="form-label">Budget</label>
-      <input
-        type="number"
-        class="form-control"
-        formControlName="budget"
-        placeholder="Enter budget"
-      />
+      <input type="number" class="form-control" formControlName="budget" placeholder="Enter budget" />
       <div class="text-danger" *ngIf="jobForm.controls['budget']?.touched && jobForm.controls['budget']?.invalid">
-        Budget must be 0 or greater
+        Budget is required and must be 0 or greater
       </div>
     </div>
 
-    <!-- ✅ Status -->
+    <!-- Status -->
     <div class="mb-3">
       <label class="form-label">Status</label>
       <select class="form-control" formControlName="status">
@@ -58,7 +43,6 @@
       </div>
     </div>
 
-    <!-- ✅ Submit Button -->
     <button type="submit" class="btn btn-primary" [disabled]="jobForm.invalid">
       Create Job
     </button>
