@@ -1,49 +1,82 @@
-<div class="login-container">
-  <div class="login-card">
-    <h2>Login</h2>
+<div class="auth-wrapper">
 
-    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+  <div class="auth-card">
 
-      <!-- Username -->
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input
-          type="text"
-          id="username"
-          formControlName="username"
-          placeholder="Enter username"
-        />
-        <small class="error" *ngIf="f['username']?.touched && f['username']?.invalid">
-          Username is required
-        </small>
+    <!-- LEFT SIDE (FORM) -->
+    <div class="left-side">
+
+      <h2>Welcome Back 👋</h2>
+      <p class="subtitle">Login to continue</p>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+
+        <!-- Username -->
+        <div class="form-group">
+          <label>Username</label>
+          <input
+            type="text"
+            formControlName="username"
+            placeholder="Enter username"
+          />
+          <small *ngIf="f['username']?.touched && f['username']?.invalid">
+            Username is required
+          </small>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group password-wrapper">
+          <label>Password</label>
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Enter password"
+          />
+          <span (click)="showPassword = !showPassword">
+            {{ showPassword ? 'Hide' : 'Show' }}
+          </span>
+          <small *ngIf="f['password']?.touched && f['password']?.invalid">
+            Password is required
+          </small>
+        </div>
+
+        <!-- Error -->
+        <div class="error-message" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+
+        <!-- Button -->
+        <button type="submit" [disabled]="loginForm.invalid || isLoading">
+          {{ isLoading ? 'Logging in...' : 'Login' }}
+        </button>
+
+        <!-- Bottom -->
+        <div class="register-link">
+          <span>Don’t have an account?</span>
+          <a routerLink="/register">Register</a>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- RIGHT SIDE (DESIGN PANEL) -->
+    <div class="right-side">
+
+      <div class="overlay-shape"></div>
+
+      <!-- Floating cards -->
+      <!-- <div class="card-box card1">
+        <h4>Projects</h4>
+        <p>Manage jobs</p>
       </div>
 
-      <!-- Password -->
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          formControlName="password"
-          placeholder="Enter password"
-        />
-        <small class="error" *ngIf="f['password']?.touched && f['password']?.invalid">
-          Password is required
-        </small>
+      <div class="card-box card2">
+        <h4>Test</h4>
       </div>
 
-      <!-- Error Message -->
-      <div class="error-message" *ngIf="errorMessage">
-        {{ errorMessage }}
-      </div>
+      <div class="card-box card3">+</div> -->
 
-      <button type="submit" [disabled]="loginForm.invalid">Login</button>
+    </div>
 
-      <!-- ✅ Register link -->
-      <div class="register-link">
-        <span>Don't have an account?</span>
-        <a routerLink="/register">Register</a>
-      </div>
-    </form>
   </div>
+
 </div>

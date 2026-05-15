@@ -1,24 +1,105 @@
-<form [formGroup]="freelancerForm" (ngSubmit)="onSubmit()">
+<div class="auth-wrapper">
 
-  <input placeholder="Username" formControlName="username" />
-  <div *ngIf="f['username']?.touched && f['username']?.invalid">Required</div>
+  <div class="auth-card">
 
-  <input placeholder="Email" formControlName="email" />
-  <div *ngIf="f['email']?.touched && f['email']?.invalid">Valid email required</div>
+    <!-- ✅ LEFT SIDE (FORM) -->
+    <div class="left-side">
 
-  <input type="password" placeholder="Password" formControlName="password" />
-  <div *ngIf="f['password']?.touched && f['password']?.invalid">Required</div>
+      <h2 class="title">Sign Up</h2>
+      <p class="subtitle">Create your account to get started</p>
 
-  <select formControlName="role">
-    <option value="">Select Role</option>
-    <option value="ADMIN">ADMIN</option>
-    <option value="CLIENT">CLIENT</option>
-    <option value="FREELANCER">FREELANCER</option>
-  </select>
-  <div *ngIf="f['role']?.touched && f['role']?.invalid">Required</div>
+      <form [formGroup]="freelancerForm" (ngSubmit)="onSubmit()">
 
-  <input placeholder="Contact Number" formControlName="contactNumber" />
+        <!-- Username -->
+        <div class="form-group">
+          <input
+            type="text"
+            placeholder="Username"
+            formControlName="username"
+          />
+          <small *ngIf="f['username']?.touched && f['username']?.invalid">
+            Username is required
+          </small>
+        </div>
 
-  <button type="submit">Register</button>
+        <!-- Email -->
+        <div class="form-group">
+          <input
+            type="email"
+            placeholder="Email"
+            formControlName="email"
+          />
+          <small *ngIf="f['email']?.invalid && f['email']?.touched">
+            Enter valid email
+          </small>
+        </div>
 
-</form>
+        <!-- Password -->
+        <div class="form-group password-wrapper">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            placeholder="Password"
+            formControlName="password"
+          />
+          <span (click)="showPassword = !showPassword">👁</span>
+
+          <small *ngIf="f['password']?.touched && f['password']?.invalid">
+            Minimum 6 characters required
+          </small>
+        </div>
+
+        <!-- Role -->
+        <div class="form-group">
+          <select formControlName="role">
+            <option value="">Select Role</option>
+            <option value="CLIENT">Client</option>
+            <option value="FREELANCER">Freelancer</option>
+            <option value="ADMIN">Admin</option>
+          </select>
+        </div>
+
+        <!-- Contact -->
+        <div class="form-group">
+          <input
+            placeholder="Contact Number (optional)"
+            formControlName="contactNumber"
+          />
+        </div>
+
+        <!-- Button -->
+        <button type="submit" [disabled]="freelancerForm.invalid || isLoading">
+          {{ isLoading ? 'Creating Account...' : 'Sign Up' }}
+        </button>
+
+        <!-- Bottom -->
+        <p class="bottom-text">
+          Already have an account?
+          <a routerLink="/login">Login</a>
+        </p>
+
+      </form>
+    </div>
+
+    <!-- ✅ RIGHT SIDE (DESIGN PANEL) -->
+    <div class="right-side">
+
+      <!-- Gradient overlay shape -->
+      <div class="overlay-shape"></div>
+
+      <!-- Floating UI cards -->
+      <div class="floating-card card1">
+        <h4>Analytics</h4>
+        <p>Track growth</p>
+      </div>
+
+      <div class="floating-card card2">
+        <h4>Projects</h4>
+      </div>
+
+      <div class="floating-card card3">+</div>
+
+    </div>
+
+  </div>
+
+</div>
