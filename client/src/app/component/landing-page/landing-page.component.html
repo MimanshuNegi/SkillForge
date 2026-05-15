@@ -1,13 +1,24 @@
 <div class="landing">
 
+  <!-- FLOATING PARTICLES (decorative) -->
+  <div class="particles">
+    <span class="particle p1"></span>
+    <span class="particle p2"></span>
+    <span class="particle p3"></span>
+    <span class="particle p4"></span>
+    <span class="particle p5"></span>
+    <span class="particle p6"></span>
+  </div>
+
   <!-- NAVBAR -->
   <nav class="navbar">
-    <div class="logo">FreelanceHub</div>
-
+    <div class="logo">
+      <span class="logo-icon">⬡</span> FreelanceHub
+    </div>
     <div class="nav-links">
-      <a href="#">About</a>
-      <a href="#">Contact</a>
-
+      <a href="#features">Features</a>
+      <a href="#stats">Stats</a>
+      <a href="#testimonials">Reviews</a>
       <a routerLink="/login" class="btn login">Login</a>
       <a routerLink="/register" class="btn signup">Sign Up</a>
     </div>
@@ -15,63 +26,169 @@
 
   <!-- HERO SECTION -->
   <div class="hero">
-
-    <!-- LEFT CONTENT -->
     <div class="hero-left">
+      <div class="badge">🚀 #1 Freelance Platform</div>
       <h1>
-        Unlock Your Business Potential With  
-        <span>Freelance Marketplace</span>
+        Unlock Your Business Potential With
+        <span class="gradient-text">Freelance Marketplace</span>
       </h1>
-
       <p>
-        Connect with top freelancers and clients worldwide.  
+        Connect with top freelancers and clients worldwide.
         Build, manage, and grow your projects effortlessly.
       </p>
-
-      <a routerLink="/register" class="cta-btn">
-        Get Started
-      </a>
+      <div class="hero-actions">
+        <a routerLink="/register" class="cta-btn">
+          Get Started <span class="arrow">→</span>
+        </a>
+        <a href="#features" class="secondary-btn">
+          <span class="play-icon">▶</span> See How It Works
+        </a>
+      </div>
     </div>
 
-    <!-- RIGHT (GRAPHIC) -->
     <div class="hero-right">
-
-      <div class="mock-box main-box">
-        <div class="circle"></div>
-        <p>Project Dashboard</p>
+      <div class="scene-3d">
+        <div class="mock-box main-box card-3d">
+          <div class="glow-ring"></div>
+          <div class="circle"></div>
+          <p>Project Dashboard</p>
+          <div class="bar-chart">
+            <span class="bar b1"></span>
+            <span class="bar b2"></span>
+            <span class="bar b3"></span>
+            <span class="bar b4"></span>
+            <span class="bar b5"></span>
+          </div>
+        </div>
+        <div class="mock-box small-box floating-card">
+          <p>📊 Analytics</p>
+          <span class="stat-num">+42%</span>
+        </div>
+        <div class="mock-box tiny-box floating-card-2">
+          <p>✅ Tasks Done</p>
+          <span class="stat-num">128</span>
+        </div>
       </div>
-
-      <div class="mock-box small-box">
-        <p>Analytics</p>
-      </div>
-
     </div>
+  </div>
 
+  <!-- TRUSTED BY (logo marquee) -->
+  <div class="trusted">
+    <p>Trusted by teams at</p>
+    <div class="marquee-track">
+      <div class="marquee-content">
+        <span>Google</span><span>Microsoft</span><span>Amazon</span>
+        <span>Meta</span><span>Netflix</span><span>Spotify</span>
+        <span>Google</span><span>Microsoft</span><span>Amazon</span>
+        <span>Meta</span><span>Netflix</span><span>Spotify</span>
+      </div>
+    </div>
   </div>
 
   <!-- STATS SECTION -->
-  <div class="stats">
-
-    <div class="stat">
-      <h3>1200+</h3>
-      <p>Jobs Posted</p>
+  <div class="stats" id="stats">
+    <div class="stat" *ngFor="let s of [
+      { val: '1200+', label: 'Jobs Posted', icon: '💼' },
+      { val: '800+', label: 'Freelancers', icon: '👩‍💻' },
+      { val: '$1M+', label: 'Transactions', icon: '💰' },
+      { val: '15+', label: 'Countries', icon: '🌍' }
+    ]">
+      <span class="stat-icon">{{ s.icon }}</span>
+      <h3>{{ s.val }}</h3>
+      <p>{{ s.label }}</p>
     </div>
-
-    <div class="stat">
-      <h3>800+</h3>
-      <p>Freelancers</p>
-    </div>
-
-    <div class="stat">
-      <h3>$1M+</h3>
-      <p>Transactions</p>
-    </div>
-
-    <div class="stat">
-      <h3>15+</h3>
-      <p>Countries</p>
-    </div>
-
   </div>
+
+  <!-- FEATURES SECTION -->
+  <div class="features" id="features">
+    <div class="section-header">
+      <span class="section-badge">Features</span>
+      <h2>Everything You Need to <span class="gradient-text">Succeed</span></h2>
+      <p>Powerful tools designed for freelancers and clients alike.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card" *ngFor="let f of [
+        { icon: '🔍', title: 'Smart Matching', desc: 'AI-powered matching connects you with the perfect freelancer or project.' },
+        { icon: '🔒', title: 'Secure Payments', desc: 'Escrow-based payments ensure your money is safe until work is approved.' },
+        { icon: '💬', title: 'Real-time Chat', desc: 'Built-in messaging with file sharing and video calls.' },
+        { icon: '📊', title: 'Analytics Dashboard', desc: 'Track project progress, earnings, and performance metrics.' },
+        { icon: '⚡', title: 'Instant Proposals', desc: 'Submit and manage proposals with one-click templates.' },
+        { icon: '🌐', title: 'Global Reach', desc: 'Connect with talent and clients from 15+ countries worldwide.' }
+      ]">
+        <div class="feature-icon">{{ f.icon }}</div>
+        <h3>{{ f.title }}</h3>
+        <p>{{ f.desc }}</p>
+        <div class="card-shine"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <div class="testimonials" id="testimonials">
+    <div class="section-header">
+      <span class="section-badge">Testimonials</span>
+      <h2>Loved by <span class="gradient-text">Thousands</span></h2>
+    </div>
+
+    <div class="testimonial-grid">
+      <div class="testimonial-card" *ngFor="let t of [
+        { name: 'Sarah Chen', role: 'UI Designer', text: 'FreelanceHub transformed my freelance career. The smart matching is incredible!', avatar: '👩‍🎨' },
+        { name: 'James Wilson', role: 'Full Stack Dev', text: 'Best platform for finding quality clients. The payment system is rock solid.', avatar: '👨‍💻' },
+        { name: 'Priya Sharma', role: 'Project Manager', text: 'Managing remote teams has never been easier. The dashboard is a game-changer.', avatar: '👩‍💼' }
+      ]">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"{{ t.text }}"</p>
+        <div class="author">
+          <span class="avatar">{{ t.avatar }}</span>
+          <div>
+            <strong>{{ t.name }}</strong>
+            <span>{{ t.role }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA SECTION -->
+  <div class="cta-section">
+    <div class="cta-glow"></div>
+    <h2>Ready to Start Your Journey?</h2>
+    <p>Join thousands of freelancers and clients building the future together.</p>
+    <a routerLink="/register" class="cta-btn-large">
+      Create Free Account <span class="arrow">→</span>
+    </a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3><span class="logo-icon">⬡</span> FreelanceHub</h3>
+        <p>Connecting talent with opportunity since 2024.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <a href="#">Find Work</a>
+        <a href="#">Post a Job</a>
+        <a href="#">Pricing</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#">About</a>
+        <a href="#">Blog</a>
+        <a href="#">Careers</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="#">Help Center</a>
+        <a href="#">Contact</a>
+        <a href="#">Privacy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 FreelanceHub. All rights reserved.</p>
+    </div>
+  </footer>
 
 </div>
