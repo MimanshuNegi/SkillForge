@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from './services/auth.service';
 
@@ -6,9 +6,23 @@ import { AuthService } from './services/auth.service';
   selector: 'app-root',
   templateUrl: './app.component.html'
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
 
-  constructor(public auth: AuthService, private router: Router) {}
+  constructor(public auth: AuthService, private router: Router) { }
+
+  ngOnInit() {
+    if (this.auth.getLoginStatus()) {
+      const role = this.auth.getRole();
+
+      if (role === 'ADMIN') {
+        this.router.navigate(['/users']);
+      } else if (role === 'CLIENT') {
+        this.router.navigate(['/job-create']);
+      } else if (role === 'FREELANCER') {
+        this.router.navigate(['/job-list']);
+      }
+    }
+  }
 
   // ✅ check login status
   isLoggedIn(): boolean {

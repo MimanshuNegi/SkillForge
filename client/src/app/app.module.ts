@@ -16,6 +16,7 @@ import { BrowseJobsComponent } from './component/browse-jobs/browse-jobs.compone
 import { MyProposalComponent } from './component/my-proposal/my-proposal.component';
 import { ProfileComponent } from './component/profile/profile.component';
 import { ReportComponent } from './component/report/report.component';
+import { LandingPageComponent } from './component/landing-page/landing-page.component';
 
 
 
@@ -33,6 +34,7 @@ import { ReportComponent } from './component/report/report.component';
     MyProposalComponent,
     ProfileComponent,
     ReportComponent,
+    LandingPageComponent,
   
    
    

@@ -14,6 +14,7 @@ import { ReportComponent } from './component/report/report.component';
 
 // ✅ Guard
 import { AuthGuard } from './auth.guard';
+import { LandingPageComponent } from './component/landing-page/landing-page.component';
 
 const routes: Routes = [
   // ✅ Open Routes
@@ -29,9 +30,10 @@ const routes: Routes = [
   { path: 'my-profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'users', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'reports', component: ReportComponent, canActivate: [AuthGuard] },
+  { path: 'landing', component: LandingPageComponent},
 
   // ✅ Default route
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', redirectTo: '/landing', pathMatch: 'full' },
 
   // ✅ Wildcard route
   { path: '**', redirectTo: '/login' }
