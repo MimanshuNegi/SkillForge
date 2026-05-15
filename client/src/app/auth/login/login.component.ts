@@ -13,7 +13,10 @@ export class LoginComponent implements OnInit {
 
   loginForm!: FormGroup;
   loginRequest!: LoginRequest;
+
   errorMessage: string = '';
+  isLoading: boolean = false;
+  showPassword: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -23,44 +26,49 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      username: ['', [Validators.required]],
-      password: ['', [Validators.required]]
+      username: ['', Validators.required],
+      password: ['', Validators.required]
     });
   }
 
- onLogin(): void {
-  if (this.loginForm.invalid) {
-    return;
-  }
+  onLogin(): void {
+    if (this.loginForm.invalid) return;
 
-  this.loginRequest = {
-    username: this.loginForm.value.username,
-    password: this.loginForm.value.password
-  };
+    this.loginRequest = this.loginForm.value;
+    this.isLoading = true;
+    this.errorMessage = '';
 
-  this.authService.login(this.loginRequest).subscribe(
-    (response) => {
+    this.authService.login(this.loginRequest).subscribe({
+      next: (response: any) => {
+        this.isLoading = false;
 
-      // Uncomment ONLY if AuthService.login() does not save these already
-      // this.authService.saveToken(response.token);
-      // this.authService.setRole(response.role);
+        // Save token & role (if not already handled)
+        this.authService.saveToken(response.token);
+        this.authService.setRole(response.role);
 
-      if (response.role === 'ADMIN') {
-        this.router.navigate(['/users']);
-      } else if (response.role === 'CLIENT') {
-        this.router.navigate(['/job-create']);
-      } else if (response.role === 'FREELANCER') {
-        this.router.navigate(['/job-list']);
-      } else {
-        this.router.navigate(['/dashboard']);
+        // Role-based navigation
+        const routeMap: any = {
+          ADMIN: '/users',
+          CLIENT: '/job-create',
+          FREELANCER: '/job-list'
+        };
+
+        this.router.navigate([routeMap[response.role] || '/dashboard']);
+      },
+
+      error: (error) => {
+        this.isLoading = false;
+
+        if (error.status === 401) {
+          this.errorMessage = 'Invalid username or password';
+        } else if (error.status === 0) {
+          this.errorMessage = 'Server not reachable';
+        } else {
+          this.errorMessage = error.error?.message || 'Login failed. Try again.';
+        }
       }
-    },
-    (error) => {
-      console.error(error);
-      this.errorMessage = 'Invalid username or password';
-    }
-  );
-}
+    });
+  }
 
   get f() {
     return this.loginForm.controls;

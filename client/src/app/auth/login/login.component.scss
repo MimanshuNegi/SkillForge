@@ -1,1 +1,140 @@
-// <!--enter the code here-->
+/* Background */
+.auth-wrapper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #a5b4fc;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Main card */
+.auth-card {
+  width: 850px;
+  height: 500px;
+  display: flex;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+/* LEFT SIDE */
+.left-side {
+  flex: 1;
+  padding: 40px;
+  background: #ffffff;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* Form */
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  font-size: 13px;
+  color: #444;
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* Inputs */
+input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  transition: 0.3s;
+}
+
+input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
+  outline: none;
+}
+
+/* Password */
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper span {
+  position: absolute;
+  right: 10px;
+  top: 30px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #6366f1;
+}
+
+/* Button */
+button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  background: linear-gradient(45deg, #6366f1, #4f46e5);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+}
+
+/* Register link */
+.register-link {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.register-link a {
+  color: #6366f1;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* Error */
+small {
+  color: red;
+  font-size: 12px;
+}
+
+.error-message {
+  color: red;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+/* ✅ RIGHT SIDE DESIGN */
+.right-side {
+  flex: 1;
+  position: relative;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Curve style */
+.overlay-shape {
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  top: -40%;
+  right: -40%;
+}
+
+/* Floating cards */
+.card-box {
+  position: absolute;
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 12px;
+}

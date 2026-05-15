@@ -12,6 +12,10 @@ export class RegisterComponent implements OnInit {
 
   freelancerForm!: FormGroup;
 
+  errorMessage: string = '';
+  isLoading: boolean = false;
+  showPassword: boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -22,30 +26,38 @@ export class RegisterComponent implements OnInit {
     this.freelancerForm = this.fb.group({
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]],
       role: ['', Validators.required],
-      contactNumber: [''] // optional
+      contactNumber: ['']
     });
   }
 
   onSubmit(): void {
-
     if (this.freelancerForm.invalid) {
       this.freelancerForm.markAllAsTouched();
       return;
     }
 
+    this.isLoading = true;
+    this.errorMessage = '';
+
     const formData = this.freelancerForm.value;
 
     this.authService.registerUser(formData).subscribe({
-      next: (res) => {
-        alert("Registration successful");
+      next: () => {
+        this.isLoading = false;
         this.router.navigate(['/login']);
       },
       error: (err) => {
-        console.error(err);
-        alert("Registration failed");
-        this.router.navigate(['/register']);
+        this.isLoading = false;
+
+        if (err.status === 400) {
+          this.errorMessage = err.error?.message || 'Invalid details';
+        } else if (err.status === 0) {
+          this.errorMessage = 'Server not reachable';
+        } else {
+          this.errorMessage = 'Registration failed. Try again.';
+        }
       }
     });
   }
