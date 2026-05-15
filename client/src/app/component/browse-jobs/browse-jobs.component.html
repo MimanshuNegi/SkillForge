@@ -1,15 +1,43 @@
 <div class="app-wrapper">
   <div class="app-card">
 
+    <!-- Title -->
     <h2 class="title">Browse Jobs</h2>
 
-    <div *ngIf="jobs.length === 0" class="empty">No jobs available.</div>
+    <!-- Empty State -->
+    <div *ngIf="jobs && jobs.length === 0" class="empty">
+      No jobs available.
+    </div>
 
-    <div *ngFor="let job of jobs" class="job-card">
-      <h4>{{ job.title }}</h4>
-      <p>{{ job.description }}</p>
-      <p><strong>Budget:</strong> {{ job.budget }}</p>
-      <p><strong>Status:</strong> {{ job.status }}</p>
+    <!-- Job List -->
+    <div *ngIf="jobs && jobs.length > 0">
+
+      <div *ngFor="let job of jobs" class="job-card">
+
+        <!-- Title -->
+        <h4>{{ job.title }}</h4>
+
+        <!-- Description fallback -->
+        <p>
+          {{ job.description ? job.description : 'No description provided' }}
+        </p>
+
+        <!-- Budget fallback -->
+        <p>
+          <strong>Budget:</strong>
+          {{ job.budget ? job.budget : 'Not specified' }}
+        </p>
+
+        <!-- Status badge -->
+        <p>
+          <strong>Status:</strong>
+          <span class="status-badge" [ngClass]="job.status">
+            {{ job.status }}
+          </span>
+        </p>
+
+      </div>
+
     </div>
 
   </div>
