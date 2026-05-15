@@ -50,6 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/auth/**").hasAnyAuthority("FREELANCER", "ADMIN", "CLIENT")
+                .antMatchers(HttpMethod.DELETE, "/api/auth/**").hasAnyAuthority("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/api/auth/**").authenticated()
 
                 // ✅ 6.4 JOBS
                 .antMatchers(HttpMethod.GET, "/api/jobs/**").hasAnyAuthority("CLIENT", "FREELANCER", "ADMIN")
@@ -61,6 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // ✅ 6.4 PROPOSALS
                 .antMatchers(HttpMethod.GET, "/api/proposals/**").hasAnyAuthority("FREELANCER")
                 .antMatchers(HttpMethod.POST, "/api/proposals/**").hasAnyAuthority("CLIENT")
+                .antMatchers(HttpMethod.PUT, "/api/proposals/**").hasAnyAuthority("CLIENT")
 
                 // ✅ All other requests - authenticated
                 .anyRequest().authenticated()

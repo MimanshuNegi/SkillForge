@@ -14,7 +14,6 @@ export class AuthService {
   private token: string | null = null;
   private baseUrl: string = environment.apiUrl;
 
-  // HttpClient is optional so unit tests won't throw "No provider for HttpClient"
   constructor(@Optional() private http?: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders {
@@ -51,8 +50,15 @@ export class AuthService {
         this.setRole(res.role as Role);
 
         const anyRes: any = res as any;
+
+        // ✅ Save userId
         if (anyRes.userId !== undefined && anyRes.userId !== null) {
           this.saveUserId(Number(anyRes.userId));
+        }
+
+        // ✅ Save username
+        if (anyRes.username) {
+          localStorage.setItem('username', anyRes.username);
         }
       })
     );
@@ -89,11 +95,13 @@ export class AuthService {
     return !!this.getToken();
   }
 
+  // ✅ Clear username on logout
   logout(): void {
     this.token = null;
     localStorage.removeItem('token');
     localStorage.removeItem('role');
     localStorage.removeItem('userId');
+    localStorage.removeItem('username');
   }
 
   isAdmin(): boolean {
@@ -123,4 +131,30 @@ export class AuthService {
       { headers: this.getAuthHeaders() }
     );
   }
+
+  deleteUser(userId: number): Observable<any> {
+    if (!this.http) throw new Error('HttpClient not available');
+    return this.http.delete(
+      `${this.baseUrl}/api/auth/user/${userId}`,
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
+  updateUser(userId: number, userData: any): Observable<any> {
+  if (!this.http) throw new Error('HttpClient not available');
+
+  // ✅ Only send editable fields (not password, role, etc.)
+  const body: any = {};
+  if (userData.username) body.username = userData.username;
+  if (userData.email) body.email = userData.email;
+  if (userData.contactNumber !== undefined) body.contactNumber = userData.contactNumber;
+  if (userData.skills !== undefined) body.skills = userData.skills;
+  if (userData.bio !== undefined) body.bio = userData.bio;
+
+  return this.http.put<any>(
+    `${this.baseUrl}/api/auth/user/${userId}`,
+    body,
+    { headers: this.getAuthHeaders() }
+  );
+}
 }

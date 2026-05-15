@@ -36,7 +36,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/landing', pathMatch: 'full' },
 
   // ✅ Wildcard route
-  { path: '**', redirectTo: '/login' }
+  { path: '**', redirectTo: '/landing' }
 ];
 
 @NgModule({

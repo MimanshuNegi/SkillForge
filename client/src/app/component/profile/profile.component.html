@@ -1,25 +1,291 @@
-<h2>Profile</h2>
+<div class="container mt-4">
 
-<!-- Freelancer Profile -->
-<div *ngIf="roleName === 'FREELANCER' && profile">
-  <p>{{profile.username}}</p>
-  <p>{{profile.email}}</p>
-  <p>{{profile.contactNumber}}</p>
+  <!-- ✅ Header -->
+  <div class="text-center mb-4">
+    <h2 class="fw-bold">👤 My Profile</h2>
+    <p class="text-muted">View and update your profile details</p>
+  </div>
+
+  <!-- ✅ Success Message -->
+  <div *ngIf="successMessage"
+       style="background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; padding: 14px 16px; border-radius: 12px; text-align: center; margin-bottom: 20px; font-weight: 600; max-width: 500px; margin-left: auto; margin-right: auto;">
+    {{ successMessage }}
+  </div>
+
+  <!-- ✅ Error Message -->
+  <div *ngIf="errorMessage" class="alert alert-danger text-center mx-auto" style="max-width: 500px;">
+    ⚠️ {{ errorMessage }}
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- ✅ FREELANCER / CLIENT Profile Card     -->
+  <!-- ═══════════════════════════════════════ -->
+  <div *ngIf="roleName === 'FREELANCER' || roleName === 'CLIENT'">
+
+    <!-- Loading State -->
+    <div *ngIf="!profile && !errorMessage" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="text-muted mt-2">Loading profile...</p>
+    </div>
+
+    <!-- ✅ VIEW MODE -->
+    <div *ngIf="profile && !isEditing" class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+
+        <div class="card shadow-sm border-0" style="border-radius: 16px; overflow: hidden;">
+
+          <!-- Avatar Header -->
+          <div style="background: linear-gradient(135deg, #1a73e8, #6f42c1); color: white; text-align: center; padding: 30px 20px;">
+            <div style="width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; margin: 0 auto 12px; border: 3px solid rgba(255,255,255,0.4);">
+              {{ profile.username?.charAt(0)?.toUpperCase() || '?' }}
+            </div>
+            <h4 class="fw-bold mb-1">{{ profile.username || 'Unknown User' }}</h4>
+            <span style="background: rgba(255,255,255,0.2); padding: 4px 16px; border-radius: 20px; font-size: 0.85rem;">
+              {{ roleName }}
+            </span>
+          </div>
+
+          <!-- Profile Details -->
+          <div class="card-body p-4">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span style="font-weight: 600; color: #555;">👤 Username</span>
+              <span>{{ profile.username || 'N/A' }}</span>
+            </div>
+            <hr class="my-2">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span style="font-weight: 600; color: #555;">📧 Email</span>
+              <span>{{ profile.email || 'N/A' }}</span>
+            </div>
+            <hr class="my-2">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span style="font-weight: 600; color: #555;">📞 Contact</span>
+              <span>{{ profile.contactNumber || 'Not provided' }}</span>
+            </div>
+
+            <!-- Freelancer fields -->
+            <div *ngIf="roleName === 'FREELANCER'">
+              <hr class="my-2">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span style="font-weight: 600; color: #555;">🛠️ Skills</span>
+                <span>{{ profile.skills || 'Not provided' }}</span>
+              </div>
+              <hr class="my-2">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span style="font-weight: 600; color: #555;">📝 Bio</span>
+                <span>{{ profile.bio || 'No bio added yet.' }}</span>
+              </div>
+            </div>
+
+            <!-- ✅ Edit Button -->
+            <button class="btn btn-primary w-100 rounded-pill mt-3"
+                    (click)="toggleEdit()">
+              ✏️ Edit Profile
+            </button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ✅ EDIT MODE -->
+    <div *ngIf="profile && isEditing" class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+
+        <div class="card shadow-sm border-0" style="border-radius: 16px; overflow: hidden;">
+
+          <!-- Edit Header -->
+          <div style="background: linear-gradient(135deg, #f59e0b, #ef4444); color: white; text-align: center; padding: 24px 20px;">
+            <h4 class="fw-bold mb-0">✏️ Edit Profile</h4>
+            <p class="mb-0 mt-1" style="opacity: 0.9; font-size: 0.9rem;">Update your information below</p>
+          </div>
+
+          <div class="card-body p-4">
+
+            <!-- Username -->
+            <div style="margin-bottom: 16px;">
+              <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 6px; font-size: 0.85rem;">
+                👤 Username
+              </label>
+              <input type="text" [(ngModel)]="editForm.username"
+                     style="width: 100%; padding: 12px 14px; border-radius: 10px; border: 2px solid #e5e7eb; background: #f9fafb; font-size: 0.9rem; box-sizing: border-box; outline: none;"
+                     placeholder="Enter username" />
+            </div>
+
+            <!-- Email -->
+            <div style="margin-bottom: 16px;">
+              <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 6px; font-size: 0.85rem;">
+                📧 Email
+              </label>
+              <input type="email" [(ngModel)]="editForm.email"
+                     style="width: 100%; padding: 12px 14px; border-radius: 10px; border: 2px solid #e5e7eb; background: #f9fafb; font-size: 0.9rem; box-sizing: border-box; outline: none;"
+                     placeholder="Enter email" />
+            </div>
+
+            <!-- Contact -->
+            <div style="margin-bottom: 16px;">
+              <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 6px; font-size: 0.85rem;">
+                📞 Contact Number
+              </label>
+              <input type="text" [(ngModel)]="editForm.contactNumber"
+                     style="width: 100%; padding: 12px 14px; border-radius: 10px; border: 2px solid #e5e7eb; background: #f9fafb; font-size: 0.9rem; box-sizing: border-box; outline: none;"
+                     placeholder="Enter contact number" />
+            </div>
+
+            <!-- Freelancer: Skills -->
+            <div *ngIf="roleName === 'FREELANCER'" style="margin-bottom: 16px;">
+              <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 6px; font-size: 0.85rem;">
+                🛠️ Skills
+              </label>
+              <input type="text" [(ngModel)]="editForm.skills"
+                     style="width: 100%; padding: 12px 14px; border-radius: 10px; border: 2px solid #e5e7eb; background: #f9fafb; font-size: 0.9rem; box-sizing: border-box; outline: none;"
+                     placeholder="e.g. Angular, Java, Spring Boot" />
+            </div>
+
+            <!-- Freelancer: Bio -->
+            <div *ngIf="roleName === 'FREELANCER'" style="margin-bottom: 16px;">
+              <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 6px; font-size: 0.85rem;">
+                📝 Bio
+              </label>
+              <textarea [(ngModel)]="editForm.bio" rows="3"
+                        style="width: 100%; padding: 12px 14px; border-radius: 10px; border: 2px solid #e5e7eb; background: #f9fafb; font-size: 0.9rem; box-sizing: border-box; outline: none; resize: vertical;"
+                        placeholder="Tell us about yourself..."></textarea>
+            </div>
+
+            <!-- ✅ Action Buttons -->
+            <div class="d-flex gap-2 mt-3">
+              <button class="btn btn-success flex-grow-1 rounded-pill"
+                      (click)="saveProfile()">
+                💾 Save Changes
+              </button>
+              <button class="btn btn-outline-secondary flex-grow-1 rounded-pill"
+                      (click)="cancelEdit()">
+                ❌ Cancel
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- ✅ ADMIN: Users Management Table        -->
+  <!-- ═══════════════════════════════════════ -->
+  <div *ngIf="roleName === 'ADMIN'">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="fw-bold mb-0">👥 All Users</h4>
+      <span *ngIf="users.length > 0" class="badge bg-primary rounded-pill px-3 py-2">
+        {{ users.length }} {{ users.length === 1 ? 'User' : 'Users' }}
+      </span>
+    </div>
+
+    <!-- No Users -->
+    <div *ngIf="users.length === 0" class="text-center py-5">
+      <div class="card shadow-sm border-0 mx-auto" style="max-width: 500px;">
+        <div class="card-body py-5">
+          <h1 class="mb-3">👥</h1>
+          <h5 class="text-muted">No users found.</h5>
+          <p class="text-secondary">There are no non-admin users registered yet.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ✅ Users Table with Delete -->
+    <div *ngIf="users.length > 0" class="card shadow-sm border-0">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0 align-middle">
+
+            <thead class="table-dark">
+              <tr>
+                <th class="ps-3">#</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th>Role</th>
+                <th class="text-center">Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let user of users; let i = index">
+                <td class="ps-3 text-muted">{{ i + 1 }}</td>
+
+                <td class="fw-semibold">
+                  <div class="d-flex align-items-center">
+                    <div style="width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.8rem; margin-right: 8px;"
+                         [style.background]="user.role === 'FREELANCER' ? '#28a745' : '#17a2b8'">
+                      {{ user.username?.charAt(0)?.toUpperCase() || '?' }}
+                    </div>
+                    {{ user.username || 'N/A' }}
+                  </div>
+                </td>
+
+                <td>{{ user.email || 'N/A' }}</td>
+                <td>{{ user.contactNumber || 'N/A' }}</td>
+
+                <td>
+                  <span class="badge rounded-pill px-3"
+                        [ngClass]="{
+                          'bg-success': user.role === 'FREELANCER',
+                          'bg-info text-dark': user.role === 'CLIENT'
+                        }">
+                    {{ user.role }}
+                  </span>
+                </td>
+
+                <!-- ✅ DELETE BUTTON -->
+                <td class="text-center">
+                  <button class="btn btn-outline-danger btn-sm rounded-pill"
+                          (click)="deleteUser(user.id)">
+                    🗑️ Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- ✅ USER role (generic view)             -->
+  <!-- ═══════════════════════════════════════ -->
+  <div *ngIf="roleName !== 'FREELANCER' && roleName !== 'CLIENT' && roleName !== 'ADMIN'">
+    <div *ngIf="profile" class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm border-0" style="border-radius: 16px;">
+          <div style="background: #6c757d; color: white; text-align: center; padding: 24px;">
+            <h4 class="fw-bold mb-1">{{ profile.username }}</h4>
+            <span style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px;">
+              {{ roleName || 'USER' }}
+            </span>
+          </div>
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between mb-3">
+              <span style="font-weight: 600;">📧 Email</span>
+              <span>{{ profile.email || 'N/A' }}</span>
+            </div>
+            <hr class="my-2">
+            <div class="d-flex justify-content-between">
+              <span style="font-weight: 600;">📞 Contact</span>
+              <span>{{ profile.contactNumber || 'N/A' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
-
-<!-- Admin Users -->
-<table *ngIf="roleName === 'ADMIN'">
-  <tr>
-    <th>Username</th>
-    <th>Email</th>
-    <th>Contact</th>
-    <th>Role</th>
-  </tr>
-
-  <tr *ngFor="let u of users">
-    <td>{{u.username}}</td>
-    <td>{{u.email}}</td>
-    <td>{{u.contactNumber}}</td>
-    <td>{{u.role}}</td>
-  </tr>
-</table>

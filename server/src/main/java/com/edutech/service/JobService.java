@@ -96,7 +96,7 @@ public class JobService {
         proposal.setFreelancer(freelancer);
         proposal.setStatus("APPLIED");
 
-        proposal.setBidAmount(0.0); 
+        proposal.setBidAmount(0.0);
         proposal.setAppliedAt(LocalDateTime.now());
 
         // Update job status
@@ -159,13 +159,23 @@ public class JobService {
 
     // Helper method: convert to DTO
     private JobDTO convertToDTO(Job job) {
-
         JobDTO dto = new JobDTO();
-
+        dto.setId(job.getId()); // ✅ CRITICAL
         dto.setTitle(job.getTitle());
         dto.setDescription(job.getDescription());
         dto.setBudget(job.getBudget());
+        dto.setStatus(job.getStatus()); // ✅ CRITICAL
+
+        if (job.getClient() != null) {
+            dto.setClientName(job.getClient().getUsername()); // ✅ nice to have
+        }
 
         return dto;
     }
+
+    public List<Proposal> getProposalsForJob(Long jobId) {
+        return proposalRepository.findByJobId(jobId);
+    }
+    
+
 }

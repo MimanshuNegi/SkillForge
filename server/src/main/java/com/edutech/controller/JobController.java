@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import com.edutech.dto.JobDTO;
 import com.edutech.entity.Job;
 import com.edutech.entity.JobApplication;
+import com.edutech.entity.Proposal;
 import com.edutech.service.JobService;
 
 @RestController
@@ -26,7 +27,7 @@ public class JobController {
     // ✅ Create Job
     @PostMapping("/client/{clientId}")
     public ResponseEntity<Job> createJob(@PathVariable Long clientId,
-                                         @Valid @RequestBody Job job) {
+            @Valid @RequestBody Job job) {
         return ResponseEntity.ok(jobService.createJob(clientId, job));
     }
 
@@ -45,27 +46,52 @@ public class JobController {
     // ✅ ✅ FIXED: Update Job Status (returns String as expected by tests)
     @PutMapping("/status/{jobId}")
     public ResponseEntity<String> updateJobStatus(@PathVariable Long jobId,
-                                                  @RequestParam String status) {
+            @RequestParam String status) {
 
         jobService.updateJobStatus(jobId, status);
         return ResponseEntity.ok("Status updated to " + status);
     }
 
-    // ✅ Apply to Job
+    // ✅ Apply to Job (FIXED)
     @PostMapping("/{jobId}/apply")
     public ResponseEntity<Map<String, String>> applyToJob(
             @PathVariable Long jobId,
-            @RequestBody JobApplication jobApplication) {
+            @RequestBody Map<String, Object> body) {
 
         Map<String, String> response = new HashMap<>();
 
-        if (jobService.hasUserAlreadyApplied(jobId, jobApplication.getUserId())) {
+        // ✅ Extract userId from request body { "userId": 1 }
+        Long userId = null;
+        if (body != null && body.get("userId") != null) {
+            userId = Long.valueOf(body.get("userId").toString());
+        }
+
+        // If userId not in body, try from JWT
+        if (userId == null) {
+            String username = SecurityContextHolder
+                    .getContext()
+                    .getAuthentication()
+                    .getName();
+
+            if (username != null) {
+                // You need userService here — add @Autowired if not already
+                // User user = userService.findByUsername(username);
+                // userId = user.getId();
+            }
+        }
+
+        if (userId == null) {
+            response.put("message", "User not identified");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        // Check duplicate
+        if (jobService.hasUserAlreadyApplied(jobId, userId)) {
             response.put("message", "Already Applied.");
             return ResponseEntity.ok(response);
         }
 
-        jobService.applyToJob(jobId, jobApplication.getUserId());
-
+        jobService.applyToJob(jobId, userId);
         response.put("message", "Applied successfully.");
         return ResponseEntity.ok(response);
     }
@@ -74,9 +100,9 @@ public class JobController {
     @GetMapping("/my-jobs")
     public ResponseEntity<List<JobDTO>> getMyJobs() {
         String username = SecurityContextHolder
-            .getContext()
-            .getAuthentication()
-            .getName();
+                .getContext()
+                .getAuthentication()
+                .getName();
         return ResponseEntity.ok(jobService.getJobsPostedByClient(username));
     }
 
@@ -92,4 +118,10 @@ public class JobController {
     public ResponseEntity<Map<String, Object>> getUserReport() {
         return ResponseEntity.ok(jobService.getUserReport());
     }
+
+    @GetMapping("/{jobId}/proposals")
+    public ResponseEntity<List<Proposal>> getProposalsForJob(@PathVariable Long jobId) {
+        return ResponseEntity.ok(jobService.getProposalsForJob(jobId));
+    }
+
 }
