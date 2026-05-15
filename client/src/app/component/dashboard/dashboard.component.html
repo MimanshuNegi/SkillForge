@@ -1,41 +1,35 @@
-<div class="container mt-3">
+<div class="app-wrapper">
+  <div class="app-card">
 
-  <!-- ✅ Header -->
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h3>Dashboard</h3>
-    <button class="btn btn-danger" (click)="logout()">Logout</button>
+    <div class="header">
+      <h2>Dashboard</h2>
+      <button class="logout" (click)="logout()">Logout</button>
+    </div>
+
+    <p><strong>Role:</strong> {{ roleName }}</p>
+
+    <!-- ADMIN -->
+    <div *ngIf="roleName === 'ADMIN'" class="panel">
+      <h4>Admin Panel</h4>
+      <a routerLink="/users">Users</a>
+      <a routerLink="/reports">Reports</a>
+    </div>
+
+    <!-- CLIENT -->
+    <div *ngIf="roleName === 'CLIENT'" class="panel">
+      <h4>Client Panel</h4>
+      <a routerLink="/job-create">Post Job</a>
+      <a routerLink="/job-list">Jobs</a>
+      <a routerLink="/my-job">My Jobs</a>
+    </div>
+
+    <!-- FREELANCER -->
+    <div *ngIf="roleName === 'FREELANCER'" class="panel">
+      <h4>Freelancer Panel</h4>
+      <a routerLink="/browse-jobs">Browse Jobs</a>
+      <a routerLink="/my-proposals">My Proposals</a>
+      <a routerLink="/my-profile">Profile</a>
+    </div>
+
   </div>
-
-  <!-- ✅ Welcome -->
-  <p><strong>Role:</strong> {{ roleName }}</p>
-
-  <!-- ✅ ADMIN Dashboard -->
-  <div *ngIf="roleName === 'ADMIN'" class="card p-3 mb-3">
-    <h5>Admin Panel</h5>
-    <ul>
-      <li><a routerLink="/users">Manage Users</a></li>
-      <li><a routerLink="/reports">View Reports</a></li>
-    </ul>
-  </div>
-
-  <!-- ✅ CLIENT Dashboard -->
-  <div *ngIf="roleName === 'CLIENT'" class="card p-3 mb-3">
-    <h5>Client Panel</h5>
-    <ul>
-      <li><a routerLink="/job-create">Post a Job</a></li>
-      <li><a routerLink="/job-list">View Jobs</a></li>
-      <li><a routerLink="/my-job">My Posted Jobs</a></li>
-    </ul>
-  </div>
-
-  <!-- ✅ FREELANCER Dashboard -->
-  <div *ngIf="roleName === 'FREELANCER'" class="card p-3 mb-3">
-    <h5>Freelancer Panel</h5>
-    <ul>
-      <li><a routerLink="/job-list">Browse Jobs</a></li>
-      <li><a routerLink="/my-proposals">My Proposals</a></li>
-      <li><a routerLink="/my-profile">My Profile</a></li>
-    </ul>
-  </div>
-
 </div>
