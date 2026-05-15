@@ -1,25 +1,218 @@
-<h2>Profile</h2>
+<div class="container mt-4">
 
-<!-- Freelancer Profile -->
-<div *ngIf="roleName === 'FREELANCER' && profile">
-  <p>{{profile.username}}</p>
-  <p>{{profile.email}}</p>
-  <p>{{profile.contactNumber}}</p>
+  <!-- ✅ Header -->
+  <div class="text-center mb-4">
+    <h2 class="fw-bold">👤 My Profile</h2>
+    <p class="text-muted">View your profile details and manage users</p>
+  </div>
+
+  <!-- ✅ Error Message -->
+  <div *ngIf="errorMessage" class="alert alert-danger text-center mx-auto" style="max-width: 500px;">
+    ⚠️ {{ errorMessage }}
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- ✅ FREELANCER / CLIENT Profile Card     -->
+  <!-- ═══════════════════════════════════════ -->
+  <div *ngIf="roleName === 'FREELANCER' || roleName === 'CLIENT'">
+
+    <!-- Loading State -->
+    <div *ngIf="!profile && !errorMessage" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="text-muted mt-2">Loading profile...</p>
+    </div>
+
+    <!-- Profile Card -->
+    <div *ngIf="profile" class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+
+        <div class="card shadow-sm border-0 profile-card">
+
+          <!-- Avatar Header -->
+          <div class="card-header bg-primary text-white text-center py-4 rounded-top">
+            <div class="avatar-circle mx-auto mb-3">
+              {{ profile.username?.charAt(0)?.toUpperCase() || '?' }}
+            </div>
+            <h4 class="fw-bold mb-1">{{ profile.username || 'Unknown User' }}</h4>
+            <span class="badge bg-light text-primary rounded-pill px-3">
+              {{ roleName }}
+            </span>
+          </div>
+
+          <!-- Profile Details -->
+          <div class="card-body p-4">
+
+            <div class="profile-row">
+              <div class="profile-label">👤 Username</div>
+              <div class="profile-value">{{ profile.username || 'N/A' }}</div>
+            </div>
+
+            <hr class="my-2">
+
+            <div class="profile-row">
+              <div class="profile-label">🏷️ Role</div>
+              <div class="profile-value">
+                <span class="badge rounded-pill px-3"
+                      [ngClass]="{
+                        'bg-success': roleName === 'FREELANCER',
+                        'bg-info text-dark': roleName === 'CLIENT'
+                      }">
+                  {{ roleName }}
+                </span>
+              </div>
+            </div>
+
+            <hr class="my-2">
+
+            <div class="profile-row">
+              <div class="profile-label">📧 Email</div>
+              <div class="profile-value">{{ profile.email || 'N/A' }}</div>
+            </div>
+
+            <hr class="my-2">
+
+            <div class="profile-row">
+              <div class="profile-label">📞 Contact</div>
+              <div class="profile-value">{{ profile.contactNumber || 'Not provided' }}</div>
+            </div>
+
+            <!-- Freelancer-specific fields -->
+            <div *ngIf="roleName === 'FREELANCER'">
+
+              <hr class="my-2">
+
+              <div class="profile-row">
+                <div class="profile-label">🛠️ Skills</div>
+                <div class="profile-value">{{ profile.skills || 'Not provided' }}</div>
+              </div>
+
+              <hr class="my-2">
+
+              <div class="profile-row">
+                <div class="profile-label">📝 Bio</div>
+                <div class="profile-value">{{ profile.bio || 'No bio added yet.' }}</div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- ✅ ADMIN: Users Management Table        -->
+  <!-- ═══════════════════════════════════════ -->
+  <div *ngIf="roleName === 'ADMIN'">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="fw-bold mb-0">👥 All Users</h4>
+      <span *ngIf="users.length > 0" class="badge bg-primary rounded-pill px-3 py-2">
+        {{ users.length }} {{ users.length === 1 ? 'User' : 'Users' }}
+      </span>
+    </div>
+
+    <!-- No Users -->
+    <div *ngIf="users.length === 0" class="text-center py-5">
+      <div class="card shadow-sm border-0 mx-auto" style="max-width: 500px;">
+        <div class="card-body py-5">
+          <h1 class="mb-3">👥</h1>
+          <h5 class="text-muted">No users found.</h5>
+          <p class="text-secondary">There are no non-admin users registered yet.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Users Table -->
+    <div *ngIf="users.length > 0" class="card shadow-sm border-0">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0 align-middle">
+
+            <thead class="table-dark">
+              <tr>
+                <th class="ps-3">#</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let user of users; let i = index">
+                <td class="ps-3 text-muted">{{ i + 1 }}</td>
+
+                <td class="fw-semibold">
+                  <div class="d-flex align-items-center">
+                    <div class="avatar-small me-2">
+                      {{ user.username?.charAt(0)?.toUpperCase() || '?' }}
+                    </div>
+                    {{ user.username || 'N/A' }}
+                  </div>
+                </td>
+
+                <td>{{ user.email || 'N/A' }}</td>
+
+                <td>{{ user.contactNumber || 'N/A' }}</td>
+
+                <td>
+                  <span class="badge rounded-pill px-3"
+                        [ngClass]="{
+                          'bg-success': user.role === 'FREELANCER',
+                          'bg-info text-dark': user.role === 'CLIENT'
+                        }">
+                    {{ user.role }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- ✅ USER role (generic view)             -->
+  <!-- ═══════════════════════════════════════ -->
+  <div *ngIf="roleName !== 'FREELANCER' && roleName !== 'CLIENT' && roleName !== 'ADMIN'">
+
+    <!-- Profile Card (generic) -->
+    <div *ngIf="profile" class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm border-0 profile-card">
+          <div class="card-header bg-secondary text-white text-center py-4 rounded-top">
+            <div class="avatar-circle mx-auto mb-3">
+              {{ profile.username?.charAt(0)?.toUpperCase() || '?' }}
+            </div>
+            <h4 class="fw-bold mb-1">{{ profile.username }}</h4>
+            <span class="badge bg-light text-dark rounded-pill px-3">
+              {{ roleName || 'USER' }}
+            </span>
+          </div>
+
+          <div class="card-body p-4">
+            <div class="profile-row">
+              <div class="profile-label">📧 Email</div>
+              <div class="profile-value">{{ profile.email || 'N/A' }}</div>
+            </div>
+            <hr class="my-2">
+            <div class="profile-row">
+              <div class="profile-label">📞 Contact</div>
+              <div class="profile-value">{{ profile.contactNumber || 'N/A' }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
 </div>
-
-<!-- Admin Users -->
-<table *ngIf="roleName === 'ADMIN'">
-  <tr>
-    <th>Username</th>
-    <th>Email</th>
-    <th>Contact</th>
-    <th>Role</th>
-  </tr>
-
-  <tr *ngFor="let u of users">
-    <td>{{u.username}}</td>
-    <td>{{u.email}}</td>
-    <td>{{u.contactNumber}}</td>
-    <td>{{u.role}}</td>
-  </tr>
-</table>

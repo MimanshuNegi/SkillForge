@@ -7,18 +7,22 @@ import { Router } from '@angular/router';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent  {
-roleName: string | null = '';
+export class DashboardComponent implements OnInit {
+
+  roleName: string | null = '';
+  username: string = '';
 
   constructor(private auth: AuthService, private router: Router) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.roleName = this.auth.getRole();
+
+    // Try to get username from localStorage
+    this.username = localStorage.getItem('username') || 'User';
   }
 
-  logout() {
+  logout(): void {
     this.auth.logout();
     this.router.navigate(['/login']);
   }
-
 }

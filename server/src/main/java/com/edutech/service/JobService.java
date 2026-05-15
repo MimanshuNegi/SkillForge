@@ -159,13 +159,17 @@ public class JobService {
 
     // Helper method: convert to DTO
     private JobDTO convertToDTO(Job job) {
+    JobDTO dto = new JobDTO();
+    dto.setId(job.getId());                    // ✅ CRITICAL
+    dto.setTitle(job.getTitle());
+    dto.setDescription(job.getDescription());
+    dto.setBudget(job.getBudget());
+    dto.setStatus(job.getStatus());            // ✅ CRITICAL
 
-        JobDTO dto = new JobDTO();
-
-        dto.setTitle(job.getTitle());
-        dto.setDescription(job.getDescription());
-        dto.setBudget(job.getBudget());
-
-        return dto;
+    if (job.getClient() != null) {
+        dto.setClientName(job.getClient().getUsername());  // ✅ nice to have
     }
+
+    return dto;
+}
 }

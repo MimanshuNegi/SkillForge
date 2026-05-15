@@ -68,18 +68,18 @@ public class ProposalController {
     }
 
     // 6. GET /api/proposals/myPropsal - Get proposals of logged-in freelancer
-    
-@GetMapping("/myPropsal")
-public ResponseEntity<List<Proposal>> getMyProposals() {
 
-    String username = SecurityContextHolder
-            .getContext()
-            .getAuthentication()
-            .getName(); // ✅ gets username from JWT
+    @GetMapping("/myPropsal")
+    public ResponseEntity<List<Proposal>> getMyProposals() {
 
-    List<Proposal> proposals = proposalService
-            .getProposalsByFreelancerUsername(username);
-return ResponseEntity.ok(proposals);
-   
+        String username = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName(); // ✅ gets username from JWT
 
-}}
+        List<Proposal> proposals = proposalService
+                .getProposalsByFreelancerUsername(username);
+        return ResponseEntity.ok(proposals);
+
+    }
+}

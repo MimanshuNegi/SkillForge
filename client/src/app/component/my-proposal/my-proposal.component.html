@@ -1,10 +1,128 @@
-<h2>My Proposals</h2>
+<div class="container mt-4">
 
-<div *ngIf="proposals.length === 0">No proposals found.</div>
+  <!-- ✅ Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold mb-1">📝 My Proposals</h2>
+      <p class="text-muted mb-0">Track all your submitted proposals and their status</p>
+    </div>
 
-<div *ngFor="let p of proposals">
-  <h3>{{p.job.title}}</h3>
-  <p>{{p.job.description}}</p>
-  <p>Status: {{p.status}}</p>
-  <p>Applied At: {{p.appliedAt | date}}</p>
+    <!-- Proposal Count -->
+    <span *ngIf="proposals.length > 0" class="badge bg-primary rounded-pill px-3 py-2 fs-6">
+      {{ proposals.length }} {{ proposals.length === 1 ? 'Proposal' : 'Proposals' }}
+    </span>
+  </div>
+
+  <!-- ✅ No Proposals Message -->
+  <div *ngIf="proposals.length === 0" class="text-center py-5">
+    <div class="card shadow-sm border-0 mx-auto" style="max-width: 500px;">
+      <div class="card-body py-5">
+        <h1 class="mb-3">📭</h1>
+        <h5 class="text-muted fw-bold">No proposals found.</h5>
+        <p class="text-secondary mb-3">
+          You haven't submitted any proposals yet. Start browsing jobs!
+        </p>
+        <a routerLink="/job-list" class="btn btn-primary rounded-pill px-4">
+          🔍 Browse Jobs
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ Proposal Cards -->
+  <div class="row" *ngIf="proposals.length > 0">
+    <div class="col-md-6 col-lg-4 mb-4" *ngFor="let p of proposals">
+
+      <div class="card h-100 shadow-sm border-0 proposal-card">
+
+        <!-- Card Header -->
+        <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center pt-3">
+
+          <!-- Status Badge -->
+          <span class="badge rounded-pill px-3 py-1"
+                [ngClass]="{
+                  'bg-warning text-dark': p.status === 'PENDING',
+                  'bg-success': p.status === 'APPROVED',
+                  'bg-danger': p.status === 'REJECTED',
+                  'bg-info text-dark': p.status === 'APPLIED',
+                  'bg-secondary': p.status !== 'PENDING' && p.status !== 'APPROVED' && p.status !== 'REJECTED' && p.status !== 'APPLIED'
+                }">
+            <span *ngIf="p.status === 'PENDING'">⏳</span>
+            <span *ngIf="p.status === 'APPROVED'">✅</span>
+            <span *ngIf="p.status === 'REJECTED'">❌</span>
+            <span *ngIf="p.status === 'APPLIED'">📤</span>
+            {{ p.status || 'N/A' }}
+          </span>
+
+          <span class="text-muted small">#{{ p.id }}</span>
+        </div>
+
+        <!-- Card Body -->
+        <div class="card-body">
+
+          <!-- Job Title -->
+          <h5 class="card-title fw-bold mb-2">
+            🏷️ {{ p.job?.title || 'Untitled Job' }}
+          </h5>
+
+          <!-- Job Description -->
+          <p class="card-text text-secondary description-clamp">
+            {{ p.job?.description || 'No description available.' }}
+          </p>
+
+          <!-- Bid Amount -->
+          <div *ngIf="p.bidAmount" class="d-flex align-items-center mb-2">
+            <span class="me-2">💰</span>
+            <span class="fw-semibold text-success fs-5">
+              ${{ p.bidAmount }}
+            </span>
+          </div>
+
+          <!-- Applied At -->
+          <div class="d-flex align-items-center text-muted small">
+            <span class="me-2">📅</span>
+            <span>
+              Applied: {{ p.appliedAt ? (p.appliedAt | date:'medium') : 'N/A' }}
+            </span>
+          </div>
+
+        </div>
+
+        <!-- Card Footer -->
+        <div class="card-footer bg-white border-0 pb-3">
+
+          <!-- Approved -->
+          <div *ngIf="p.status === 'APPROVED'" class="text-center">
+            <span class="text-success fw-bold small">
+              🎉 Congratulations! Your proposal was approved.
+            </span>
+          </div>
+
+          <!-- Pending -->
+          <div *ngIf="p.status === 'PENDING'" class="text-center">
+            <span class="text-warning fw-bold small">
+              ⏳ Waiting for client's response...
+            </span>
+          </div>
+
+          <!-- Rejected -->
+          <div *ngIf="p.status === 'REJECTED'" class="text-center">
+            <span class="text-danger fw-bold small">
+              This proposal was not selected.
+            </span>
+          </div>
+
+          <!-- Applied -->
+          <div *ngIf="p.status === 'APPLIED'" class="text-center">
+            <span class="text-info fw-bold small">
+              📤 Application submitted successfully.
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
 </div>

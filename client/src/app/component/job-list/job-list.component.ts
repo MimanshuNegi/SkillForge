@@ -15,59 +15,57 @@ export class JobListComponent implements OnInit {
 
   constructor(private service: JobService, private auth: AuthService) {}
 
- 
-ngOnInit(): void {
-  this.roleName = this.auth.getRole();
+  ngOnInit(): void {
+    this.roleName = this.auth.getRole();
 
-  this.service.getJobList().subscribe({
-    next: (data: any) => {
-      this.job = data || [];
-      this.allJobs = data || [];
-    },
-    error: (err: any) => {
-      console.error('Error fetching jobs', err); 
-      this.job = [];
-      this.allJobs = [];
-    }
-  });
-}
+    // ✅ DEBUG: check what role is stored
+    console.log('ROLE:', this.roleName);
 
+    this.service.getJobList().subscribe({
+      next: (data: any) => {
+        this.job = data || [];
+        this.allJobs = data || [];
 
-  
-applyJob(jobId: number): void {
-  const fromService = (this.auth as any).getUserId?.();
-  const stored = localStorage.getItem('userId');
-  const fromStorage = stored !== null ? Number(stored) : null;
-  const userId = (fromService ?? fromStorage ?? 1);
-
-  this.service.applyToJob(jobId, userId).subscribe({
-    next: (res: any) => {
-      const msg = res?.message ?? res;
-
-      // ✅ Keep alert (tests often spy on this)
-      alert(msg);
-
-      // ✅ ALWAYS update only the applied job status on success
-      const found = this.job.find(j => j.id === jobId);
-      if (found) {
-        found.status = 'APPLIED';
+        // ✅ DEBUG: check what status jobs have
+        console.log('JOBS:', this.job);
+      },
+      error: (err: any) => {
+        console.error('Error fetching jobs', err);
+        this.job = [];
+        this.allJobs = [];
       }
-    },
-    error: (err: any) => {
-      if (err?.status === 409) {
-        alert('You have already applied to this job.');
-      } else {
-        alert('Failed to apply. Please try again.');
-        console.error('Error details:', err);
-      }
-    }
-  });
-}
+    });
+  }
 
+  applyJob(jobId: number): void {
+    const fromService = (this.auth as any).getUserId?.();
+    const stored = localStorage.getItem('userId');
+    const fromStorage = stored !== null ? Number(stored) : null;
+    const userId = (fromService ?? fromStorage ?? 1);
+
+    this.service.applyToJob(jobId, userId).subscribe({
+      next: (res: any) => {
+        const msg = res?.message ?? res;
+        alert(msg);
+
+        const found = this.job.find(j => j.id === jobId);
+        if (found) {
+          found.status = 'APPLIED';
+        }
+      },
+      error: (err: any) => {
+        if (err?.status === 409) {
+          alert('You have already applied to this job.');
+        } else {
+          alert('Failed to apply. Please try again.');
+          console.error('Error details:', err);
+        }
+      }
+    });
+  }
 
   searchJobs(): void {
     if (!this.searchTitle || this.searchTitle.trim() === '') {
-      // Reset to original list
       this.job = this.allJobs;
       return;
     }

@@ -46,4 +46,20 @@ export class JobService {
   getUserReport(): Observable<any> {
     return this.http.get(`${this.api}/report/users`, { headers: this.getHeaders() });
   }
+
+  
+getProposalsForJob(jobId: number): Observable<any> {
+  return this.http.get(`${this.api}/${jobId}/proposals`, { headers: this.getHeaders() });
+}
+
+
+updateProposalStatus(proposalId: number, status: string): Observable<any> {
+  return this.http.put(
+    `${environment.apiUrl}/api/proposals/${proposalId}`,
+    { status, bidAmount: 0, job: {}, freelancer: {} },
+    { headers: this.getHeaders() }
+  );
+}
+
+
 }
