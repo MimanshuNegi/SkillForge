@@ -13,15 +13,23 @@ jobs: Job[] = [];
 
   constructor(private service: JobService, private auth: AuthService) {}
 
-  ngOnInit() {
-    const userId = this.auth.getUserId();
+  ngOnInit(): void {
+  const userId = this.auth.getUserId();
 
-    this.service.getMyJobs(userId!).subscribe((data: Job[]) => {
-      this.jobs = data.filter((j: Job) =>
-        j.status === 'APPLIED' || j.status === 'ACCEPTED'
+  this.service.getMyJobs(userId!).subscribe({
+    next: (data: Job[]) => {
+      this.jobs = (data || []).filter(
+        (j: Job) =>
+          j.status === 'APPLIED' ||
+          j.status === 'ACCEPTED'
       );
-    });
-  }
+    },
+    error: (err) => {
+      console.error('Error fetching jobs', err);
+      this.jobs = [];
+    }
+  });
+}
 
   updateStatus(jobId: number, status: string) {
     this.service.updateJobStatus(jobId, status).subscribe(() => {

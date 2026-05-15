@@ -6,7 +6,7 @@ import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class JobService {
-  private api = `${environment.apiUrl}/api/jobs`; // tests expect /api/jobs
+  private api = `${environment.apiUrl}/api/jobs`; 
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
