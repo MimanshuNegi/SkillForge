@@ -6,7 +6,6 @@
   <div class="collapse navbar-collapse">
     <ul class="navbar-nav me-auto">
 
-      <!-- Common -->
       <li class="nav-item">
         <a class="nav-link" routerLink="/dashboard">Dashboard</a>
       </li>
@@ -41,14 +40,12 @@
         <a class="nav-link" routerLink="/my-proposals">My Proposals</a>
       </li>
 
-      <!-- Common: Profile -->
       <li class="nav-item">
         <a class="nav-link" routerLink="/my-profile">Profile</a>
       </li>
 
     </ul>
 
-    <!-- ✅ RIGHT: Role Badge + Logout (ALWAYS visible) -->
     <div class="d-flex align-items-center text-white">
       <span class="badge bg-light text-dark me-3">{{ role }}</span>
       <button class="btn btn-outline-danger btn-sm" (click)="logout()">
@@ -59,7 +56,6 @@
   </div>
 </nav>
 
-<!-- ✅ Main content -->
-<div class="container mt-3">
-  <router-outlet></router-outlet>
-</div>
+<!-- ✅ IMPORTANT: No .container wrapper for router-outlet -->
+<!-- Landing page needs full width, other pages use their own .container -->
+<router-outlet></router-outlet>
