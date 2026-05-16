@@ -1,203 +1,551 @@
+// ─── Variables ───
+$bg-dark: #0a0a1a;
+$bg-surface: rgba(255, 255, 255, 0.04);
+$gradient-primary: linear-gradient(135deg, #00f0ff, #7b2ff7, #ff2d95);
+$glass-bg: rgba(255, 255, 255, 0.05);
+$glass-border: rgba(255, 255, 255, 0.08);
+$text-primary: #ffffff;
+$text-secondary: #c4c4d4;
+$text-muted: #8a8aa3;
+$accent-cyan: #00f0ff;
+$accent-purple: #7b2ff7;
+$accent-pink: #ff2d95;
+$accent-green: #10b981;
+$accent-orange: #f59e0b;
+$accent-blue: #3b82f6;
+$radius-lg: 20px;
+$radius-md: 14px;
+$radius-sm: 10px;
 
-/* Header */
-.header {
+// ─── Mixins ───
+@mixin glass($blur: 16px) {
+  background: $glass-bg;
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: 1px solid $glass-border;
+}
+
+@mixin glow($color, $spread: 25px) {
+  box-shadow: 0 0 $spread rgba($color, 0.25),
+              0 0 ($spread * 2) rgba($color, 0.08);
+}
+
+@mixin card-hover {
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  &:hover {
+    transform: translateY(-6px);
+  }
+}
+
+// ─── Dashboard Wrapper ───
 .dashboard-wrapper {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 16px;
-}
-}
-// ═══════════════════════════
-// Welcome Banner
-// ═══════════════════════════
-.welcome-banner {
-  background: linear-gradient(135deg, #1a73e8, #4a9af5);
-  border-radius: 16px;
-  padding: 32px;
-  color: white;
-  box-shadow: 0 8px 30px rgba(26, 115, 232, 0.3);
-}
-
-.banner-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.banner-text h1 {
-  font-size: 1.8rem;
-}
-
-.role-badge {
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 8px 20px;
-  border-radius: 50px;
-  font-weight: 600;
-  font-size: 0.95rem;
-  backdrop-filter: blur(10px);
-}
-// ═══════════════════════════
-// Section Title
-// ═══════════════════════════
-.section-title {
-  color: #2c3e50;
-  font-weight: 700;
-  border-left: 4px solid #1a73e8;
-  padding-left: 12px;
-}
-
-// ═══════════════════════════
-// Action Cards
-// ═══════════════════════════
-.action-card {
+  min-height: 100vh;
+  background: $bg-dark;
+  padding: 28px 36px 50px;
   position: relative;
-  padding: 28px 24px;
-  border-radius: 16px;
-  color: white;
-  cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  overflow-x: hidden;
+
+  // Ambient background orbs
+  &::before,
+  &::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(140px);
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  &::before {
+    width: 600px;
+    height: 600px;
+    background: $accent-purple;
+    top: -200px;
+    right: -150px;
+    animation: floatOrb 10s ease-in-out infinite alternate;
+  }
+
+  &::after {
+    width: 500px;
+    height: 500px;
+    background: $accent-cyan;
+    bottom: -150px;
+    left: -100px;
+    animation: floatOrb 10s ease-in-out infinite alternate-reverse;
+  }
+
+  // Everything above orbs
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+// ─── Welcome Banner ───
+.welcome-banner {
+  @include glass(20px);
+  border-radius: $radius-lg;
+  padding: 32px 36px;
+  margin-bottom: 8px;
+  position: relative;
   overflow: hidden;
+
+  // Gradient accent line at top
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: $gradient-primary;
+  }
+
+  // Subtle mesh overlay
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 30px 30px;
+    pointer-events: none;
+  }
+
+  .banner-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .banner-text {
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 0 0 6px;
+      background: $gradient-primary;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    p {
+      color: $text-muted;
+      font-size: 0.95rem;
+      margin: 0;
+    }
+  }
+
+  .banner-badge {
+    .role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: $text-primary;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      @include glow($accent-purple, 12px);
+    }
+  }
+}
+
+// ─── Section Title ───
+.section-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: $text-primary;
+  letter-spacing: 0.3px;
+  padding-left: 4px;
+}
+
+// ─── Action Cards ───
+.action-card {
+  @include glass(14px);
+  border-radius: $radius-lg;
+  padding: 28px 26px;
   min-height: 200px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  @include card-hover;
 
-  &:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+  // Accent glow bar at top
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: $radius-lg $radius-lg 0 0;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+  }
+
+  // Hover shimmer
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.04),
+      transparent
+    );
+    transition: left 0.6s ease;
+  }
+
+  &:hover::after {
+    left: 100%;
+  }
+
+  &:hover::before {
+    opacity: 1;
   }
 
   .card-icon {
-    font-size: 2.5rem;
-    margin-bottom: 12px;
+    font-size: 2.2rem;
+    margin-bottom: 14px;
+    filter: drop-shadow(0 0 8px rgba(255,255,255,0.15));
   }
 
   h5 {
+    color: $text-primary;
+    font-size: 1.05rem;
     margin-bottom: 8px;
   }
 
   p {
-    font-size: 0.9rem;
-    opacity: 0.85;
-    margin-bottom: 0;
-    line-height: 1.4;
+    color: $text-muted;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    margin: 0;
+    flex-grow: 1;
   }
 
   .card-arrow {
-    position: absolute;
-    bottom: 16px;
-    right: 20px;
-    font-size: 1.5rem;
-    opacity: 0.5;
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    align-self: flex-end;
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.3);
+    margin-top: 12px;
+    transition: all 0.3s ease;
   }
 
   &:hover .card-arrow {
-    opacity: 1;
-    transform: translateX(4px);
+    color: $text-primary;
+    transform: translateX(6px);
+  }
+
+  // ─── Card Color Variants ───
+  &.card-purple {
+    &::before { background: linear-gradient(90deg, $accent-purple, $accent-pink); }
+    &:hover {
+      border-color: rgba($accent-purple, 0.3);
+      @include glow($accent-purple, 20px);
+    }
+  }
+
+  &.card-blue {
+    &::before { background: linear-gradient(90deg, $accent-blue, $accent-cyan); }
+    &:hover {
+      border-color: rgba($accent-blue, 0.3);
+      @include glow($accent-blue, 20px);
+    }
+  }
+
+  &.card-green {
+    &::before { background: linear-gradient(90deg, $accent-green, #34d399); }
+    &:hover {
+      border-color: rgba($accent-green, 0.3);
+      @include glow($accent-green, 20px);
+    }
+  }
+
+  &.card-orange {
+    &::before { background: linear-gradient(90deg, $accent-orange, #fb923c); }
+    &:hover {
+      border-color: rgba($accent-orange, 0.3);
+      @include glow($accent-orange, 20px);
+    }
   }
 }
 
-
-// Card Colors
-.card-blue {
-  background: linear-gradient(135deg, #1a73e8, #4a9af5);
-}
-
-.card-green {
-  background: linear-gradient(135deg, #28a745, #51c46d);
-}
-
-.card-purple {
-  background: linear-gradient(135deg, #6f42c1, #9b6dff);
-}
-
-.card-orange {
-  background: linear-gradient(135deg, #fd7e14, #ffad60);
-}
-
-// ═══════════════════════════
-// Stat Cards
-// ═══════════════════════════
+// ─── Stat Cards ───
 .stat-card {
+  @include glass(12px);
+  border-radius: $radius-md;
+  padding: 22px 24px;
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 20px 24px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  border: 1px solid #f0f0f0;
-  transition: box-shadow 0.2s ease;
+  gap: 18px;
+  @include card-hover;
 
   &:hover {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-color: rgba($accent-cyan, 0.2);
+    @include glow($accent-cyan, 12px);
   }
 
   .stat-icon {
     font-size: 2rem;
-    background: #f0f4ff;
-    width: 56px;
-    height: 56px;
-    border-radius: 12px;
+    width: 52px;
+    height: 52px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    flex-shrink: 0;
+  }
+
+  h6 {
+    color: $text-muted !important;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 4px !important;
+  }
+
+  h4 {
+    color: $text-primary;
+    font-size: 1.1rem;
+    margin: 0;
   }
 }
-// ═══════════════════════════
-// Tips Section
-// ═══════════════════════════
+
+// ─── Tips Section ───
 .tips-section {
-  border-top: 1px solid #eee;
-  padding-top: 24px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .tip-card {
-  padding: 20px;
-  background: #fafbfc;
-  border-radius: 12px;
-  border: 1px solid #f0f0f0;
+  @include glass(10px);
+  border-radius: $radius-md;
+  padding: 22px 24px;
   text-align: center;
+  @include card-hover;
+  position: relative;
+  overflow: hidden;
+
+  // Subtle gradient on hover
+  &:hover {
+    border-color: rgba($accent-cyan, 0.15);
+    background: rgba(255, 255, 255, 0.07);
+  }
 
   .tip-icon {
     font-size: 1.8rem;
     display: block;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 6px rgba(255,255,255,0.1));
+  }
+
+  h6 {
+    color: $text-primary;
+    font-size: 0.9rem;
     margin-bottom: 8px;
+  }
+
+  p {
+    color: $text-muted !important;
+    font-size: 0.8rem;
+    line-height: 1.55;
   }
 }
 
-// ═══════════════════════════
-// Responsive
-// ═══════════════════════════
-@media (max-width: 768px) {
-  .welcome-banner {
-    padding: 24px;
+// ─── Row / Grid Overrides (Bootstrap-compatible) ───
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -12px;
+  margin-right: -12px;
+}
+
+[class*='col-'] {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.col-md-4 { flex: 0 0 33.3333%; max-width: 33.3333%; }
+.col-md-6 { flex: 0 0 50%; max-width: 50%; }
+
+// ─── Utility Classes ───
+.mt-2 { margin-top: 0.5rem; }
+.mt-4 { margin-top: 1.5rem; }
+.mt-5 { margin-top: 2.5rem; }
+.mb-0 { margin-bottom: 0; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-3 { margin-bottom: 1rem; }
+.mb-4 { margin-bottom: 1.5rem; }
+.fw-bold { font-weight: 700; }
+.text-muted { color: $text-muted; }
+.small { font-size: 0.85rem; }
+.opacity-75 { opacity: 0.75; }
+
+// ─── Keyframes ───
+@keyframes floatOrb {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(50px, 40px) scale(1.1); }
+}
+
+@keyframes fadeIn {
+  0%   { opacity: 0; transform: translateY(16px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+// ─── Entrance Animations ───
+.welcome-banner {
+  animation: fadeIn 0.5s ease both;
+}
+
+.action-card {
+  animation: fadeIn 0.5s ease both;
+
+  @for $i from 1 through 6 {
+    .col-md-4:nth-child(#{$i}) & {
+      animation-delay: #{$i * 0.1}s;
+    }
+  }
+}
+
+.stat-card {
+  animation: fadeIn 0.5s ease both;
+  animation-delay: 0.4s;
+}
+
+.tip-card {
+  animation: fadeIn 0.5s ease both;
+
+  @for $i from 1 through 3 {
+    .col-md-4:nth-child(#{$i}) & {
+      animation-delay: #{0.5 + $i * 0.1}s;
+    }
+  }
+}
+
+// ─── Responsive ───
+@media (max-width: 992px) {
+  .dashboard-wrapper {
+    padding: 24px 20px 40px;
   }
 
-  .banner-text h1 {
-    font-size: 1.4rem;
+  .col-md-4 {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+
+  .col-md-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .welcome-banner {
+    padding: 26px 28px;
+
+    .banner-text h1 {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-wrapper {
+    padding: 16px 14px 36px;
+  }
+
+  .col-md-4,
+  .col-md-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .welcome-banner {
+    padding: 22px 20px;
+
+    .banner-content {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .banner-text h1 {
+      font-size: 1.35rem;
+    }
   }
 
   .action-card {
     min-height: 160px;
+    padding: 22px 20px;
+  }
+
+  .section-title {
+    text-align: center;
   }
 }
 
-/* Logout button */
-.logout-btn {
-  padding: 8px 14px;
-  border-radius: 8px;
-  border: none;
-  background: linear-gradient(45deg, #ef4444, #dc2626);
-  color: white;
-  cursor: pointer;
-  transition: 0.3s;
-}
+@media (max-width: 480px) {
+  .dashboard-wrapper {
+    padding: 12px 10px 30px;
+  }
 
-.logout-btn:hover {
-  opacity: 0.9;
+  .welcome-banner {
+    padding: 18px 16px;
+
+    .banner-text h1 {
+      font-size: 1.2rem;
+    }
+
+    .banner-badge .role-badge {
+      font-size: 0.72rem;
+      padding: 8px 16px;
+    }
+  }
+
+  .action-card {
+    min-height: 140px;
+    padding: 18px 16px;
+
+    .card-icon {
+      font-size: 1.8rem;
+    }
+
+    h5 {
+      font-size: 0.95rem;
+    }
+  }
+
+  .stat-card {
+    padding: 16px 18px;
+
+    .stat-icon {
+      width: 44px;
+      height: 44px;
+      font-size: 1.6rem;
+    }
+
+    h4 {
+      font-size: 0.95rem;
+    }
+  }
+
+  .tip-card {
+    padding: 18px 16px;
+  }
 }
