@@ -62,7 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 // ✅ 6.4 PROPOSALS
                 .antMatchers(HttpMethod.GET, "/api/proposals/**").hasAnyAuthority("FREELANCER")
-                .antMatchers(HttpMethod.POST, "/api/proposals/**").hasAnyAuthority("CLIENT")
+                .antMatchers(HttpMethod.POST, "/api/proposals/**").hasAnyAuthority("CLIENT","FREELANCER")
                 .antMatchers(HttpMethod.PUT, "/api/proposals/**").hasAnyAuthority("CLIENT")
 
                 // ✅ All other requests - authenticated

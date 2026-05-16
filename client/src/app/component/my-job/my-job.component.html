@@ -8,8 +8,8 @@
         <span *ngIf="roleName !== 'CLIENT'">📋 My Applied Jobs</span>
       </h2>
       <p class="text-muted mb-0">
-        <span *ngIf="roleName === 'CLIENT'">Manage your jobs, view applicants, and accept freelancers</span>
-        <span *ngIf="roleName !== 'CLIENT'">Track your applications and respond to offers</span>
+        <span *ngIf="roleName === 'CLIENT'">Manage your jobs, view bids, and accept freelancers</span>
+        <span *ngIf="roleName !== 'CLIENT'">Track your bids and respond to offers</span>
       </p>
     </div>
 
@@ -70,7 +70,6 @@
         <!-- ═══════════════════════════════ -->
         <div *ngIf="roleName === 'CLIENT'">
 
-          <!-- Action Buttons -->
           <div class="d-flex gap-2 mb-3 flex-wrap">
 
             <button *ngIf="j.status === 'OPEN' || j.status === 'IN_PROGRESS'"
@@ -87,7 +86,7 @@
 
             <button class="btn btn-outline-primary btn-sm rounded-pill"
                     (click)="toggleApplicants(j)">
-              👥 {{ j.showApplicants ? 'Hide' : 'View' }} Applicants
+              💰 {{ j.showApplicants ? 'Hide' : 'View' }} Bids
               <span *ngIf="j.proposals?.length > 0" class="badge bg-danger ms-1">
                 {{ j.proposals.length }}
               </span>
@@ -99,30 +98,46 @@
             </button>
           </div>
 
-          <!-- ✅ Applicants Section -->
+          <!-- ✅ Bids/Applicants Section -->
           <div *ngIf="j.showApplicants" class="applicants-section" style="padding: 16px; margin-top: 8px;">
 
-            <h6 class="fw-bold mb-3">👥 Applicants ({{ j.proposals?.length || 0 }})</h6>
+            <h6 class="fw-bold mb-3">💰 Bids ({{ j.proposals?.length || 0 }})</h6>
 
             <div *ngIf="!j.proposals || j.proposals.length === 0" class="text-muted text-center py-3">
-              No one has applied yet.
+              No bids received yet.
             </div>
 
-            <!-- Each Applicant -->
+            <!-- Each Bid -->
             <div *ngFor="let p of j.proposals" class="applicant-card" style="padding: 14px 16px; margin-bottom: 12px;">
 
-              <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex justify-content-between align-items-start">
 
-                <div>
+                <div style="flex: 1;">
                   <span class="fw-semibold">👤 {{ p.freelancer?.username || 'Unknown' }}</span>
                   <span class="text-muted ms-2 small">📧 {{ p.freelancer?.email || '' }}</span>
-                  <br>
-                  <span class="small text-muted">
-                    📅 Applied: {{ p.appliedAt ? (p.appliedAt | date:'medium') : 'N/A' }}
-                  </span>
+
+                  <!-- ✅ Bid Amount -->
+                  <div *ngIf="p.bidAmount" style="margin-top: 8px;">
+                    <span style="color: #10b981; font-weight: 700; font-size: 1.1rem;">
+                      💰 Bid: ${{ p.bidAmount }}
+                    </span>
+                  </div>
+
+                  <!-- ✅ Proposal Message -->
+                  <div *ngIf="p.message" style="margin-top: 6px; padding: 8px 12px; background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 3px solid #00f0ff;">
+                    <span style="color: #c4c4d4; font-size: 0.85rem; line-height: 1.5; font-style: italic;">
+                      📝 "{{ p.message }}"
+                    </span>
+                  </div>
+
+                  <div style="margin-top: 6px;">
+                    <span class="small text-muted">
+                      📅 Submitted: {{ p.appliedAt ? (p.appliedAt | date:'medium') : 'N/A' }}
+                    </span>
+                  </div>
                 </div>
 
-                <div class="d-flex gap-2 align-items-center">
+                <div class="d-flex gap-2 align-items-center" style="flex-shrink: 0; margin-left: 12px;">
 
                   <span class="badge rounded-pill px-2"
                         [ngClass]="{
@@ -200,7 +215,7 @@
                 <div class="assessment-bar">
                   <div class="d-flex gap-3 flex-wrap">
                     <span><strong>🏷️ Role:</strong> {{ p.freelancer?.role || 'FREELANCER' }}</span>
-                    <span><strong>📅 Applied:</strong> {{ p.appliedAt ? (p.appliedAt | date:'mediumDate') : 'N/A' }}</span>
+                    <span><strong>📅 Bid Date:</strong> {{ p.appliedAt ? (p.appliedAt | date:'mediumDate') : 'N/A' }}</span>
                     <span *ngIf="p.freelancer?.skills"><strong>🔢 Skills:</strong> {{ p.freelancer.skills.split(',').length }} listed</span>
                   </div>
                 </div>

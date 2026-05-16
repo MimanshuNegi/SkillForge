@@ -6,6 +6,7 @@ export interface Proposal {
   title?:string;
   bidAmount?: number;
   status?: string;
+  message?:string;
   job?: Job;
   freelancer?: User;
   appliedAt?: string;

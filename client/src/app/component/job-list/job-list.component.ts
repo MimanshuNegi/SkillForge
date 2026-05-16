@@ -15,12 +15,16 @@ export class JobListComponent implements OnInit {
   roleName: string | null = '';
   searchTitle: string = '';
   appliedJobIds: Set<number> = new Set();
+  // ✅ Bid form state
+  showBidForm: { [jobId: number]: boolean } = {};
+  bidAmount: { [jobId: number]: number } = {};
+  bidMessage: { [jobId: number]: string } = {};
 
   constructor(
     private service: JobService,
     private auth: AuthService,
     private proposalService: ProposalService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.roleName = this.auth.getRole();
@@ -130,4 +134,38 @@ export class JobListComponent implements OnInit {
       }
     });
   }
+
+  // ✅ Toggle bid form
+toggleBidForm(jobId: number): void {
+  this.showBidForm[jobId] = !this.showBidForm[jobId];
+}
+
+// ✅ Submit bid
+submitBid(jobId: number): void {
+  const freelancerId = Number(localStorage.getItem('userId') || 0);
+
+  const body = {
+    bidAmount: this.bidAmount[jobId] || 0,
+    message: this.bidMessage[jobId] || ''
+  };
+
+  this.proposalService.bidOnJob(jobId, freelancerId, body).subscribe({
+    next: (res: any) => {
+      const msg = res?.message ?? 'Bid submitted!';
+      alert(msg);
+
+      this.appliedJobIds.add(jobId);
+      this.showBidForm[jobId] = false;
+    },
+    error: (err: any) => {
+      if (err?.error?.message?.includes('Already Applied')) {
+        this.appliedJobIds.add(jobId);
+        alert('⚠️ You already bid on this job.');
+      } else {
+        alert('❌ Failed to submit bid.');
+        console.error(err);
+      }
+    }
+  });
+}
 }
