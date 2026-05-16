@@ -96,15 +96,15 @@
         <!-- Card Footer: Actions -->
         <div class="card-footer bg-white border-0 pb-3">
 
-          <!-- ✅ FREELANCER: Apply Button (hide if already applied) -->
-          <button *ngIf="roleName === 'FREELANCER' && !j.applied && j.status !== 'APPLIED' && j.status !== 'CLOSED' && j.status !== 'IN_PROGRESS'"
+          <!-- ✅ FREELANCER: Apply Button (uses isApplied method) -->
+          <button *ngIf="roleName === 'FREELANCER' && !isApplied(j.id) && j.status !== 'APPLIED' && j.status !== 'CLOSED' && j.status !== 'IN_PROGRESS'"
                   class="btn btn-success w-100 rounded-pill fw-bold mb-2"
                   (click)="applyJob(j.id)">
             🚀 Apply Now
           </button>
 
-          <!-- ✅ FREELANCER: Already Applied -->
-          <div *ngIf="roleName === 'FREELANCER' && (j.applied || j.status === 'APPLIED' || j.status === 'IN_PROGRESS')"
+          <!-- ✅ FREELANCER: Already Applied (uses isApplied method) -->
+          <div *ngIf="roleName === 'FREELANCER' && (isApplied(j.id) || j.status === 'APPLIED' || j.status === 'IN_PROGRESS')"
                class="text-center mb-2">
             <span class="badge bg-info text-dark px-4 py-2 rounded-pill">
               ✅ Already Applied
