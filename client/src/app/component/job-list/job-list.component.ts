@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { JobService } from '../../services/job.service';
 import { AuthService } from '../../services/auth.service';
+import { ProposalService } from '../../services/proposal.service';
 
 @Component({
   selector: 'app-job-list',
@@ -12,16 +13,54 @@ export class JobListComponent implements OnInit {
   allJobs: any[] = [];
   roleName: string | null = '';
   searchTitle: string = '';
+  appliedJobIds: Set<number> = new Set(); // ✅ Track applied jobs
 
-  constructor(private service: JobService, private auth: AuthService) {}
+  constructor(
+    private service: JobService,
+    private auth: AuthService,
+    private proposalService: ProposalService  // ✅ Inject ProposalService
+  ) {}
 
   ngOnInit(): void {
     this.roleName = this.auth.getRole();
 
+    // ✅ Step 1: If FREELANCER, fetch their proposals first
+    if (this.roleName === 'FREELANCER') {
+      this.proposalService.getMyProposals().subscribe({
+        next: (proposals: any[]) => {
+          // ✅ Collect all job IDs the freelancer has applied to
+          (proposals || []).forEach((p: any) => {
+            if (p.job?.id) {
+              this.appliedJobIds.add(p.job.id);
+            }
+          });
+
+          // ✅ Then fetch jobs
+          this.fetchJobs();
+        },
+        error: () => {
+          // If proposals fail, still fetch jobs
+          this.fetchJobs();
+        }
+      });
+    } else {
+      this.fetchJobs();
+    }
+  }
+
+  // ✅ Fetch jobs and mark applied ones
+  fetchJobs(): void {
     this.service.getJobList().subscribe({
       next: (data: any) => {
-        this.job = data || [];
-        this.allJobs = data || [];
+        const list = data || [];
+
+        // ✅ Mark jobs that freelancer already applied to
+        this.job = list.map((j: any) => ({
+          ...j,
+          applied: this.appliedJobIds.has(j.id)
+        }));
+
+        this.allJobs = [...this.job];
       },
       error: (err: any) => {
         console.error('Error fetching jobs', err);
@@ -29,29 +68,6 @@ export class JobListComponent implements OnInit {
         this.allJobs = [];
       }
     });
-  }
-
-  // ✅ Check if job belongs to logged-in client
-  isMyJob(job: any): boolean {
-    const myUsername = localStorage.getItem('username') || '';
-    const myUserId = Number(localStorage.getItem('userId') || 0);
-
-    // Check by clientName (from JobDTO)
-    if (job.clientName) {
-      return job.clientName === myUsername;
-    }
-
-    // Check by client.id (from full Job object)
-    if (job.client?.id) {
-      return job.client.id === myUserId;
-    }
-
-    // Check by client.username
-    if (job.client?.username) {
-      return job.client.username === myUsername;
-    }
-
-    return false;
   }
 
   applyJob(jobId: number): void {
@@ -65,14 +81,21 @@ export class JobListComponent implements OnInit {
         const msg = res?.message ?? res;
         alert(msg);
 
+        // ✅ Mark as applied locally + in tracking set
         const found = this.job.find(j => j.id === jobId);
         if (found) {
+          found.applied = true;
           found.status = 'APPLIED';
         }
+        this.appliedJobIds.add(jobId);
       },
       error: (err: any) => {
         if (err?.status === 409) {
           alert('You have already applied to this job.');
+
+          const found = this.job.find(j => j.id === jobId);
+          if (found) found.applied = true;
+          this.appliedJobIds.add(jobId);
         } else {
           alert('Failed to apply. Please try again.');
           console.error('Error details:', err);
