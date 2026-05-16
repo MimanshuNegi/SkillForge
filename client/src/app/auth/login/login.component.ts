@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
 
         // Role-based navigation
         const routeMap: any = {
-          ADMIN: '/users',
+          ADMIN: '/dashboard',
           CLIENT: '/dashboard',
           FREELANCER: '/dashboard'
         };
