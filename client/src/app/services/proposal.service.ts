@@ -10,7 +10,6 @@ export class ProposalService {
 
   private api = `${environment.apiUrl}/api/proposals`;
 
-  // ✅ HttpClient optional for unit tests
   constructor(@Optional() private http?: HttpClient, @Optional() private authService?: AuthService) {}
 
   private getHeaders(): HttpHeaders {
@@ -23,6 +22,16 @@ export class ProposalService {
   create(freelancerId: number, data: Partial<Proposal>): Observable<any> {
     if (!this.http) return of(null);
     return this.http.post(`${this.api}/freelancer/${freelancerId}`, data, { headers: this.getHeaders() });
+  }
+
+  // ✅ NEW: Freelancer bids on a job
+  bidOnJob(jobId: number, freelancerId: number, body: any): Observable<any> {
+    if (!this.http) return of(null);
+    return this.http.post(
+      `${this.api}/job/${jobId}/freelancer/${freelancerId}`,
+      body,
+      { headers: this.getHeaders() }
+    );
   }
 
   getMyProposals(): Observable<any> {
