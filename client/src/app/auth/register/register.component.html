@@ -47,12 +47,18 @@
         <!-- Password -->
         <div class="form-group">
           <label>🔒 Password</label>
-          <input type="password" formControlName="password" placeholder="Create a password" />
+          <div style="position: relative;">
+            <input [type]="showPassword ? 'text' : 'password'" formControlName="password"
+              placeholder="Create a password" style="padding-right: 60px;" />
+            <span (click)="showPassword = !showPassword"
+              style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #8a8aa3; font-size: 0.8rem; font-weight: 600; user-select: none;">
+              {{ showPassword ? '🙈 Hide' : '👁️ Show' }}
+            </span>
+          </div>
           <small *ngIf="f['password']?.touched && f['password']?.invalid">
             Password is required
           </small>
         </div>
-
         <!-- Contact Number -->
         <div class="form-group">
           <label>📞 Contact Number</label>
