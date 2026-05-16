@@ -13,11 +13,7 @@
         <!-- Username -->
         <div class="form-group">
           <label>Username</label>
-          <input
-            type="text"
-            formControlName="username"
-            placeholder="Enter username"
-          />
+          <input type="text" formControlName="username" placeholder="Enter username" />
           <small *ngIf="f['username']?.touched && f['username']?.invalid">
             Username is required
           </small>
@@ -25,14 +21,10 @@
 
         <!-- Password -->
         <div class="form-group password-wrapper">
-          <label>Password</label>
-          <input
-            [type]="showPassword ? 'text' : 'password'"
-            formControlName="password"
-            placeholder="Enter password"
-          />
+          <label>🔒 Password</label>
+          <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Enter password" />
           <span (click)="showPassword = !showPassword">
-            {{ showPassword ? 'Hide' : 'Show' }}
+            {{ showPassword ? '🙈 Hide' : '👁️ Show' }}
           </span>
           <small *ngIf="f['password']?.touched && f['password']?.invalid">
             Password is required

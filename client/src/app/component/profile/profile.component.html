@@ -1,15 +1,24 @@
 <div style="min-height: 100vh; background: #0a0a1a; padding: 0 16px 40px;">
 
-  <!-- ✅ Header -->
+  <!-- ✅ Header (changes based on route) -->
   <div style="text-align: center; padding-top: 28px; margin-bottom: 24px;">
-    <h2 *ngIf="roleName !== 'ADMIN'" style="font-weight: 700; font-size: 1.5rem; background: linear-gradient(135deg, #00f0ff, #7b2ff7); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-      👤 My Profile
-    </h2>
-    <h2 *ngIf="roleName === 'ADMIN'" style="font-weight: 700; font-size: 1.5rem; background: linear-gradient(135deg, #00f0ff, #7b2ff7); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+
+    <h2 *ngIf="roleName === 'ADMIN' && isUsersPage"
+        style="font-weight: 700; font-size: 1.5rem; background: linear-gradient(135deg, #00f0ff, #7b2ff7); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
       👥 User Management
     </h2>
-    <p style="color: #8a8aa3;" *ngIf="roleName !== 'ADMIN'">View and update your profile details</p>
-    <p style="color: #8a8aa3;" *ngIf="roleName === 'ADMIN'">Manage all registered users on the platform</p>
+    <p *ngIf="roleName === 'ADMIN' && isUsersPage" style="color: #8a8aa3;">
+      Manage all registered users on the platform
+    </p>
+
+    <h2 *ngIf="!isUsersPage"
+        style="font-weight: 700; font-size: 1.5rem; background: linear-gradient(135deg, #00f0ff, #7b2ff7); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+      👤 My Profile
+    </h2>
+    <p *ngIf="!isUsersPage" style="color: #8a8aa3;">
+      View and update your profile details
+    </p>
+
   </div>
 
   <!-- ✅ Success Message -->
@@ -27,7 +36,7 @@
   <!-- ═══════════════════════════════════════ -->
   <!-- ✅ FREELANCER / CLIENT Profile Card     -->
   <!-- ═══════════════════════════════════════ -->
-  <div *ngIf="roleName === 'FREELANCER' || roleName === 'CLIENT'">
+  <div *ngIf="(roleName === 'FREELANCER' || roleName === 'CLIENT') && !isUsersPage">
 
     <!-- Loading -->
     <div *ngIf="!profile && !errorMessage" style="text-align: center; padding: 40px 0;">
@@ -40,7 +49,6 @@
       <div class="col-md-8 col-lg-6">
         <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden;">
 
-          <!-- Avatar Header -->
           <div style="background: linear-gradient(135deg, #7b2ff7, #00f0ff); color: white; text-align: center; padding: 30px 20px;">
             <div style="width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; margin: 0 auto 12px; border: 3px solid rgba(255,255,255,0.4);">
               {{ profile.username?.charAt(0)?.toUpperCase() || '?' }}
@@ -51,21 +59,17 @@
             </span>
           </div>
 
-          <!-- Profile Details -->
           <div style="padding: 24px;">
-
             <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
               <span style="color: #8a8aa3; font-weight: 600;">👤 Username</span>
               <span style="color: #ffffff;">{{ profile.username || 'N/A' }}</span>
             </div>
             <hr style="border-color: rgba(255,255,255,0.06); margin: 8px 0;">
-
             <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
               <span style="color: #8a8aa3; font-weight: 600;">📧 Email</span>
               <span style="color: #ffffff;">{{ profile.email || 'N/A' }}</span>
             </div>
             <hr style="border-color: rgba(255,255,255,0.06); margin: 8px 0;">
-
             <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
               <span style="color: #8a8aa3; font-weight: 600;">📞 Contact</span>
               <span style="color: #ffffff;">{{ profile.contactNumber || 'Not provided' }}</span>
@@ -84,12 +88,10 @@
               </div>
             </div>
 
-            <!-- Edit Button -->
             <button (click)="toggleEdit()"
                     style="width: 100%; padding: 12px; border-radius: 12px; border: none; background: linear-gradient(135deg, #7b2ff7, #00f0ff); color: #0a0a1a; font-weight: 700; cursor: pointer; margin-top: 16px; font-size: 0.95rem;">
               ✏️ Edit Profile
             </button>
-
           </div>
         </div>
       </div>
@@ -106,37 +108,31 @@
           </div>
 
           <div style="padding: 24px;">
-
             <div style="margin-bottom: 16px;">
               <label style="display: block; font-weight: 600; color: #8a8aa3; margin-bottom: 6px; font-size: 0.85rem;">👤 Username</label>
               <input type="text" [(ngModel)]="editForm.username" placeholder="Enter username"
                      style="width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.06); color: #ffffff; font-size: 0.9rem; box-sizing: border-box; outline: none;" />
             </div>
-
             <div style="margin-bottom: 16px;">
               <label style="display: block; font-weight: 600; color: #8a8aa3; margin-bottom: 6px; font-size: 0.85rem;">📧 Email</label>
               <input type="email" [(ngModel)]="editForm.email" placeholder="Enter email"
                      style="width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.06); color: #ffffff; font-size: 0.9rem; box-sizing: border-box; outline: none;" />
             </div>
-
             <div style="margin-bottom: 16px;">
               <label style="display: block; font-weight: 600; color: #8a8aa3; margin-bottom: 6px; font-size: 0.85rem;">📞 Contact</label>
               <input type="text" [(ngModel)]="editForm.contactNumber" placeholder="Enter contact number"
                      style="width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.06); color: #ffffff; font-size: 0.9rem; box-sizing: border-box; outline: none;" />
             </div>
-
             <div *ngIf="roleName === 'FREELANCER'" style="margin-bottom: 16px;">
               <label style="display: block; font-weight: 600; color: #8a8aa3; margin-bottom: 6px; font-size: 0.85rem;">🛠️ Skills</label>
               <input type="text" [(ngModel)]="editForm.skills" placeholder="e.g. Angular, Java"
                      style="width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.06); color: #ffffff; font-size: 0.9rem; box-sizing: border-box; outline: none;" />
             </div>
-
             <div *ngIf="roleName === 'FREELANCER'" style="margin-bottom: 16px;">
               <label style="display: block; font-weight: 600; color: #8a8aa3; margin-bottom: 6px; font-size: 0.85rem;">📝 Bio</label>
               <textarea [(ngModel)]="editForm.bio" rows="3" placeholder="Tell us about yourself..."
                         style="width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.06); color: #ffffff; font-size: 0.9rem; box-sizing: border-box; outline: none; resize: vertical;"></textarea>
             </div>
-
             <div style="display: flex; gap: 10px; margin-top: 16px;">
               <button (click)="saveProfile()"
                       style="flex: 1; padding: 12px; border-radius: 12px; border: none; background: linear-gradient(135deg, #10b981, #34d399); color: #0a0a1a; font-weight: 700; cursor: pointer;">
@@ -147,7 +143,6 @@
                 ❌ Cancel
               </button>
             </div>
-
           </div>
         </div>
       </div>
@@ -156,9 +151,108 @@
   </div>
 
   <!-- ═══════════════════════════════════════ -->
-  <!-- ✅ ADMIN: Users Table (inline dark)     -->
+  <!-- ✅ ADMIN: Profile Card (on /my-profile) -->
   <!-- ═══════════════════════════════════════ -->
-  <div *ngIf="roleName === 'ADMIN'">
+  <div *ngIf="roleName === 'ADMIN' && !isUsersPage">
+
+    <!-- Loading -->
+    <div *ngIf="!profile && !errorMessage" style="text-align: center; padding: 40px 0;">
+      <div class="spinner-border" style="color: #00f0ff;" role="status"></div>
+      <p style="color: #8a8aa3; margin-top: 8px;">Loading profile...</p>
+    </div>
+
+    <!-- VIEW MODE -->
+    <div *ngIf="profile && !isEditing" class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden;">
+
+          <div style="background: linear-gradient(135deg, #7b2ff7, #00f0ff); color: white; text-align: center; padding: 30px 20px;">
+            <div style="width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; margin: 0 auto 12px; border: 3px solid rgba(255,255,255,0.4);">
+              {{ profile.username?.charAt(0)?.toUpperCase() || '?' }}
+            </div>
+            <h4 style="font-weight: 700; margin-bottom: 4px; color: white;">{{ profile.username || 'Admin' }}</h4>
+            <span style="background: rgba(255,255,255,0.2); padding: 4px 16px; border-radius: 20px; font-size: 0.85rem;">
+              🛡️ ADMIN
+            </span>
+          </div>
+
+          <div style="padding: 24px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+              <span style="color: #8a8aa3; font-weight: 600;">👤 Username</span>
+              <span style="color: #ffffff;">{{ profile.username || 'N/A' }}</span>
+            </div>
+            <hr style="border-color: rgba(255,255,255,0.06); margin: 8px 0;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+              <span style="color: #8a8aa3; font-weight: 600;">📧 Email</span>
+              <span style="color: #ffffff;">{{ profile.email || 'N/A' }}</span>
+            </div>
+            <hr style="border-color: rgba(255,255,255,0.06); margin: 8px 0;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+              <span style="color: #8a8aa3; font-weight: 600;">📞 Contact</span>
+              <span style="color: #ffffff;">{{ profile.contactNumber || 'Not provided' }}</span>
+            </div>
+            <hr style="border-color: rgba(255,255,255,0.06); margin: 8px 0;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+              <span style="color: #8a8aa3; font-weight: 600;">🏷️ Role</span>
+              <span style="color: #00f0ff; font-weight: 600;">ADMIN</span>
+            </div>
+
+            <button (click)="toggleEdit()"
+                    style="width: 100%; padding: 12px; border-radius: 12px; border: none; background: linear-gradient(135deg, #7b2ff7, #00f0ff); color: #0a0a1a; font-weight: 700; cursor: pointer; margin-top: 16px; font-size: 0.95rem;">
+              ✏️ Edit Profile
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EDIT MODE -->
+    <div *ngIf="profile && isEditing" class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden;">
+
+          <div style="background: linear-gradient(135deg, #f59e0b, #ff2d95); color: white; text-align: center; padding: 24px 20px;">
+            <h4 style="font-weight: 700; margin: 0; color: white;">✏️ Edit Profile</h4>
+            <p style="margin: 4px 0 0; opacity: 0.9; font-size: 0.9rem;">Update your information below</p>
+          </div>
+
+          <div style="padding: 24px;">
+            <div style="margin-bottom: 16px;">
+              <label style="display: block; font-weight: 600; color: #8a8aa3; margin-bottom: 6px; font-size: 0.85rem;">👤 Username</label>
+              <input type="text" [(ngModel)]="editForm.username" placeholder="Enter username"
+                     style="width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.06); color: #ffffff; font-size: 0.9rem; box-sizing: border-box; outline: none;" />
+            </div>
+            <div style="margin-bottom: 16px;">
+              <label style="display: block; font-weight: 600; color: #8a8aa3; margin-bottom: 6px; font-size: 0.85rem;">📧 Email</label>
+              <input type="email" [(ngModel)]="editForm.email" placeholder="Enter email"
+                     style="width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.06); color: #ffffff; font-size: 0.9rem; box-sizing: border-box; outline: none;" />
+            </div>
+            <div style="margin-bottom: 16px;">
+              <label style="display: block; font-weight: 600; color: #8a8aa3; margin-bottom: 6px; font-size: 0.85rem;">📞 Contact</label>
+              <input type="text" [(ngModel)]="editForm.contactNumber" placeholder="Enter contact number"
+                     style="width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.06); color: #ffffff; font-size: 0.9rem; box-sizing: border-box; outline: none;" />
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 16px;">
+              <button (click)="saveProfile()"
+                      style="flex: 1; padding: 12px; border-radius: 12px; border: none; background: linear-gradient(135deg, #10b981, #34d399); color: #0a0a1a; font-weight: 700; cursor: pointer;">
+                💾 Save Changes
+              </button>
+              <button (click)="cancelEdit()"
+                      style="flex: 1; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); background: transparent; color: #8a8aa3; font-weight: 600; cursor: pointer;">
+                ❌ Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- ✅ ADMIN: Users Table (on /users only)  -->
+  <!-- ═══════════════════════════════════════ -->
+  <div *ngIf="roleName === 'ADMIN' && isUsersPage">
 
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
       <h4 style="font-weight: 700; color: #ffffff; margin: 0;">👥 All Users</h4>
@@ -176,12 +270,11 @@
       </div>
     </div>
 
-    <!-- ✅ Users Table -->
+    <!-- Users Table -->
     <div *ngIf="users.length > 0"
          style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden;">
 
       <table style="width: 100%; border-collapse: collapse;">
-
         <thead>
           <tr style="background: rgba(255,255,255,0.06);">
             <th style="padding: 14px 16px; color: #ffffff; font-weight: 600; font-size: 0.9rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08);">#</th>
@@ -192,13 +285,10 @@
             <th style="padding: 14px 16px; color: #ffffff; font-weight: 600; font-size: 0.9rem; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.08);">Action</th>
           </tr>
         </thead>
-
         <tbody>
           <tr *ngFor="let user of users; let i = index"
               style="border-bottom: 1px solid rgba(255,255,255,0.04);">
-
             <td style="padding: 14px 16px; color: #8a8aa3;">{{ i + 1 }}</td>
-
             <td style="padding: 14px 16px;">
               <div style="display: flex; align-items: center; gap: 10px;">
                 <div [style.background]="user.role === 'FREELANCER' ? '#10b981' : '#00f0ff'"
@@ -208,30 +298,23 @@
                 <span style="color: #ffffff; font-weight: 600;">{{ user.username || 'N/A' }}</span>
               </div>
             </td>
-
             <td style="padding: 14px 16px; color: #ffffff;">{{ user.email || 'N/A' }}</td>
-
             <td style="padding: 14px 16px; color: #ffffff;">{{ user.contactNumber || 'N/A' }}</td>
-
             <td style="padding: 14px 16px;">
               <span [style.background]="user.role === 'FREELANCER' ? '#10b981' : '#00f0ff'"
                     style="color: #0a0a1a; padding: 4px 14px; border-radius: 20px; font-weight: 600; font-size: 0.8rem;">
                 {{ user.role }}
               </span>
             </td>
-
             <td style="padding: 14px 16px; text-align: center;">
               <button (click)="deleteUser(user.id)"
                       style="background: transparent; border: 1px solid rgba(255,45,149,0.4); color: #ff2d95; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; cursor: pointer;">
                 🗑️ Delete
               </button>
             </td>
-
           </tr>
         </tbody>
-
       </table>
-
     </div>
 
   </div>

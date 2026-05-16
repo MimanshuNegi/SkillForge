@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Role } from '../../model/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
-  // encapsulation: ViewEncapsulation.None
 })
 export class ProfileComponent implements OnInit {
 
@@ -15,53 +15,65 @@ export class ProfileComponent implements OnInit {
   roleName: Role | null = null;
   errorMessage: string = '';
   successMessage: string = '';
-
-  // ✅ Edit mode
   isEditing: boolean = false;
+  isUsersPage: boolean = false;
   editForm: any = {};
 
-  constructor(private auth: AuthService) {}
+  constructor(private auth: AuthService, private router: Router) { }
 
   ngOnInit(): void {
+
     this.roleName = this.auth.getRole();
+
+    // ✅ Check which route we're on
+    this.isUsersPage = this.router.url === '/users';
+
     this.getUser();
+
   }
 
-  getUser(): void {
-    this.roleName = this.auth.getRole();
+getUser(): void {
+  this.roleName = this.auth.getRole();
 
-    const fromService = (this.auth as any).getUserId?.() ?? null;
-    const stored = localStorage.getItem('userId');
-    const fromStorage = stored !== null ? Number(stored) : null;
-    const userId = (fromService ?? fromStorage ?? 1);
+  // ✅ DEBUG
+  console.log('ROLE:', this.roleName);
+  console.log('isUsersPage:', this.isUsersPage);
 
-    const profile$ = (this.auth as any).getLoggedInUser?.(userId);
-    if (profile$ && typeof profile$.subscribe === 'function') {
-      profile$.subscribe({
-        next: (res: any) => {
-          this.profile = res;
-          // ✅ Pre-fill edit form
-          this.editForm = { ...res };
-        },
-        error: () => {
-          this.errorMessage = 'Failed to load profile';
-        }
-      });
-    }
+  const fromService = (this.auth as any).getUserId?.() ?? null;
+  const stored = localStorage.getItem('userId');
+  const fromStorage = stored !== null ? Number(stored) : null;
+  const userId = (fromService ?? fromStorage ?? 1);
 
-    const users$ = (this.auth as any).getUsers?.();
-    if (users$ && typeof users$.subscribe === 'function') {
-      users$.subscribe({
-        next: (res: any) => {
-          const arr = res || [];
-          this.users = arr.filter((u: any) => u.role !== 'ADMIN');
-        },
-        error: () => {
-          this.users = [];
-        }
-      });
-    }
+  const profile$ = (this.auth as any).getLoggedInUser?.(userId);
+  if (profile$ && typeof profile$.subscribe === 'function') {
+    profile$.subscribe({
+      next: (res: any) => {
+        this.profile = res;
+        this.editForm = { ...res };
+        console.log('PROFILE loaded:', res);  // ✅ DEBUG
+      },
+      error: (err: any) => {
+        this.errorMessage = 'Failed to load profile';
+        console.error('PROFILE error:', err);  // ✅ DEBUG
+      }
+    });
   }
+
+  const users$ = (this.auth as any).getUsers?.();
+  if (users$ && typeof users$.subscribe === 'function') {
+    users$.subscribe({
+      next: (res: any) => {
+        const arr = res || [];
+        this.users = arr.filter((u: any) => u.role !== 'ADMIN');
+        console.log('USERS loaded:', this.users);  // ✅ DEBUG
+      },
+      error: (err: any) => {
+        this.users = [];
+        console.error('USERS error:', err);  // ✅ DEBUG
+      }
+    });
+  }
+}
 
   // ✅ Toggle edit mode
   toggleEdit(): void {
