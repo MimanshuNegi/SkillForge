@@ -1,7 +1,7 @@
-<div class="container mt-4">
+<div class="container">
 
   <!-- ✅ Header -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="d-flex justify-content-between align-items-center mb-4" style="padding-top: 24px;">
     <div>
       <h2 class="fw-bold mb-1">📝 My Proposals</h2>
       <p class="text-muted mb-0">Track all your submitted proposals and their status</p>
@@ -19,7 +19,7 @@
       <div class="card-body py-5">
         <h1 class="mb-3">📭</h1>
         <h5 class="text-muted fw-bold">No proposals found.</h5>
-        <p class="text-secondary mb-3">
+        <p class="text-muted mb-3">
           You haven't submitted any proposals yet. Start browsing jobs!
         </p>
         <a routerLink="/job-list" class="btn btn-primary rounded-pill px-4">
@@ -36,7 +36,7 @@
       <div class="card h-100 shadow-sm border-0 proposal-card">
 
         <!-- Card Header -->
-        <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center pt-3">
+        <div class="card-header border-0 d-flex justify-content-between align-items-center pt-3">
 
           <!-- Status Badge -->
           <span class="badge rounded-pill px-3 py-1"
@@ -66,7 +66,7 @@
           </h5>
 
           <!-- Job Description -->
-          <p class="card-text text-secondary description-clamp">
+          <p class="card-text description-clamp">
             {{ p.job?.description || 'No description available.' }}
           </p>
 
@@ -89,7 +89,7 @@
         </div>
 
         <!-- Card Footer -->
-        <div class="card-footer bg-white border-0 pb-3">
+        <div class="card-footer border-0 pb-3">
 
           <!-- Approved -->
           <div *ngIf="p.status === 'APPROVED'" class="text-center">

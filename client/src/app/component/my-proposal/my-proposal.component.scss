@@ -1,15 +1,81 @@
-.proposal-card {
-  border-radius: 12px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+$bg-dark: #0a0a1a;
+$glass-bg: rgba(255, 255, 255, 0.04);
+$glass-border: rgba(255, 255, 255, 0.08);
+$text-primary: #ffffff;
+$text-muted: #8a8aa3;
+$accent-cyan: #00f0ff;
+$accent-purple: #7b2ff7;
 
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12) !important;
-  }
+:host {
+  display: block;
+  min-height: 100vh;
+  background: $bg-dark;
+  padding-bottom: 40px;
 }
 
-.card-title {
-  color: #2c3e50;
+// ✅ Fix white strip
+.container {
+  margin-top: 0 !important;
+}
+
+h2 {
+  background: linear-gradient(135deg, $accent-cyan, $accent-purple);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+h5 {
+  color: $text-primary;
+}
+
+.text-muted {
+  color: $text-muted !important;
+}
+
+.card {
+  background: $glass-bg !important;
+  backdrop-filter: blur(14px);
+  border: 1px solid $glass-border !important;
+  border-radius: 20px !important;
+  color: $text-primary;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, $accent-cyan, $accent-purple);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 0 25px rgba($accent-purple, 0.15);
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  .card-header {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
+  }
+
+  .card-footer {
+    background: transparent !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.04) !important;
+  }
+
+  .card-title {
+    color: $text-primary;
+  }
 }
 
 .description-clamp {
@@ -21,13 +87,22 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   min-height: 60px;
+  color: $text-muted;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, $accent-purple, $accent-cyan) !important;
+  border: none !important;
+  color: $bg-dark !important;
+  font-weight: 700;
+
+  &:hover {
+    box-shadow: 0 4px 20px rgba($accent-cyan, 0.3);
+    transform: translateY(-2px);
+  }
 }
 
 .badge {
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.5px;
-}
-
-h2 {
-  color: #1a73e8;
 }

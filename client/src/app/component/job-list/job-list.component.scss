@@ -1,51 +1,197 @@
-/* Header */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-}
+// ═══════════════════════════
+// Variables
+// ═══════════════════════════
+$bg-dark: #0a0a1a;
+$bg-surface: rgba(255, 255, 255, 0.04);
+$glass-bg: rgba(255, 255, 255, 0.04);
+$glass-border: rgba(255, 255, 255, 0.08);
+$gradient-primary: linear-gradient(135deg, #00f0ff, #7b2ff7, #ff2d95);
+$text-primary: #ffffff;
+$text-secondary: #c4c4d4;
+$text-muted: #8a8aa3;
+$accent-cyan: #00f0ff;
+$accent-purple: #7b2ff7;
+$accent-pink: #ff2d95;
+$accent-green: #10b981;
+$accent-orange: #f59e0b;
+$accent-blue: #3b82f6;
+$radius-lg: 20px;
+$radius-md: 14px;
 
-.title {
-  margin: 0;
-}
+// ═══════════════════════════
+// Host
+// ═══════════════════════════
+:host {
+  display: block;
+  min-height: 100vh;
+  background: $bg-dark;
+  padding-bottom: 40px;
+  position: relative;
+  overflow-x: hidden;
 
-/* Search box */
-.search-box {
-  display: flex;
-  gap: 8px;
-
-  input {
-    padding: 8px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
+  &::before {
+    content: '';
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: $accent-purple;
+    filter: blur(140px);
+    opacity: 0.15;
+    top: -200px;
+    right: -150px;
+    pointer-events: none;
+    z-index: 0;
+    animation: floatOrb 10s ease-in-out infinite alternate;
   }
 
-  button {
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: none;
-    background: linear-gradient(45deg, #6366f1, #4f46e5);
-    color: white;
-    cursor: pointer;
+  &::after {
+    content: '';
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: $accent-cyan;
+    filter: blur(140px);
+    opacity: 0.1;
+    bottom: -150px;
+    left: -100px;
+    pointer-events: none;
+    z-index: 0;
+    animation: floatOrb 10s ease-in-out infinite alternate-reverse;
   }
 }
 
-/* Job card */
+@keyframes floatOrb {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(50px, 40px) scale(1.1); }
+}
+
+// ═══════════════════════════
+// Container
+// ═══════════════════════════
+.container {
+  max-width: 1100px;
+  position: relative;
+  z-index: 1;
+}
+
+// ═══════════════════════════
+// Headings
+// ═══════════════════════════
+h2 {
+  background: $gradient-primary;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% 200%;
+  animation: gradientShift 4s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.text-muted {
+  color: $text-muted !important;
+}
+
+// ═══════════════════════════
+// Job Cards (Glass Style)
+// ═══════════════════════════
 .job-card {
-  border-radius: 12px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: $glass-bg !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid $glass-border !important;
+  border-radius: $radius-lg !important;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1),
+              box-shadow 0.35s ease,
+              border-color 0.35s ease;
+
+  // Gradient accent line at top
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, $accent-cyan, $accent-purple, $accent-pink);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+  }
+
+  // Hover shimmer
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.03),
+      transparent
+    );
+    transition: left 0.6s ease;
+    z-index: 1;
+  }
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12) !important;
+    transform: translateY(-6px);
+    border-color: rgba($accent-purple, 0.3) !important;
+    box-shadow: 0 0 25px rgba($accent-purple, 0.15),
+                0 20px 50px rgba(0, 0, 0, 0.2);
+
+    &::before {
+      opacity: 1;
+    }
+
+    &::after {
+      left: 100%;
+    }
+  }
+
+  .card-header {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
+    position: relative;
+    z-index: 2;
+  }
+
+  .card-body {
+    color: $text-primary;
+    position: relative;
+    z-index: 2;
+  }
+
+  .card-title {
+    color: $text-primary !important;
+    font-weight: 700;
+  }
+
+  .card-text {
+    color: $text-muted !important;
+  }
+
+  .card-footer {
+    background: transparent !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.04) !important;
+    position: relative;
+    z-index: 2;
   }
 }
 
-.card-title {
-  color: #2c3e50;
-}
-
+// ═══════════════════════════
+// Description Clamp
+// ═══════════════════════════
 .description-clamp {
   font-size: 0.9rem;
   line-height: 1.5;
@@ -55,23 +201,134 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   min-height: 60px;
+  color: $text-muted;
 }
 
-.badge {
-  font-weight: 500;
-  letter-spacing: 0.5px;
+// ═══════════════════════════
+// Search Input (Glass Style)
+// ═══════════════════════════
+.form-control {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: $text-primary !important;
+  border-radius: $radius-md !important;
+  transition: all 0.3s ease;
+
+  &::placeholder {
+    color: $text-muted !important;
+  }
+
+  &:focus {
+    border-color: $accent-cyan !important;
+    box-shadow: 0 0 0 3px rgba($accent-cyan, 0.15) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+  }
 }
 
-h2 {
-  color: #1a73e8;
+// ═══════════════════════════
+// Buttons (Matching Dashboard)
+// ═══════════════════════════
+.btn-primary {
+  background: linear-gradient(135deg, $accent-purple, $accent-cyan) !important;
+  border: none !important;
+  color: $bg-dark !important;
+  font-weight: 700;
+  box-shadow: 0 4px 20px rgba($accent-purple, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba($accent-cyan, 0.4) !important;
+  }
+}
+
+.btn-outline-primary {
+  color: $accent-cyan !important;
+  border-color: rgba($accent-cyan, 0.4) !important;
+  background: transparent !important;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba($accent-cyan, 0.1) !important;
+    border-color: $accent-cyan !important;
+    box-shadow: 0 0 15px rgba($accent-cyan, 0.15);
+  }
 }
 
 .btn-success {
-  background-color: #28a745;
-  border-color: #28a745;
+  background: linear-gradient(135deg, $accent-green, #34d399) !important;
+  border: none !important;
+  color: $bg-dark !important;
+  font-weight: 700;
+  box-shadow: 0 4px 20px rgba($accent-green, 0.3);
+  transition: all 0.3s ease;
 
   &:hover {
-    background-color: #218838;
-    transform: scale(1.02);
+    box-shadow: 0 6px 25px rgba($accent-green, 0.45) !important;
+    transform: translateY(-2px);
+  }
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #ef4444, $accent-pink) !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba($accent-pink, 0.25);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba($accent-pink, 0.4) !important;
+  }
+}
+
+// ═══════════════════════════
+// Badges
+// ═══════════════════════════
+.badge {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+// ═══════════════════════════
+// Empty State Card
+// ═══════════════════════════
+.card.shadow-sm {
+  background: $glass-bg !important;
+  backdrop-filter: blur(14px);
+  border: 1px solid $glass-border !important;
+  border-radius: $radius-lg !important;
+  color: $text-primary;
+}
+
+// ═══════════════════════════
+// Animations
+// ═══════════════════════════
+.job-card {
+  animation: fadeIn 0.5s ease both;
+}
+
+@for $i from 1 through 12 {
+  .col-md-6:nth-child(#{$i}) .job-card,
+  .col-lg-4:nth-child(#{$i}) .job-card {
+    animation-delay: #{$i * 0.08}s;
+  }
+}
+
+@keyframes fadeIn {
+  0%   { opacity: 0; transform: translateY(16px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+// ═══════════════════════════
+// Responsive
+// ═══════════════════════════
+@media (max-width: 768px) {
+  :host {
+    padding-bottom: 24px;
+  }
+
+  .container {
+    padding: 0 12px;
   }
 }
