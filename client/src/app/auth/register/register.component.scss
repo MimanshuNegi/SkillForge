@@ -537,4 +537,73 @@ button[type='submit'] {
     padding: 12px;
     font-size: 0.88rem;
   }
+  
+}
+// ─── Password Checklist ───
+.password-checklist {
+  margin-top: 8px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 0;
+    font-size: 0.75rem;
+    transition: all 0.3s ease;
+
+    .check-icon {
+      font-size: 0.7rem;
+      width: 18px;
+      text-align: center;
+    }
+
+    &.valid {
+      color: $accent-green;
+
+      span:last-child {
+        text-decoration: line-through;
+        opacity: 0.6;
+      }
+    }
+
+    &.invalid {
+      color: $text-muted;
+    }
+  }
+}
+
+// ─── Password Strength ───
+.password-strength {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+
+  .strength-bar {
+    flex: 1;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .strength-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease, background 0.4s ease;
+    box-shadow: 0 0 8px currentColor;
+  }
+
+  .strength-text {
+    font-size: 0.72rem;
+    font-weight: 700;
+    min-width: 50px;
+    text-align: right;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
 }

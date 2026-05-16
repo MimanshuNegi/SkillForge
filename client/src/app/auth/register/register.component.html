@@ -28,7 +28,7 @@
 
         <!-- Username -->
         <div class="form-group">
-          <label>👤 Full Name</label>
+          <label>👤 User Name</label>
           <input type="text" formControlName="username" placeholder="Enter your username" />
           <small *ngIf="f['username']?.touched && f['username']?.invalid">
             Username is required
@@ -49,20 +49,65 @@
           <label>🔒 Password</label>
           <div style="position: relative;">
             <input [type]="showPassword ? 'text' : 'password'" formControlName="password"
-              placeholder="Create a password" style="padding-right: 60px;" />
+              placeholder="Min 8 chars, uppercase, number, special" style="padding-right: 60px;" />
             <span (click)="showPassword = !showPassword"
               style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #8a8aa3; font-size: 0.8rem; font-weight: 600; user-select: none;">
               {{ showPassword ? '🙈 Hide' : '👁️ Show' }}
             </span>
           </div>
-          <small *ngIf="f['password']?.touched && f['password']?.invalid">
-            Password is required
-          </small>
+
+          <!-- ✅ Password Requirements Checklist -->
+          <div class="password-checklist" *ngIf="passwordValue.length > 0">
+
+            <div class="check-item" [class.valid]="hasMinLength" [class.invalid]="!hasMinLength">
+              <span class="check-icon">{{ hasMinLength ? '✅' : '❌' }}</span>
+              <span>At least 8 characters</span>
+            </div>
+
+            <div class="check-item" [class.valid]="hasUppercase" [class.invalid]="!hasUppercase">
+              <span class="check-icon">{{ hasUppercase ? '✅' : '❌' }}</span>
+              <span>One uppercase letter (A-Z)</span>
+            </div>
+
+            <div class="check-item" [class.valid]="hasLowercase" [class.invalid]="!hasLowercase">
+              <span class="check-icon">{{ hasLowercase ? '✅' : '❌' }}</span>
+              <span>One lowercase letter (a-z)</span>
+            </div>
+
+            <div class="check-item" [class.valid]="hasNumber" [class.invalid]="!hasNumber">
+              <span class="check-icon">{{ hasNumber ? '✅' : '❌' }}</span>
+              <span>One number (0-9)</span>
+            </div>
+
+            <div class="check-item" [class.valid]="hasSpecialChar" [class.invalid]="!hasSpecialChar">
+              <span class="check-icon">{{ hasSpecialChar ? '✅' : '❌' }}</span>
+              <span>One special character (adsad)</span>
+            </div>
+
+          </div>
+
+          <!-- ✅ Password Strength Bar -->
+          <div class="password-strength" *ngIf="passwordValue.length > 0">
+            <div class="strength-bar">
+              <div class="strength-fill" [style.width]="passwordStrengthWidth"
+                [style.background]="passwordStrengthColor">
+              </div>
+            </div>
+            <small class="strength-text" [style.color]="passwordStrengthColor">
+              {{ passwordStrengthLabel }}
+            </small>
+          </div>
+
+          <!-- ✅ Error when touched but empty -->
+          <div *ngIf="f['password']?.touched && f['password']?.errors?.['required']" class="validation-errors">
+            <small>Password is required</small>
+          </div>
+
         </div>
         <!-- Contact Number -->
         <div class="form-group">
           <label>📞 Contact Number</label>
-          <input type="text" formControlName="contactNumber" placeholder="Optional" />
+          <input type="text" formControlName="contactNumber" placeholder="Enter Your Mob Number" />
         </div>
 
         <!-- Role -->
