@@ -1,140 +1,497 @@
-/* Background */
+// ─── Variables ───
+$bg-dark: #0a0a1a;
+$gradient-primary: linear-gradient(135deg, #00f0ff, #7b2ff7, #ff2d95);
+$glass-bg: rgba(255, 255, 255, 0.05);
+$glass-border: rgba(255, 255, 255, 0.1);
+$text-primary: #ffffff;
+$text-muted: #8a8aa3;
+$accent-cyan: #00f0ff;
+$accent-purple: #7b2ff7;
+$accent-pink: #ff2d95;
+$radius-lg: 24px;
+$radius-md: 14px;
+$radius-sm: 10px;
+
+// ─── Mixins ───
+@mixin glass($blur: 20px) {
+  background: $glass-bg;
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: 1px solid $glass-border;
+}
+
+@mixin glow($color, $spread: 30px) {
+  box-shadow: 0 0 $spread rgba($color, 0.3),
+              0 0 ($spread * 2) rgba($color, 0.1);
+}
+
+// ─── Auth Wrapper ───
 .auth-wrapper {
-  height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: center;
-  background: #a5b4fc;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-/* Main card */
-.auth-card {
-  width: 850px;
-  height: 500px;
-  display: flex;
-  border-radius: 20px;
+  justify-content: center;
+  min-height: 100vh;
+  background: $bg-dark;
+  padding: 20px;
+  position: relative;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.4;
+    animation: floatOrb 8s ease-in-out infinite alternate;
+  }
+
+  &::before {
+    width: 500px;
+    height: 500px;
+    background: $accent-purple;
+    top: -150px;
+    left: -100px;
+  }
+
+  &::after {
+    width: 400px;
+    height: 400px;
+    background: $accent-cyan;
+    bottom: -100px;
+    right: -80px;
+    animation-delay: 2s;
+  }
 }
 
-/* LEFT SIDE */
+// ─── Auth Card ───
+.auth-card {
+  display: flex;
+  width: 900px;
+  max-width: 95vw;
+  // ✅ FIX: constrain height — prevents overflow
+  max-height: 92vh;
+  min-height: 480px;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  @include glass(24px);
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.5),
+    0 0 80px rgba($accent-cyan, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  position: relative;
+  z-index: 1;
+  // ✅ FIX: removed perspective/rotateY — was clipping right panel corner
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+
+  &:hover {
+    // ✅ FIX: clean translateY only — no 3D tilt
+    transform: translateY(-4px);
+    box-shadow:
+      0 30px 80px rgba(0, 0, 0, 0.6),
+      0 0 100px rgba($accent-cyan, 0.08);
+  }
+}
+
+// ─── Left Side (Form) ───
 .left-side {
   flex: 1;
-  padding: 40px;
-  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  // ✅ FIX: contained padding, scrollable if needed
+  padding: 44px 42px;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba($accent-purple, 0.4);
+    border-radius: 4px;
+  }
+
+  h2 {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+    background: $gradient-primary;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    color: $text-muted;
+    font-size: 0.92rem;
+    margin-bottom: 32px;
+    font-weight: 400;
+  }
 }
 
-.subtitle {
-  font-size: 13px;
-  color: #666;
-  margin-bottom: 20px;
-}
-
-/* Form */
+// ─── Form Group ───
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  position: relative;
+
+  label {
+    display: block;
+    color: $text-muted;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 7px;
+  }
+
+  input {
+    width: 100%;
+    padding: 13px 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: $radius-sm;
+    color: $text-primary;
+    font-size: 0.93rem;
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.2);
+    }
+
+    &:focus {
+      border-color: $accent-cyan;
+      background: rgba($accent-cyan, 0.04);
+      @include glow($accent-cyan, 10px);
+    }
+  }
+
+  small {
+    color: $accent-pink;
+    font-size: 0.73rem;
+    margin-top: 5px;
+    display: block;
+    animation: shakeIn 0.3s ease;
+  }
 }
 
-label {
-  font-size: 13px;
-  color: #444;
-  display: block;
-  margin-bottom: 4px;
-}
-
-/* Inputs */
-input {
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  transition: 0.3s;
-}
-
-input:focus {
-  border-color: #6366f1;
-  box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
-  outline: none;
-}
-
-/* Password */
+// ─── Password Wrapper ───
 .password-wrapper {
   position: relative;
+
+  span {
+    position: absolute;
+    right: 16px;
+    // ✅ FIX: vertically center the show/hide toggle with the input
+    top: 38px;
+    color: $accent-cyan;
+    font-size: 0.78rem;
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: lighten($accent-cyan, 10%);
+      text-shadow: 0 0 8px rgba($accent-cyan, 0.5);
+    }
+  }
 }
 
-.password-wrapper span {
-  position: absolute;
-  right: 10px;
-  top: 30px;
-  cursor: pointer;
-  font-size: 12px;
-  color: #6366f1;
-}
-
-/* Button */
-button {
-  width: 100%;
-  margin-top: 10px;
-  padding: 10px;
-  background: linear-gradient(45deg, #6366f1, #4f46e5);
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-weight: 600;
-}
-
-/* Register link */
-.register-link {
-  margin-top: 15px;
-  text-align: center;
-}
-
-.register-link a {
-  color: #6366f1;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-/* Error */
-small {
-  color: red;
-  font-size: 12px;
-}
-
+// ─── Error Message ───
 .error-message {
-  color: red;
-  font-size: 13px;
-  margin-top: 5px;
+  background: rgba($accent-pink, 0.1);
+  border: 1px solid rgba($accent-pink, 0.3);
+  border-radius: $radius-md;
+  padding: 12px 16px;
+  color: $accent-pink;
+  font-size: 0.85rem;
+  margin-bottom: 18px;
+  animation: shakeIn 0.4s ease;
 }
 
-/* ✅ RIGHT SIDE DESIGN */
+// ─── Submit Button ───
+button[type='submit'] {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: $radius-sm;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  background: $gradient-primary;
+  background-size: 200% 200%;
+  animation: gradientShift 4s ease infinite;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.15),
+      transparent
+    );
+    transition: left 0.5s ease;
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    @include glow($accent-purple, 20px);
+
+    &::before {
+      left: 100%;
+    }
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    filter: grayscale(0.3);
+  }
+}
+
+// ─── Register Link ───
+.register-link {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 0.86rem;
+
+  span {
+    color: $text-muted;
+  }
+
+  a {
+    color: $accent-cyan;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 6px;
+    position: relative;
+    transition: all 0.2s ease;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: $accent-cyan;
+      transition: width 0.3s ease;
+    }
+
+    &:hover {
+      text-shadow: 0 0 10px rgba($accent-cyan, 0.4);
+
+      &::after {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// ─── Right Side (Design Panel) ───
 .right-side {
   flex: 1;
+  background: linear-gradient(160deg, $accent-purple, $accent-cyan);
   position: relative;
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+
+  // Grid mesh
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: gridMove 20s linear infinite;
+  }
+
+  // Glow ring
+  &::after {
+    content: '';
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.15);
+    box-shadow:
+      0 0 60px rgba($accent-cyan, 0.3),
+      inset 0 0 60px rgba($accent-purple, 0.2);
+    animation: pulseRing 4s ease-in-out infinite;
+  }
 }
 
-/* Curve style */
 .overlay-shape {
-  position: absolute;
-  width: 150%;
-  height: 150%;
-  background: rgba(255,255,255,0.1);
-  border-radius: 50%;
-  top: -40%;
-  right: -40%;
+  width: 180px;
+  height: 180px;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  animation: morphBlob 8s ease-in-out infinite;
+  position: relative;
+  z-index: 1;
 }
 
-/* Floating cards */
+// ─── Floating Cards (uncomment in HTML to use) ───
 .card-box {
   position: absolute;
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  font-size: 12px;
+  @include glass(16px);
+  border-radius: $radius-md;
+  padding: 18px 22px;
+  color: $text-primary;
+  z-index: 2;
+  transition: transform 0.3s ease;
+
+  h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin: 0 0 4px;
+  }
+
+  p {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+  }
+
+  &:hover {
+    transform: translateY(-4px) scale(1.03);
+  }
+
+  &.card1 {
+    top: 60px;
+    right: 40px;
+    animation: floatCard 6s ease-in-out infinite;
+  }
+
+  &.card2 {
+    bottom: 120px;
+    left: 30px;
+    animation: floatCard 6s ease-in-out infinite 1s;
+  }
+
+  &.card3 {
+    bottom: 50px;
+    right: 50px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    border-radius: 50%;
+    animation: floatCard 6s ease-in-out infinite 2s;
+  }
+}
+
+// ─── Keyframes ───
+@keyframes floatOrb {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(40px, 30px) scale(1.15); }
+}
+
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes shakeIn {
+  0%   { transform: translateX(-8px); opacity: 0; }
+  50%  { transform: translateX(4px); }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes morphBlob {
+  0%   { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; transform: rotate(0deg); }
+  33%  { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  66%  { border-radius: 40% 60% 60% 40% / 40% 70% 30% 60%; }
+  100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; transform: rotate(360deg); }
+}
+
+@keyframes pulseRing {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50%      { transform: scale(1.12); opacity: 0.3; }
+}
+
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-12px); }
+}
+
+@keyframes gridMove {
+  0%   { transform: translate(0, 0); }
+  100% { transform: translate(40px, 40px); }
+}
+
+// ─── Responsive ───
+@media (max-width: 768px) {
+  .auth-card {
+    flex-direction: column;
+    max-width: 420px;
+    max-height: 95vh;
+  }
+
+  .right-side {
+    min-height: 180px;
+    order: -1;
+    border-radius: $radius-lg $radius-lg 0 0;
+    flex: none;
+  }
+
+  .left-side {
+    padding: 32px 26px;
+  }
+
+  .overlay-shape {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .left-side {
+    padding: 24px 20px;
+
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    .subtitle {
+      margin-bottom: 24px;
+    }
+  }
+
+  button[type='submit'] {
+    padding: 12px;
+    font-size: 0.88rem;
+  }
 }

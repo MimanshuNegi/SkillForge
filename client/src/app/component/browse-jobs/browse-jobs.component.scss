@@ -1,48 +1,413 @@
+// ─── Variables ───
+$bg-dark: #0a0a1a;
+$gradient-primary: linear-gradient(135deg, #00f0ff, #7b2ff7, #ff2d95);
+$glass-bg: rgba(255, 255, 255, 0.05);
+$glass-border: rgba(255, 255, 255, 0.08);
+$text-primary: #ffffff;
+$text-secondary: #c4c4d4;
+$text-muted: #8a8aa3;
+$accent-cyan: #00f0ff;
+$accent-purple: #7b2ff7;
+$accent-pink: #ff2d95;
+$accent-green: #10b981;
+$accent-orange: #f59e0b;
+$accent-blue: #3b82f6;
+$accent-red: #ef4444;
+$radius-lg: 20px;
+$radius-md: 14px;
+$radius-sm: 10px;
+
+// ─── Mixins ───
+@mixin glass($blur: 16px) {
+  background: $glass-bg;
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: 1px solid $glass-border;
+}
+
+@mixin glow($color, $spread: 25px) {
+  box-shadow: 0 0 $spread rgba($color, 0.25),
+              0 0 ($spread * 2) rgba($color, 0.08);
+}
+
+// ─── App Wrapper ───
+.app-wrapper {
+  min-height: 100vh;
+  background: $bg-dark;
+  padding: 36px;
+  position: relative;
+  overflow-x: hidden;
+
+  // Ambient orbs
+  &::before,
+  &::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(140px);
+    opacity: 0.2;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  &::before {
+    width: 550px;
+    height: 550px;
+    background: $accent-purple;
+    top: -180px;
+    left: -120px;
+    animation: floatOrb 10s ease-in-out infinite alternate;
+  }
+
+  &::after {
+    width: 450px;
+    height: 450px;
+    background: $accent-cyan;
+    bottom: -120px;
+    right: -100px;
+    animation: floatOrb 10s ease-in-out infinite alternate-reverse;
+  }
+}
+
+// ─── App Card (Main Container) ───
+.app-card {
+  max-width: 960px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+// ─── Title ───
 .title {
-  margin-bottom: 15px;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  background: $gradient-primary;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  display: inline-block;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: $gradient-primary;
+    border-radius: 3px;
+  }
 }
 
-/* Job Card */
-.job-card {
-  background: #f9fafb;
-  border-radius: 12px;
-  padding: 15px;
-  margin-bottom: 12px;
-  border: 1px solid #eee;
-  transition: 0.3s;
-}
-
-.job-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-}
-
-/* Empty */
+// ─── Empty State ───
 .empty {
-  color: #888;
-  font-size: 14px;
+  @include glass(14px);
+  border-radius: $radius-lg;
+  padding: 60px 40px;
+  text-align: center;
+  color: $text-muted;
+  font-size: 1.05rem;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '📭';
+    display: block;
+    font-size: 3rem;
+    margin-bottom: 16px;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.1));
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba($accent-purple, 0.3), transparent);
+  }
 }
 
-/* Status Badge */
+// ─── Job Card ───
+.job-card {
+  @include glass(14px);
+  border-radius: $radius-lg;
+  padding: 28px 30px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+
+  // Left accent bar
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(180deg, $accent-cyan, $accent-purple);
+    border-radius: 3px 0 0 3px;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+  }
+
+  // Shimmer on hover
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.03),
+      transparent
+    );
+    transition: left 0.6s ease;
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    border-color: rgba($accent-cyan, 0.2);
+    @include glow($accent-cyan, 15px);
+
+    &::before {
+      opacity: 1;
+    }
+
+    &::after {
+      left: 100%;
+    }
+  }
+
+  // ─── Job Title ───
+  h4 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin: 0 0 12px;
+    padding-right: 20px;
+    transition: color 0.2s ease;
+
+    &:hover {
+      background: $gradient-primary;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  }
+
+  // ─── Description & Info ───
+  p {
+    color: $text-muted;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    margin: 0 0 10px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    strong {
+      color: $text-secondary;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-right: 6px;
+    }
+  }
+}
+
+// ─── Status Badge ───
 .status-badge {
-  padding: 3px 10px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 14px;
+  border-radius: 50px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-left: 4px;
+  position: relative;
+
+  // Dot indicator before text
+  &::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 7px;
+    flex-shrink: 0;
+  }
+
+  // ─── Status Variants ───
+  &.OPEN,
+  &.open {
+    color: $accent-green;
+    background: rgba($accent-green, 0.1);
+    border: 1px solid rgba($accent-green, 0.2);
+
+    &::before {
+      background: $accent-green;
+      box-shadow: 0 0 6px rgba($accent-green, 0.6);
+    }
+  }
+
+  &.IN_PROGRESS,
+  &.in_progress,
+  &.in-progress {
+    color: $accent-blue;
+    background: rgba($accent-blue, 0.1);
+    border: 1px solid rgba($accent-blue, 0.2);
+
+    &::before {
+      background: $accent-blue;
+      box-shadow: 0 0 6px rgba($accent-blue, 0.6);
+    }
+  }
+
+  &.CLOSED,
+  &.closed {
+    color: $accent-red;
+    background: rgba($accent-red, 0.1);
+    border: 1px solid rgba($accent-red, 0.2);
+
+    &::before {
+      background: $accent-red;
+      box-shadow: 0 0 6px rgba($accent-red, 0.6);
+    }
+  }
+
+  &.PENDING,
+  &.pending {
+    color: $accent-orange;
+    background: rgba($accent-orange, 0.1);
+    border: 1px solid rgba($accent-orange, 0.2);
+
+    &::before {
+      background: $accent-orange;
+      box-shadow: 0 0 6px rgba($accent-orange, 0.6);
+    }
+  }
+
+  &.COMPLETED,
+  &.completed {
+    color: $accent-cyan;
+    background: rgba($accent-cyan, 0.1);
+    border: 1px solid rgba($accent-cyan, 0.2);
+
+    &::before {
+      background: $accent-cyan;
+      box-shadow: 0 0 6px rgba($accent-cyan, 0.6);
+    }
+  }
+
+  &.ASSIGNED,
+  &.assigned {
+    color: $accent-purple;
+    background: rgba($accent-purple, 0.1);
+    border: 1px solid rgba($accent-purple, 0.2);
+
+    &::before {
+      background: $accent-purple;
+      box-shadow: 0 0 6px rgba($accent-purple, 0.6);
+    }
+  }
 }
 
-/* Role-based styling (future-safe) */
-.OPEN {
-  background: #d1fae5;
-  color: #065f46;
+// ─── Staggered Entrance ───
+.job-card {
+  animation: fadeSlideIn 0.45s ease both;
+
+  @for $i from 1 through 20 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.06}s;
+    }
+  }
 }
 
-.APPLIED {
-  background: #e0f2fe;
-  color: #0369a1;
+// ─── Keyframes ───
+@keyframes floatOrb {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(50px, 40px) scale(1.1); }
 }
 
-.CLOSED {
-  background: #fee2e2;
-  color: #991b1b;
+@keyframes fadeSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ─── Responsive ───
+@media (max-width: 768px) {
+  .app-wrapper {
+    padding: 20px 16px;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    margin-bottom: 24px;
+  }
+
+  .job-card {
+    padding: 22px 20px;
+    margin-bottom: 16px;
+
+    h4 {
+      font-size: 1.05rem;
+    }
+  }
+
+  .empty {
+    padding: 44px 24px;
+    font-size: 0.95rem;
+
+    &::before {
+      font-size: 2.4rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .app-wrapper {
+    padding: 14px 10px;
+  }
+
+  .title {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+  }
+
+  .job-card {
+    padding: 18px 16px;
+    border-radius: $radius-md;
+
+    h4 {
+      font-size: 0.95rem;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 0.82rem;
+    }
+  }
+
+  .status-badge {
+    font-size: 0.68rem;
+    padding: 3px 10px;
+  }
 }

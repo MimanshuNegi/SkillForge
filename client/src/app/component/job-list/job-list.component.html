@@ -53,10 +53,10 @@
           <span class="badge rounded-pill px-3 py-1"
                 [ngClass]="{
                   'bg-success': j.status === 'OPEN',
-                  'bg-info text-dark': j.status === 'APPLIED',
+                  'bg-info text-dark': j.status === 'APPLIED' || j.status === 'IN_PROGRESS',
                   'bg-danger': j.status === 'CLOSED',
                   'bg-warning text-dark': j.status === 'ACCEPTED',
-                  'bg-secondary': !j.status || (j.status !== 'OPEN' && j.status !== 'APPLIED' && j.status !== 'CLOSED' && j.status !== 'ACCEPTED')
+                  'bg-secondary': !j.status || (j.status !== 'OPEN' && j.status !== 'APPLIED' && j.status !== 'CLOSED' && j.status !== 'ACCEPTED' && j.status !== 'IN_PROGRESS')
                 }">
             {{ j.status || 'OPEN' }}
           </span>
@@ -96,28 +96,30 @@
         <!-- Card Footer: Actions -->
         <div class="card-footer bg-white border-0 pb-3">
 
-          <!-- ✅ FREELANCER: Apply Button -->
-          <button *ngIf="roleName === 'FREELANCER' && j.status !== 'APPLIED' && j.status !== 'CLOSED'"
+          <!-- ✅ FREELANCER: Apply Button (hide if already applied) -->
+          <button *ngIf="roleName === 'FREELANCER' && !j.applied && j.status !== 'APPLIED' && j.status !== 'CLOSED' && j.status !== 'IN_PROGRESS'"
                   class="btn btn-success w-100 rounded-pill fw-bold mb-2"
                   (click)="applyJob(j.id)">
             🚀 Apply Now
           </button>
 
           <!-- ✅ FREELANCER: Already Applied -->
-          <div *ngIf="roleName === 'FREELANCER' && j.status === 'APPLIED'" class="text-center mb-2">
+          <div *ngIf="roleName === 'FREELANCER' && (j.applied || j.status === 'APPLIED' || j.status === 'IN_PROGRESS')"
+               class="text-center mb-2">
             <span class="badge bg-info text-dark px-4 py-2 rounded-pill">
               ✅ Already Applied
             </span>
           </div>
 
           <!-- ✅ FREELANCER: Job Closed -->
-          <div *ngIf="roleName === 'FREELANCER' && j.status === 'CLOSED'" class="text-center mb-2">
+          <div *ngIf="roleName === 'FREELANCER' && j.status === 'CLOSED'"
+               class="text-center mb-2">
             <span class="badge bg-secondary px-4 py-2 rounded-pill">
               🔒 Job Closed
             </span>
           </div>
 
-          <!-- ✅ CLIENT: Just show who posted (no Manage/Delete here) -->
+          <!-- ✅ CLIENT: Just show who posted -->
           <div *ngIf="roleName === 'CLIENT'" class="text-center">
             <span class="text-muted small">
               👤 Posted by: {{ j.clientName || 'Client' }}
