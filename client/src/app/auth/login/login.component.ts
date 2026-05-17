@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
         this.authService.saveToken(response.token);
         this.authService.setRole(response.role);
 
-        // ✅ Save username for ownership checks
+        //  Save username for ownership checks
         if (response.username) {
           localStorage.setItem('username', response.username);
         }

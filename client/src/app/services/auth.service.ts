@@ -51,12 +51,12 @@ export class AuthService {
 
         const anyRes: any = res as any;
 
-        // ✅ Save userId
+        //  Save userId
         if (anyRes.userId !== undefined && anyRes.userId !== null) {
           this.saveUserId(Number(anyRes.userId));
         }
 
-        // ✅ Save username
+        //  Save username
         if (anyRes.username) {
           localStorage.setItem('username', anyRes.username);
         }
@@ -95,7 +95,7 @@ export class AuthService {
     return !!this.getToken();
   }
 
-  // ✅ Clear username on logout
+  //  Clear username on logout
   logout(): void {
     this.token = null;
     localStorage.removeItem('token');
@@ -143,7 +143,7 @@ export class AuthService {
   updateUser(userId: number, userData: any): Observable<any> {
   if (!this.http) throw new Error('HttpClient not available');
 
-  // ✅ Only send editable fields (not password, role, etc.)
+  //  Only send editable fields (not password, role, etc.)
   const body: any = {};
   if (userData.username) body.username = userData.username;
   if (userData.email) body.email = userData.email;

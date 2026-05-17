@@ -8,7 +8,7 @@ import com.edutech.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    // ✅ Used by tests & service
+    //  Used by tests & service
     User findByUsername(String username);
 
 }

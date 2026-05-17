@@ -18,7 +18,7 @@ public class Proposal {
 
     private String status;
 
-    private String message;  // ✅ NEW: bid message / cover letter
+    private String message;  //  NEW: bid message / cover letter
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "job_id")

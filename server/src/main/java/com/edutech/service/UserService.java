@@ -35,14 +35,14 @@ public class UserService implements UserDetailsService {
 
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
-        // ✅ FIX: store authority as plain string like "ADMIN"
+        //  FIX: store authority as plain string like "ADMIN"
         String roleName = (user.getRole() != null)
                 ? user.getRole().name()
                 : "CLIENT";
 
         authorities.add(new SimpleGrantedAuthority(roleName));
 
-        // ✅ TEST STABILITY FIX:
+        //  TEST STABILITY FIX:
         // If these fixed test users exist from older DB runs with different passwords,
         // allow the expected test password to work.
         String passwordToUse = user.getPassword();
@@ -56,7 +56,7 @@ public class UserService implements UserDetailsService {
     }
 
     /**
-     * ✅ Ensures repeated test runs pass even if DB already contains test users
+     *  Ensures repeated test runs pass even if DB already contains test users
      * with stale password hashes.
      */
     private String normalizeFixedTestUserPassword(String username, User user, String currentEncodedPassword) {
@@ -125,7 +125,7 @@ public class UserService implements UserDetailsService {
         userRepository.deleteById(userId);
     }
 
-    // ✅ Update user (accepts partial data as Map)
+    //  Update user (accepts partial data as Map)
     public User updateUser(Long userId, Map<String, Object> updates) {
 
         User user = userRepository.findById(userId)

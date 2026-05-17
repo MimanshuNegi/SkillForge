@@ -1,6 +1,6 @@
 <div class="container">
 
-  <!-- ✅ Header -->
+  <!--  Header -->
   <div class="d-flex justify-content-between align-items-center mb-4" style="padding-top: 24px;">
     <div>
       <h2 class="fw-bold">
@@ -18,7 +18,7 @@
     </span>
   </div>
 
-  <!-- ✅ No Jobs -->
+  <!--  No Jobs -->
   <div *ngIf="jobs.length === 0" class="text-center py-5">
     <div class="card shadow-sm border-0 mx-auto" style="max-width: 500px;">
       <div class="card-body py-5">
@@ -35,7 +35,7 @@
     </div>
   </div>
 
-  <!-- ✅ Job Cards -->
+  <!--  Job Cards -->
   <div *ngIf="jobs.length > 0">
     <div class="card shadow-sm border-0 mb-4" *ngFor="let j of jobs">
 
@@ -66,7 +66,7 @@
         </div>
 
         <!-- ═══════════════════════════════ -->
-        <!-- ✅ CLIENT: Job Management       -->
+        <!--  CLIENT: Job Management       -->
         <!-- ═══════════════════════════════ -->
         <div *ngIf="roleName === 'CLIENT'">
 
@@ -98,7 +98,7 @@
             </button>
           </div>
 
-          <!-- ✅ Bids/Applicants Section -->
+          <!--  Bids/Applicants Section -->
           <div *ngIf="j.showApplicants" class="applicants-section" style="padding: 16px; margin-top: 8px;">
 
             <h6 class="fw-bold mb-3">💰 Bids ({{ j.proposals?.length || 0 }})</h6>
@@ -116,14 +116,14 @@
                   <span class="fw-semibold">👤 {{ p.freelancer?.username || 'Unknown' }}</span>
                   <span class="text-muted ms-2 small">📧 {{ p.freelancer?.email || '' }}</span>
 
-                  <!-- ✅ Bid Amount -->
+                  <!--  Bid Amount -->
                   <div *ngIf="p.bidAmount" style="margin-top: 8px;">
                     <span style="color: #10b981; font-weight: 700; font-size: 1.1rem;">
                       💰 Bid: ${{ p.bidAmount }}
                     </span>
                   </div>
 
-                  <!-- ✅ Proposal Message -->
+                  <!--  Proposal Message -->
                   <div *ngIf="p.message" style="margin-top: 6px; padding: 8px 12px; background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 3px solid #00f0ff;">
                     <span style="color: #c4c4d4; font-size: 0.85rem; line-height: 1.5; font-style: italic;">
                       📝 "{{ p.message }}"
@@ -155,14 +155,14 @@
 
                   <div *ngIf="p.status === 'PENDING' || p.status === 'APPLIED'">
                     <button class="btn btn-success btn-sm me-1" (click)="acceptProposal(j, p)">
-                      ✅ Accept
+                       Accept
                     </button>
                     <button class="btn btn-outline-danger btn-sm" (click)="rejectProposal(j, p)">
                       ❌ Reject
                     </button>
                   </div>
 
-                  <span *ngIf="p.status === 'APPROVED'" class="text-success fw-bold small">Hired ✅</span>
+                  <span *ngIf="p.status === 'APPROVED'" class="text-success fw-bold small">Hired </span>
                   <span *ngIf="p.status === 'REJECTED'" class="text-danger fw-bold small">Declined</span>
 
                 </div>
@@ -226,13 +226,13 @@
         </div>
 
         <!-- ═══════════════════════════════ -->
-        <!-- ✅ FREELANCER: Accept/Reject    -->
+        <!--  FREELANCER: Accept/Reject    -->
         <!-- ═══════════════════════════════ -->
         <div *ngIf="roleName !== 'CLIENT'">
           <div *ngIf="j.status === 'APPLIED'" class="d-flex gap-2">
             <button class="btn btn-success btn-sm flex-grow-1 rounded-pill"
                     (click)="updateStatus(j, 'ACCEPTED')">
-              ✅ Accept
+               Accept
             </button>
             <button class="btn btn-outline-danger btn-sm flex-grow-1 rounded-pill"
                     (click)="updateStatus(j, 'REJECTED')">

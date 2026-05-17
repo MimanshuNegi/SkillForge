@@ -1,6 +1,6 @@
 <div style="min-height: 100vh; background: #0a0a1a; padding: 0 16px 40px;">
 
-  <!-- ✅ Header (changes based on route) -->
+  <!--  Header (changes based on route) -->
   <div style="text-align: center; padding-top: 28px; margin-bottom: 24px;">
 
     <h2 *ngIf="roleName === 'ADMIN' && isUsersPage"
@@ -21,20 +21,20 @@
 
   </div>
 
-  <!-- ✅ Success Message -->
+  <!--  Success Message -->
   <div *ngIf="successMessage"
        style="background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); color: #10b981; padding: 14px 16px; border-radius: 12px; text-align: center; margin-bottom: 20px; font-weight: 600; max-width: 500px; margin-left: auto; margin-right: auto;">
     {{ successMessage }}
   </div>
 
-  <!-- ✅ Error Message -->
+  <!--  Error Message -->
   <div *ngIf="errorMessage"
        style="background: rgba(255,45,149,0.1); border: 1px solid rgba(255,45,149,0.3); color: #ff2d95; padding: 14px 16px; border-radius: 12px; text-align: center; margin-bottom: 20px; max-width: 500px; margin-left: auto; margin-right: auto;">
     ⚠️ {{ errorMessage }}
   </div>
 
   <!-- ═══════════════════════════════════════ -->
-  <!-- ✅ FREELANCER / CLIENT Profile Card     -->
+  <!--  FREELANCER / CLIENT Profile Card     -->
   <!-- ═══════════════════════════════════════ -->
   <div *ngIf="(roleName === 'FREELANCER' || roleName === 'CLIENT') && !isUsersPage">
 
@@ -151,7 +151,7 @@
   </div>
 
   <!-- ═══════════════════════════════════════ -->
-  <!-- ✅ ADMIN: Profile Card (on /my-profile) -->
+  <!--  ADMIN: Profile Card (on /my-profile) -->
   <!-- ═══════════════════════════════════════ -->
   <div *ngIf="roleName === 'ADMIN' && !isUsersPage">
 
@@ -250,7 +250,7 @@
   </div>
 
   <!-- ═══════════════════════════════════════ -->
-  <!-- ✅ ADMIN: Users Table (on /users only)  -->
+  <!--  ADMIN: Users Table (on /users only)  -->
   <!-- ═══════════════════════════════════════ -->
   <div *ngIf="roleName === 'ADMIN' && isUsersPage">
 

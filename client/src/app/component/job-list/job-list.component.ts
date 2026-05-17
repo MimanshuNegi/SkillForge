@@ -15,7 +15,7 @@ export class JobListComponent implements OnInit {
   roleName: string | null = '';
   searchTitle: string = '';
   appliedJobIds: Set<number> = new Set();
-  // ✅ Bid form state
+  //  Bid form state
   showBidForm: { [jobId: number]: boolean } = {};
   bidAmount: { [jobId: number]: number } = {};
   bidMessage: { [jobId: number]: string } = {};
@@ -28,7 +28,7 @@ export class JobListComponent implements OnInit {
 
   ngOnInit(): void {
     this.roleName = this.auth.getRole();
-
+    
     // If FREELANCER, fetch their proposals first to know which jobs they applied to
     if (this.roleName === 'FREELANCER') {
       const proposals$ = (this.proposalService as any).getMyProposals?.();
@@ -55,12 +55,19 @@ export class JobListComponent implements OnInit {
     }
   }
 
-  // ✅ Fetch jobs WITHOUT adding extra properties
+  //  Fetch jobs WITHOUT adding extra properties
   fetchJobs(): void {
     this.service.getJobList().subscribe({
       next: (data: any) => {
-        this.job = data || [];
-        this.allJobs = data || [];
+        const list = data || [];
+
+//  Filter out test users' jobs
+this.job = list.filter((j: any) =>
+  !j.clientName?.endsWith('_test') &&
+  j.clientName !== 'newuser_reg'
+);
+
+this.allJobs = [...this.job];
       },
       error: (err: any) => {
         console.error('Error fetching jobs', err);
@@ -70,7 +77,7 @@ export class JobListComponent implements OnInit {
     });
   }
 
-  // ✅ Check if freelancer already applied (without modifying job object)
+  //  Check if freelancer already applied (without modifying job object)
   isApplied(jobId: number): boolean {
     return this.appliedJobIds.has(jobId);
   }
@@ -107,17 +114,34 @@ export class JobListComponent implements OnInit {
     });
   }
 
-  searchJobs(): void {
-    if (!this.searchTitle || this.searchTitle.trim() === '') {
-      this.job = this.allJobs;
-      return;
-    }
+  // searchJobs(): void {
+  //   if (!this.searchTitle || this.searchTitle.trim() === '') {
+  //     this.job = this.allJobs;
+  //     return;
+  //   }
 
-    const term = this.searchTitle.toLowerCase();
-    this.job = this.allJobs.filter(j =>
-      (j.title || '').toLowerCase().includes(term)
-    );
+  //   const term = this.searchTitle.toLowerCase();
+  //   this.job = this.allJobs.filter(j =>
+  //     (j.title || '').toLowerCase().includes(term)
+  //   );
+  // }
+
+  searchJobs(): void {
+  if (!this.searchTitle || this.searchTitle.trim() === '') {
+    this.job = this.allJobs;
+    return;
   }
+
+  const term = this.searchTitle.toLowerCase().trim();
+
+  this.job = this.allJobs.filter(j =>
+    (j.title || '').toLowerCase().includes(term) ||
+    (j.description || '').toLowerCase().includes(term) ||
+    (j.clientName || '').toLowerCase().includes(term) ||
+    (j.status || '').toLowerCase().includes(term) ||
+    (j.budget?.toString() || '').includes(term)
+  );
+}
 
   deleteJob(jobId: number): void {
     if (!confirm('Are you sure you want to delete this job?')) return;
@@ -135,12 +159,12 @@ export class JobListComponent implements OnInit {
     });
   }
 
-  // ✅ Toggle bid form
+  //  Toggle bid form
 toggleBidForm(jobId: number): void {
   this.showBidForm[jobId] = !this.showBidForm[jobId];
 }
 
-// ✅ Submit bid
+//  Submit bid
 submitBid(jobId: number): void {
   const freelancerId = Number(localStorage.getItem('userId') || 0);
 

@@ -46,7 +46,7 @@ export class JobCreateComponent implements OnInit {
         this.router.navigate(['/job-list']);
       },
       error: (err: any) => {
-        // ✅ TEST EXPECTS: second arg must be an Error object
+        //  TEST EXPECTS: second arg must be an Error object
         const errorObj = err instanceof Error ? err : new Error(err?.message || String(err));
         console.error('Error creating job:', errorObj);
 

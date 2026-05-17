@@ -96,7 +96,7 @@ export class RegisterComponent implements OnInit {
   return this.freelancerForm.controls;
 }
 
-// ✅ Password validation helpers
+//  Password validation helpers
 get passwordValue(): string {
   return this.freelancerForm.get('password')?.value || '';
 }

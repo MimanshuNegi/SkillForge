@@ -47,7 +47,7 @@ public class ProposalController {
         return ResponseEntity.ok(proposal);
     }
 
-    // ✅ Update a proposal (accepts partial body like { "status": "APPROVED" })
+    //  Update a proposal (accepts partial body like { "status": "APPROVED" })
     @PutMapping("/{id}")
     public ResponseEntity<Proposal> updateProposal(
             @PathVariable Long id,
@@ -86,7 +86,7 @@ public class ProposalController {
         String username = SecurityContextHolder
                 .getContext()
                 .getAuthentication()
-                .getName(); // ✅ gets username from JWT
+                .getName(); //  gets username from JWT
 
         List<Proposal> proposals = proposalService
                 .getProposalsByFreelancerUsername(username);
@@ -94,7 +94,7 @@ public class ProposalController {
 
     }
 
-    // ✅ Freelancer bids on a job
+    //  Freelancer bids on a job
     @PostMapping("/job/{jobId}/freelancer/{freelancerId}")
     public ResponseEntity<?> bidOnJob(
             @PathVariable Long jobId,

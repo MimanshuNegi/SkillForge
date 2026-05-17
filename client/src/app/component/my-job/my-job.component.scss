@@ -15,7 +15,7 @@ $accent-pink: #ff2d95;
   padding-bottom: 40px;
 }
 
-// ✅ Fix white strip at top
+//  Fix white strip at top
 .container {
   padding-top: 24px;
   margin-top: 0 !important;
@@ -56,14 +56,14 @@ p {
   }
 }
 
-// ✅ Applicants section (dark themed)
+//  Applicants section (dark themed)
 .applicants-section {
   background: rgba(255, 255, 255, 0.03) !important;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-// ✅ Applicant cards (dark themed)
+//  Applicant cards (dark themed)
 .applicant-card {
   background: rgba(255, 255, 255, 0.04) !important;
   border: 1px solid rgba(255, 255, 255, 0.06) !important;
@@ -75,7 +75,7 @@ p {
   }
 }
 
-// ✅ Profile card inside applicants (dark themed)
+//  Profile card inside applicants (dark themed)
 .profile-card-expand {
   background: rgba(255, 255, 255, 0.04) !important;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
@@ -112,7 +112,7 @@ p {
   }
 }
 
-// ✅ Buttons
+//  Buttons
 .btn-outline-danger {
   color: $accent-pink !important;
   border-color: rgba($accent-pink, 0.4) !important;

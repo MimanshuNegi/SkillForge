@@ -70,7 +70,7 @@ $radius-sm: 10px;
   display: flex;
   width: 920px;
   max-width: 95vw;
-  // ✅ FIX: constrain height so card never overflows viewport
+  //  FIX: constrain height so card never overflows viewport
   max-height: 92vh;
   border-radius: $radius-lg;
   overflow: hidden;
@@ -96,11 +96,11 @@ $radius-sm: 10px;
   flex: 1.15;
   display: flex;
   flex-direction: column;
-  // ✅ FIX: split into fixed header + scrollable form area
+  //  FIX: split into fixed header + scrollable form area
   overflow: hidden;
 
   h2 {
-    // ✅ FIX: sticky header — never cut off
+    //  FIX: sticky header — never cut off
     font-size: 1.6rem;
     font-weight: 700;
     color: $text-primary;
@@ -126,7 +126,7 @@ $radius-sm: 10px;
   }
 
   form {
-    // ✅ FIX: only the form scrolls, not the title
+    //  FIX: only the form scrolls, not the title
     flex: 1;
     overflow-y: auto;
     padding: 8px 38px 32px;
@@ -196,7 +196,7 @@ $radius-sm: 10px;
 
 // ─── Form Group ───
 .form-group {
-  // ✅ FIX: tighter spacing to fit all fields
+  //  FIX: tighter spacing to fit all fields
   margin-bottom: 14px;
   position: relative;
 
@@ -214,7 +214,7 @@ $radius-sm: 10px;
   select,
   textarea {
     width: 100%;
-    // ✅ FIX: compact padding
+    //  FIX: compact padding
     padding: 11px 14px;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.08);
