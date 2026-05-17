@@ -47,7 +47,7 @@ public class ProposalController {
         return ResponseEntity.ok(proposal);
     }
 
-   // ✅ Update a proposal (accepts partial body like { "status": "APPROVED" })
+   //  Update a proposal (accepts partial body like { "status": "APPROVED" })
 @PutMapping("/{id}")
 public ResponseEntity<Proposal> updateProposal(
         @PathVariable Long id,

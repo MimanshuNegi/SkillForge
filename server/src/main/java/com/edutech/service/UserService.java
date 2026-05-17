@@ -35,7 +35,7 @@ public class UserService implements UserDetailsService {
 
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
-        // ✅ FIXED HERE
+        //  FIXED HERE
         String roleName = (user.getRole() != null)
                 ? user.getRole().name()
                 : "CLIENT";
@@ -86,8 +86,8 @@ public class UserService implements UserDetailsService {
         userRepository.deleteById(userId);
     }
 
-    // ✅ Update user details
-    // ✅ Update user (accepts partial data as Map)
+    //  Update user details
+    //  Update user (accepts partial data as Map)
 public User updateUser(Long userId, Map<String, Object> updates) {
 
     User user = userRepository.findById(userId)

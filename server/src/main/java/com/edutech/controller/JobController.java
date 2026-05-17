@@ -24,26 +24,26 @@ public class JobController {
     @Autowired
     private JobService jobService;
 
-    // ✅ Create Job
+    //  Create Job
     @PostMapping("/client/{clientId}")
     public ResponseEntity<Job> createJob(@PathVariable Long clientId,
             @Valid @RequestBody Job job) {
         return ResponseEntity.ok(jobService.createJob(clientId, job));
     }
 
-    // ✅ Get All Jobs
+    //  Get All Jobs
     @GetMapping
     public ResponseEntity<List<JobDTO>> getAllJobs() {
         return ResponseEntity.ok(jobService.getAllJobs());
     }
 
-    // ✅ Get Job by ID
+    //  Get Job by ID
     @GetMapping("/{id}")
     public ResponseEntity<Job> getJobById(@PathVariable Long id) {
         return ResponseEntity.ok(jobService.getJobById(id));
     }
 
-    // ✅ ✅ FIXED: Update Job Status (returns String as expected by tests)
+    //  FIXED: Update Job Status (returns String as expected by tests)
     @PutMapping("/status/{jobId}")
     public ResponseEntity<String> updateJobStatus(@PathVariable Long jobId,
             @RequestParam String status) {
@@ -52,7 +52,7 @@ public class JobController {
         return ResponseEntity.ok("Status updated to " + status);
     }
 
-    // ✅ Apply to Job (FIXED)
+    //  Apply to Job (FIXED)
     @PostMapping("/{jobId}/apply")
     public ResponseEntity<Map<String, String>> applyToJob(
             @PathVariable Long jobId,
@@ -60,7 +60,7 @@ public class JobController {
 
         Map<String, String> response = new HashMap<>();
 
-        // ✅ Extract userId from request body { "userId": 1 }
+        //  Extract userId from request body { "userId": 1 }
         Long userId = null;
         if (body != null && body.get("userId") != null) {
             userId = Long.valueOf(body.get("userId").toString());
@@ -96,7 +96,7 @@ public class JobController {
         return ResponseEntity.ok(response);
     }
 
-    // ✅ Get My Jobs (client)
+    //  Get My Jobs (client)
     @GetMapping("/my-jobs")
     public ResponseEntity<List<JobDTO>> getMyJobs() {
         String username = SecurityContextHolder
@@ -106,14 +106,14 @@ public class JobController {
         return ResponseEntity.ok(jobService.getJobsPostedByClient(username));
     }
 
-    // ✅ Delete Job
+    //  Delete Job
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteJob(@PathVariable Long id) {
         jobService.deleteJob(id);
         return ResponseEntity.ok().build();
     }
 
-    // ✅ User Report
+    //  User Report
     @GetMapping("/report/users")
     public ResponseEntity<Map<String, Object>> getUserReport() {
         return ResponseEntity.ok(jobService.getUserReport());
