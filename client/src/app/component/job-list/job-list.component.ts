@@ -15,6 +15,7 @@ export class JobListComponent implements OnInit {
   roleName: string | null = '';
   searchTitle: string = '';
   appliedJobIds: Set<number> = new Set();
+  isLoading: boolean = true;
   //  Bid form state
   showBidForm: { [jobId: number]: boolean } = {};
   bidAmount: { [jobId: number]: number } = {};
@@ -28,7 +29,7 @@ export class JobListComponent implements OnInit {
 
   ngOnInit(): void {
     this.roleName = this.auth.getRole();
-    
+
     // If FREELANCER, fetch their proposals first to know which jobs they applied to
     if (this.roleName === 'FREELANCER') {
       const proposals$ = (this.proposalService as any).getMyProposals?.();
@@ -57,22 +58,26 @@ export class JobListComponent implements OnInit {
 
   //  Fetch jobs WITHOUT adding extra properties
   fetchJobs(): void {
+    this.isLoading = true;
     this.service.getJobList().subscribe({
       next: (data: any) => {
         const list = data || [];
 
-//  Filter out test users' jobs
-this.job = list.filter((j: any) =>
-  !j.clientName?.endsWith('_test') &&
-  j.clientName !== 'newuser_reg'
-);
+        //  Filter out test users' jobs
+        this.job = list.filter((j: any) =>
+          !j.clientName?.endsWith('_test') &&
+          j.clientName !== 'newuser_reg'
+        );
 
-this.allJobs = [...this.job];
+        this.allJobs = [...this.job];
+        this.isLoading = false;
+
       },
       error: (err: any) => {
         console.error('Error fetching jobs', err);
         this.job = [];
         this.allJobs = [];
+        this.isLoading = false;
       }
     });
   }
@@ -127,21 +132,21 @@ this.allJobs = [...this.job];
   // }
 
   searchJobs(): void {
-  if (!this.searchTitle || this.searchTitle.trim() === '') {
-    this.job = this.allJobs;
-    return;
+    if (!this.searchTitle || this.searchTitle.trim() === '') {
+      this.job = this.allJobs;
+      return;
+    }
+
+    const term = this.searchTitle.toLowerCase().trim();
+
+    this.job = this.allJobs.filter(j =>
+      (j.title || '').toLowerCase().includes(term) ||
+      (j.description || '').toLowerCase().includes(term) ||
+      (j.clientName || '').toLowerCase().includes(term) ||
+      (j.status || '').toLowerCase().includes(term) ||
+      (j.budget?.toString() || '').includes(term)
+    );
   }
-
-  const term = this.searchTitle.toLowerCase().trim();
-
-  this.job = this.allJobs.filter(j =>
-    (j.title || '').toLowerCase().includes(term) ||
-    (j.description || '').toLowerCase().includes(term) ||
-    (j.clientName || '').toLowerCase().includes(term) ||
-    (j.status || '').toLowerCase().includes(term) ||
-    (j.budget?.toString() || '').includes(term)
-  );
-}
 
   deleteJob(jobId: number): void {
     if (!confirm('Are you sure you want to delete this job?')) return;
@@ -160,36 +165,36 @@ this.allJobs = [...this.job];
   }
 
   //  Toggle bid form
-toggleBidForm(jobId: number): void {
-  this.showBidForm[jobId] = !this.showBidForm[jobId];
-}
+  toggleBidForm(jobId: number): void {
+    this.showBidForm[jobId] = !this.showBidForm[jobId];
+  }
 
-//  Submit bid
-submitBid(jobId: number): void {
-  const freelancerId = Number(localStorage.getItem('userId') || 0);
+  //  Submit bid
+  submitBid(jobId: number): void {
+    const freelancerId = Number(localStorage.getItem('userId') || 0);
 
-  const body = {
-    bidAmount: this.bidAmount[jobId] || 0,
-    message: this.bidMessage[jobId] || ''
-  };
+    const body = {
+      bidAmount: this.bidAmount[jobId] || 0,
+      message: this.bidMessage[jobId] || ''
+    };
 
-  this.proposalService.bidOnJob(jobId, freelancerId, body).subscribe({
-    next: (res: any) => {
-      const msg = res?.message ?? 'Bid submitted!';
-      alert(msg);
+    this.proposalService.bidOnJob(jobId, freelancerId, body).subscribe({
+      next: (res: any) => {
+        const msg = res?.message ?? 'Bid submitted!';
+        alert(msg);
 
-      this.appliedJobIds.add(jobId);
-      this.showBidForm[jobId] = false;
-    },
-    error: (err: any) => {
-      if (err?.error?.message?.includes('Already Applied')) {
         this.appliedJobIds.add(jobId);
-        alert('⚠️ You already bid on this job.');
-      } else {
-        alert('❌ Failed to submit bid.');
-        console.error(err);
+        this.showBidForm[jobId] = false;
+      },
+      error: (err: any) => {
+        if (err?.error?.message?.includes('Already Applied')) {
+          this.appliedJobIds.add(jobId);
+          alert('⚠️ You already bid on this job.');
+        } else {
+          alert('❌ Failed to submit bid.');
+          console.error(err);
+        }
       }
-    }
-  });
-}
+    });
+  }
 }

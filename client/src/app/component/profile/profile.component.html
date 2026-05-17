@@ -1,8 +1,7 @@
 <div style="min-height: 100vh; background: #0a0a1a; padding: 0 16px 40px;">
 
-  <!--  Header (changes based on route) -->
+  <!-- ✅ Header -->
   <div style="text-align: center; padding-top: 28px; margin-bottom: 24px;">
-
     <h2 *ngIf="roleName === 'ADMIN' && isUsersPage"
         style="font-weight: 700; font-size: 1.5rem; background: linear-gradient(135deg, #00f0ff, #7b2ff7); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
       👥 User Management
@@ -10,7 +9,6 @@
     <p *ngIf="roleName === 'ADMIN' && isUsersPage" style="color: #8a8aa3;">
       Manage all registered users on the platform
     </p>
-
     <h2 *ngIf="!isUsersPage"
         style="font-weight: 700; font-size: 1.5rem; background: linear-gradient(135deg, #00f0ff, #7b2ff7); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
       👤 My Profile
@@ -18,34 +16,33 @@
     <p *ngIf="!isUsersPage" style="color: #8a8aa3;">
       View and update your profile details
     </p>
-
   </div>
 
-  <!--  Success Message -->
+  <!-- ✅ Success Message -->
   <div *ngIf="successMessage"
        style="background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); color: #10b981; padding: 14px 16px; border-radius: 12px; text-align: center; margin-bottom: 20px; font-weight: 600; max-width: 500px; margin-left: auto; margin-right: auto;">
     {{ successMessage }}
   </div>
 
-  <!--  Error Message -->
+  <!-- ✅ Error Message -->
   <div *ngIf="errorMessage"
        style="background: rgba(255,45,149,0.1); border: 1px solid rgba(255,45,149,0.3); color: #ff2d95; padding: 14px 16px; border-radius: 12px; text-align: center; margin-bottom: 20px; max-width: 500px; margin-left: auto; margin-right: auto;">
     ⚠️ {{ errorMessage }}
   </div>
 
   <!-- ═══════════════════════════════════════ -->
-  <!--  FREELANCER / CLIENT Profile Card     -->
+  <!-- ✅ FREELANCER / CLIENT Profile Card     -->
   <!-- ═══════════════════════════════════════ -->
   <div *ngIf="(roleName === 'FREELANCER' || roleName === 'CLIENT') && !isUsersPage">
 
-    <!-- Loading -->
-    <div *ngIf="!profile && !errorMessage" style="text-align: center; padding: 40px 0;">
-      <div class="spinner-border" style="color: #00f0ff;" role="status"></div>
-      <p style="color: #8a8aa3; margin-top: 8px;">Loading profile...</p>
+    <!-- ✅ Loading -->
+    <div *ngIf="isLoadingProfile" style="text-align: center; padding: 60px 0;">
+      <div class="spinner-border" style="color: #00f0ff; width: 3rem; height: 3rem;" role="status"></div>
+      <p style="color: #8a8aa3; margin-top: 12px; font-size: 0.9rem;">Loading profile...</p>
     </div>
 
     <!-- VIEW MODE -->
-    <div *ngIf="profile && !isEditing" class="row justify-content-center">
+    <div *ngIf="!isLoadingProfile && profile && !isEditing" class="row justify-content-center">
       <div class="col-md-8 col-lg-6">
         <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden;">
 
@@ -98,7 +95,7 @@
     </div>
 
     <!-- EDIT MODE -->
-    <div *ngIf="profile && isEditing" class="row justify-content-center">
+    <div *ngIf="!isLoadingProfile && profile && isEditing" class="row justify-content-center">
       <div class="col-md-8 col-lg-6">
         <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden;">
 
@@ -151,18 +148,18 @@
   </div>
 
   <!-- ═══════════════════════════════════════ -->
-  <!--  ADMIN: Profile Card (on /my-profile) -->
+  <!-- ✅ ADMIN: Profile Card (on /my-profile) -->
   <!-- ═══════════════════════════════════════ -->
   <div *ngIf="roleName === 'ADMIN' && !isUsersPage">
 
-    <!-- Loading -->
-    <div *ngIf="!profile && !errorMessage" style="text-align: center; padding: 40px 0;">
-      <div class="spinner-border" style="color: #00f0ff;" role="status"></div>
-      <p style="color: #8a8aa3; margin-top: 8px;">Loading profile...</p>
+    <!-- ✅ Loading -->
+    <div *ngIf="isLoadingProfile" style="text-align: center; padding: 60px 0;">
+      <div class="spinner-border" style="color: #00f0ff; width: 3rem; height: 3rem;" role="status"></div>
+      <p style="color: #8a8aa3; margin-top: 12px; font-size: 0.9rem;">Loading profile...</p>
     </div>
 
     <!-- VIEW MODE -->
-    <div *ngIf="profile && !isEditing" class="row justify-content-center">
+    <div *ngIf="!isLoadingProfile && profile && !isEditing" class="row justify-content-center">
       <div class="col-md-8 col-lg-6">
         <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden;">
 
@@ -207,7 +204,7 @@
     </div>
 
     <!-- EDIT MODE -->
-    <div *ngIf="profile && isEditing" class="row justify-content-center">
+    <div *ngIf="!isLoadingProfile && profile && isEditing" class="row justify-content-center">
       <div class="col-md-8 col-lg-6">
         <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden;">
 
@@ -250,28 +247,34 @@
   </div>
 
   <!-- ═══════════════════════════════════════ -->
-  <!--  ADMIN: Users Table (on /users only)  -->
+  <!-- ✅ ADMIN: Users Table (on /users only)  -->
   <!-- ═══════════════════════════════════════ -->
   <div *ngIf="roleName === 'ADMIN' && isUsersPage">
 
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
       <h4 style="font-weight: 700; color: #ffffff; margin: 0;">👥 All Users</h4>
-      <span *ngIf="users.length > 0"
+      <span *ngIf="!isLoadingUsers && users.length > 0"
             style="background: linear-gradient(135deg, #7b2ff7, #00f0ff); color: #0a0a1a; padding: 6px 16px; border-radius: 20px; font-weight: 700; font-size: 0.9rem;">
         {{ users.length }} {{ users.length === 1 ? 'User' : 'Users' }}
       </span>
     </div>
 
-    <!-- No Users -->
-    <div *ngIf="users.length === 0" style="text-align: center; padding: 40px;">
+    <!-- ✅ Loading Spinner -->
+    <div *ngIf="isLoadingUsers" style="text-align: center; padding: 60px 0;">
+      <div class="spinner-border" style="color: #00f0ff; width: 3rem; height: 3rem;" role="status"></div>
+      <p style="color: #8a8aa3; margin-top: 12px; font-size: 0.9rem;">Loading users...</p>
+    </div>
+
+    <!-- ✅ No Users -->
+    <div *ngIf="!isLoadingUsers && users.length === 0" style="text-align: center; padding: 40px;">
       <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 40px; max-width: 500px; margin: 0 auto;">
         <h1 style="margin-bottom: 12px;">👥</h1>
         <h5 style="color: #8a8aa3;">No users found.</h5>
       </div>
     </div>
 
-    <!-- Users Table -->
-    <div *ngIf="users.length > 0"
+    <!-- ✅ Users Table -->
+    <div *ngIf="!isLoadingUsers && users.length > 0"
          style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden;">
 
       <table style="width: 100%; border-collapse: collapse;">
