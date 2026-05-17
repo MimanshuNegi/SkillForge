@@ -24,7 +24,7 @@ export class ProposalService {
     return this.http.post(`${this.api}/freelancer/${freelancerId}`, data, { headers: this.getHeaders() });
   }
 
-  // ✅ NEW: Freelancer bids on a job
+  //  NEW: Freelancer bids on a job
   bidOnJob(jobId: number, freelancerId: number, body: any): Observable<any> {
     if (!this.http) return of(null);
     return this.http.post(

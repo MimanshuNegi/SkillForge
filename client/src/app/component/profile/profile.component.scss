@@ -159,7 +159,7 @@ textarea {
 }
 
 // ═══════════════════════════
-// ✅ TABLE (ADMIN users list)
+//  TABLE (ADMIN users list)
 // ═══════════════════════════
 .table {
   color: $text-primary !important;
@@ -193,7 +193,7 @@ textarea {
       vertical-align: middle;
     }
 
-    // ✅ Force text visibility
+    //  Force text visibility
     .fw-semibold {
       color: $text-primary !important;
     }
@@ -204,7 +204,7 @@ textarea {
   }
 }
 
-// ✅ Avatar in table
+//  Avatar in table
 .avatar-sm {
   width: 32px;
   height: 32px;
@@ -220,7 +220,7 @@ textarea {
 }
 
 // ═══════════════════════════
-// ✅ BUTTONS
+//  BUTTONS
 // ═══════════════════════════
 .btn-primary {
   background: linear-gradient(135deg, $accent-purple, $accent-cyan) !important;

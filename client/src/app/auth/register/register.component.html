@@ -8,7 +8,7 @@
       <h2>📝 Freelancer Registration</h2>
       <p class="subtitle">Create your account and get started</p>
 
-      <!-- ✅ Success Message -->
+      <!--  Success Message -->
       <div class="success-message" *ngIf="successMessage">
         {{ successMessage }}
         <div class="progress-bar-wrapper">
@@ -18,7 +18,7 @@
         </div>
       </div>
 
-      <!-- ✅ Error Message -->
+      <!--  Error Message -->
       <div class="error-message" *ngIf="errorMessage">
         {{ errorMessage }}
       </div>
@@ -56,7 +56,7 @@
             </span>
           </div>
 
-          <!-- ✅ Password Requirements Checklist -->
+          <!--  Password Requirements Checklist -->
           <div class="password-checklist" *ngIf="passwordValue.length > 0">
 
             <div class="check-item" [class.valid]="hasMinLength" [class.invalid]="!hasMinLength">
@@ -86,7 +86,7 @@
 
           </div>
 
-          <!-- ✅ Password Strength Bar -->
+          <!--  Password Strength Bar -->
           <div class="password-strength" *ngIf="passwordValue.length > 0">
             <div class="strength-bar">
               <div class="strength-fill" [style.width]="passwordStrengthWidth"
@@ -98,7 +98,7 @@
             </small>
           </div>
 
-          <!-- ✅ Error when touched but empty -->
+          <!--  Error when touched but empty -->
           <div *ngIf="f['password']?.touched && f['password']?.errors?.['required']" class="validation-errors">
             <small>Password is required</small>
           </div>
@@ -124,14 +124,14 @@
           </small>
         </div>
 
-        <!-- ✅ Skills (FREELANCER only) -->
+        <!--  Skills (FREELANCER only) -->
         <div class="form-group" *ngIf="isFreelancer">
           <label>🛠️ Skills</label>
           <input type="text" formControlName="skills" placeholder="e.g. Angular, Java, Spring Boot" />
           <small class="hint">Separate skills with commas</small>
         </div>
 
-        <!-- ✅ Bio (FREELANCER only) -->
+        <!--  Bio (FREELANCER only) -->
         <div class="form-group" *ngIf="isFreelancer">
           <label>📝 Bio</label>
           <textarea formControlName="bio" rows="3" placeholder="Tell us about yourself..."></textarea>

@@ -25,57 +25,61 @@ export class ProfileComponent implements OnInit {
 
     this.roleName = this.auth.getRole();
 
-    // ✅ Check which route we're on
+    //  Check which route we're on
     this.isUsersPage = this.router.url === '/users';
 
     this.getUser();
 
   }
 
-getUser(): void {
-  this.roleName = this.auth.getRole();
+  getUser(): void {
+    this.roleName = this.auth.getRole();
 
-  // ✅ DEBUG
-  console.log('ROLE:', this.roleName);
-  console.log('isUsersPage:', this.isUsersPage);
+    //  DEBUG
+    console.log('ROLE:', this.roleName);
+    console.log('isUsersPage:', this.isUsersPage);
 
-  const fromService = (this.auth as any).getUserId?.() ?? null;
-  const stored = localStorage.getItem('userId');
-  const fromStorage = stored !== null ? Number(stored) : null;
-  const userId = (fromService ?? fromStorage ?? 1);
+    const fromService = (this.auth as any).getUserId?.() ?? null;
+    const stored = localStorage.getItem('userId');
+    const fromStorage = stored !== null ? Number(stored) : null;
+    const userId = (fromService ?? fromStorage ?? 1);
 
-  const profile$ = (this.auth as any).getLoggedInUser?.(userId);
-  if (profile$ && typeof profile$.subscribe === 'function') {
-    profile$.subscribe({
-      next: (res: any) => {
-        this.profile = res;
-        this.editForm = { ...res };
-        console.log('PROFILE loaded:', res);  // ✅ DEBUG
-      },
-      error: (err: any) => {
-        this.errorMessage = 'Failed to load profile';
-        console.error('PROFILE error:', err);  // ✅ DEBUG
-      }
-    });
+    const profile$ = (this.auth as any).getLoggedInUser?.(userId);
+    if (profile$ && typeof profile$.subscribe === 'function') {
+      profile$.subscribe({
+        next: (res: any) => {
+          this.profile = res;
+          this.editForm = { ...res };
+          console.log('PROFILE loaded:', res);  //  DEBUG
+        },
+        error: (err: any) => {
+          this.errorMessage = 'Failed to load profile';
+          console.error('PROFILE error:', err);  //  DEBUG
+        }
+      });
+    }
+
+    const users$ = (this.auth as any).getUsers?.();
+    if (users$ && typeof users$.subscribe === 'function') {
+      users$.subscribe({
+        next: (res: any) => {
+          const arr = res || [];
+          this.users = arr.filter((u: any) =>
+            u.role !== 'ADMIN' &&
+            !u.username?.endsWith('_test') &&
+            u.username !== 'newuser_reg'
+          );
+          console.log('USERS loaded:', this.users);  //  DEBUG
+        },
+        error: (err: any) => {
+          this.users = [];
+          console.error('USERS error:', err);  //  DEBUG
+        }
+      });
+    }
   }
 
-  const users$ = (this.auth as any).getUsers?.();
-  if (users$ && typeof users$.subscribe === 'function') {
-    users$.subscribe({
-      next: (res: any) => {
-        const arr = res || [];
-        this.users = arr.filter((u: any) => u.role !== 'ADMIN');
-        console.log('USERS loaded:', this.users);  // ✅ DEBUG
-      },
-      error: (err: any) => {
-        this.users = [];
-        console.error('USERS error:', err);  // ✅ DEBUG
-      }
-    });
-  }
-}
-
-  // ✅ Toggle edit mode
+  //  Toggle edit mode
   toggleEdit(): void {
     this.isEditing = !this.isEditing;
     this.successMessage = '';
@@ -86,7 +90,7 @@ getUser(): void {
     }
   }
 
-  // ✅ Save profile changes
+  //  Save profile changes
   saveProfile(): void {
     const userId = this.profile?.id;
     if (!userId) return;
@@ -115,14 +119,14 @@ getUser(): void {
     });
   }
 
-  // ✅ Cancel edit
+  //  Cancel edit
   cancelEdit(): void {
     this.isEditing = false;
     this.editForm = { ...this.profile };
     this.errorMessage = '';
   }
 
-  // ✅ Delete user (ADMIN)
+  //  Delete user (ADMIN)
   deleteUser(userId: number): void {
     if (!confirm('Are you sure you want to delete this user?')) return;
 

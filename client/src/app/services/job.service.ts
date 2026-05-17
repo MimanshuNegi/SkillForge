@@ -72,7 +72,7 @@ updateJobStatus(jobId: number, status: string): Observable<any> {
     {},
     {
       headers: this.getHeaders(),
-      responseType: 'text' as 'json'   // ✅ THIS FIXES IT
+      responseType: 'text' as 'json'   //  THIS FIXES IT
     }
   );
 }

@@ -1,6 +1,6 @@
 <div class="container mt-4">
 
-  <!-- ✅ Header -->
+  <!--  Header -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
       <h2 class="fw-bold">💼 Job List</h2>
@@ -16,14 +16,14 @@
     </a>
   </div>
 
-  <!-- ✅ Search Bar -->
+  <!--  Search Bar -->
   <div class="d-flex gap-2 mb-4">
     <input class="form-control" type="text"
-           placeholder="🔍 Search by title..." [(ngModel)]="searchTitle" />
+           placeholder="🔍 Search by title, description, client, status, budget..." [(ngModel)]="searchTitle" />
     <button class="btn btn-outline-primary" (click)="searchJobs()">Search</button>
   </div>
 
-  <!-- ✅ No Jobs -->
+  <!--  No Jobs -->
   <div *ngIf="job.length === 0" class="text-center py-5">
     <div class="card shadow-sm border-0 mx-auto" style="max-width: 500px;">
       <div class="card-body py-5">
@@ -34,16 +34,16 @@
     </div>
   </div>
 
-  <!-- ✅ Job Count -->
+  <!--  Job Count -->
   <div *ngIf="job.length > 0" class="mb-3">
     <span class="badge bg-primary rounded-pill px-3 py-2">
       {{ job.length }} {{ job.length === 1 ? 'Job' : 'Jobs' }}
     </span>
   </div>
 
-  <!-- ✅ Job Cards -->
+  <!--  Job Cards -->
   <div class="row" *ngIf="job.length > 0">
-    <div class="col-md-6 col-lg-4 mb-4" *ngFor="let j of job">
+    <div class="col-md-6 col-lg-4 mb-4" *ngFor="let j of job; let i=index">
 
       <div class="card h-100 shadow-sm border-0 job-card">
 
@@ -59,7 +59,7 @@
                 }">
             {{ j.status || 'OPEN' }}
           </span>
-          <span class="text-muted small">#{{ j.id }}</span>
+          <span class="text-muted small">#{{ i+1 }}</span>
         </div>
 
         <!-- Card Body -->
@@ -92,7 +92,7 @@
         <!-- Card Footer -->
         <div class="card-footer border-0 pb-3">
 
-          <!-- ✅ FREELANCER: Bid Button + Form -->
+          <!--  FREELANCER: Bid Button + Form -->
           <div *ngIf="roleName === 'FREELANCER' && !isApplied(j.id) && j.status !== 'APPLIED' && j.status !== 'CLOSED' && j.status !== 'IN_PROGRESS'">
 
             <!-- Bid Now Button -->
@@ -132,15 +132,15 @@
 
           </div>
 
-          <!-- ✅ FREELANCER: Already Bid -->
+          <!--  FREELANCER: Already Bid -->
           <div *ngIf="roleName === 'FREELANCER' && (isApplied(j.id) || j.status === 'APPLIED' || j.status === 'IN_PROGRESS')"
                class="text-center mb-2">
             <span style="background: rgba(0,240,255,0.1); color: #00f0ff; padding: 8px 20px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid rgba(0,240,255,0.2);">
-              ✅ Bid Submitted
+               Bid Submitted
             </span>
           </div>
 
-          <!-- ✅ FREELANCER: Job Closed -->
+          <!--  FREELANCER: Job Closed -->
           <div *ngIf="roleName === 'FREELANCER' && j.status === 'CLOSED'"
                class="text-center mb-2">
             <span style="background: rgba(255,255,255,0.04); color: #8a8aa3; padding: 8px 20px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.08);">
@@ -148,14 +148,14 @@
             </span>
           </div>
 
-          <!-- ✅ CLIENT -->
+          <!--  CLIENT -->
           <div *ngIf="roleName === 'CLIENT'" class="text-center">
             <span class="text-muted small">
               👤 Posted by: {{ j.clientName || 'Client' }}
             </span>
           </div>
 
-          <!-- ✅ ADMIN -->
+          <!--  ADMIN -->
           <div *ngIf="roleName === 'ADMIN'">
             <button class="btn btn-danger w-100 rounded-pill btn-sm"
                     (click)="deleteJob(j.id)">

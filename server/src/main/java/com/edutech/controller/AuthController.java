@@ -88,7 +88,7 @@ public class AuthController {
         return ResponseEntity.ok(users);
     }
 
-    // ✅ DELETE /api/auth/user/{userId} — Delete a user (ADMIN only)
+    //  DELETE /api/auth/user/{userId} — Delete a user (ADMIN only)
     @DeleteMapping("/user/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
@@ -96,7 +96,7 @@ public class AuthController {
     }
 
     
-// ✅ PUT /api/auth/user/{userId} — Update user profile (accepts partial data)
+//  PUT /api/auth/user/{userId} — Update user profile (accepts partial data)
 @PutMapping("/user/{userId}")
 public ResponseEntity<User> updateUser(@PathVariable Long userId,
                                         @RequestBody Map<String, Object> body) {

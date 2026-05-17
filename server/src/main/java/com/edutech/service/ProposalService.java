@@ -84,7 +84,7 @@ public Proposal createProposal(Long freelancerId, Proposal proposal) {
         return proposalRepository.findByFreelancerId(freelancer.getId());
     }
 
-    // ✅ Freelancer bids on a job
+    //  Freelancer bids on a job
 public Proposal bidOnJob(Long jobId, Long freelancerId, Proposal req) {
 
     Job job = jobRepository.findById(jobId)
