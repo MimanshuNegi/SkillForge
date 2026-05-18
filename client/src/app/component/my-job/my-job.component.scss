@@ -1,32 +1,74 @@
-$bg-dark: #0a0a1a;
-$glass-bg: rgba(255, 255, 255, 0.04);
-$glass-border: rgba(255, 255, 255, 0.08);
-$text-primary: #ffffff;
-$text-muted: #8a8aa3;
-$accent-cyan: #00f0ff;
-$accent-purple: #7b2ff7;
-$accent-green: #10b981;
-$accent-pink: #ff2d95;
+// ═══════════════════════════
+// Variables (MATCHING JOB LIST)
+// ═══════════════════════════
+$bg-main: #f0f2f5;
+$card-bg: #ffffff;
+$border-color: rgba(0, 0, 0, 0.08);
 
+$text-primary: #1a1a2e;
+$text-muted: #6b7280;
+
+$accent-green: #14a800;
+$accent-blue: #3b82f6;
+$accent-purple: #6366f1;
+$accent-red: #ef4444;
+$accent-orange: #f59e0b;
+
+$radius-lg: 18px;
+$radius-md: 12px;
+
+// ═══════════════════════════
+// Host
+// ═══════════════════════════
 :host {
   display: block;
   min-height: 100vh;
-  background: $bg-dark;
+  background: $bg-main;
   padding-bottom: 40px;
 }
 
-//  Fix white strip at top
+// ═══════════════════════════
+// Container
+// ═══════════════════════════
 .container {
   padding-top: 24px;
-  margin-top: 0 !important;
 }
 
-h2 {
-  background: linear-gradient(135deg, $accent-cyan, $accent-purple);
+// ═══════════════════════════
+// Header
+// ═══════════════════════════
+.page-header h2 {
+  background: linear-gradient(135deg, $accent-green, $accent-purple);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
+.text-muted {
+  color: $text-muted !important;
+}
+
+// ═══════════════════════════
+// CARDS
+// ═══════════════════════════
+.card {
+  background: $card-bg !important;
+  border: 1px solid $border-color !important;
+  border-radius: $radius-lg !important;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.empty-card {
+  max-width: 500px;
+}
+
+// ═══════════════════════════
+// JOB TITLE + TEXT
+// ═══════════════════════════
 h5, h6 {
   color: $text-primary;
 }
@@ -35,139 +77,150 @@ p {
   color: $text-muted;
 }
 
-.text-muted {
-  color: $text-muted !important;
+// ═══════════════════════════
+// BUDGET
+// ═══════════════════════════
+.budget-amount {
+  color: $accent-green !important;
+  font-weight: 700;
 }
 
-.text-secondary {
-  color: $text-muted !important;
-}
-
-.card {
-  background: $glass-bg !important;
-  backdrop-filter: blur(14px);
-  border: 1px solid $glass-border !important;
-  border-radius: 16px !important;
-  color: $text-primary;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-  &:hover {
-    box-shadow: 0 0 20px rgba($accent-purple, 0.1);
-  }
-}
-
-//  Applicants section (dark themed)
+// ═══════════════════════════
+// APPLICANTS SECTION
+// ═══════════════════════════
 .applicants-section {
-  background: rgba(255, 255, 255, 0.03) !important;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: #f9fafb;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  padding: 16px;
 }
 
-//  Applicant cards (dark themed)
+// ═══════════════════════════
+// APPLICANT CARD
+// ═══════════════════════════
 .applicant-card {
-  background: rgba(255, 255, 255, 0.04) !important;
-  border: 1px solid rgba(255, 255, 255, 0.06) !important;
-  border-radius: 10px;
-  color: $text-primary;
+  background: #ffffff;
+  border: 1px solid $border-color;
+  padding: 14px;
+  border-radius: $radius-md;
+  margin-bottom: 12px;
 
   &:hover {
-    border-color: rgba($accent-cyan, 0.2) !important;
+    border-color: $accent-blue;
   }
 }
 
-//  Profile card inside applicants (dark themed)
+// ═══════════════════════════
+// BID INFO
+// ═══════════════════════════
+.bid-amount {
+  color: $accent-green;
+  font-weight: 700;
+}
+
+.proposal-message {
+  background: #f9fafb;
+  border-left: 4px solid $accent-blue;
+  padding: 8px;
+  border-radius: 6px;
+  margin-top: 6px;
+}
+
+.proposal-text {
+  color: $text-muted;
+  font-size: 0.85rem;
+}
+
+.bid-actions {
+  margin-left: 10px;
+}
+
+// ═══════════════════════════
+// PROFILE EXPAND
+// ═══════════════════════════
 .profile-card-expand {
-  background: rgba(255, 255, 255, 0.04) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  border-radius: 12px;
-  color: $text-primary;
+  background: #f9fafb;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  padding: 16px;
+  margin-top: 12px;
+
+  .profile-heading {
+    color: $accent-blue;
+  }
 
   .profile-label {
+    font-size: 0.8rem;
     color: $text-muted;
-    font-weight: 600;
-    font-size: 0.85rem;
-  }
-
-  .profile-value {
-    color: $text-primary;
   }
 
   .skill-tag {
     display: inline-block;
-    background: rgba($accent-cyan, 0.1);
-    color: $accent-cyan;
-    padding: 2px 10px;
+    background: rgba(20,168,0,0.1);
+    color: $accent-green;
+    padding: 3px 10px;
     border-radius: 20px;
+    margin: 2px;
     font-size: 0.8rem;
-    margin: 2px 4px 2px 0;
-    border: 1px solid rgba($accent-cyan, 0.2);
   }
 
   .assessment-bar {
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-    padding-top: 12px;
+    border-top: 1px solid $border-color;
     margin-top: 12px;
-    color: $text-muted;
+    padding-top: 8px;
     font-size: 0.85rem;
+    color: $text-muted;
   }
 }
 
-//  Buttons
-.btn-outline-danger {
-  color: $accent-pink !important;
-  border-color: rgba($accent-pink, 0.4) !important;
+// ═══════════════════════════
+// BUTTONS
+// ═══════════════════════════
+.btn-primary {
+  background: linear-gradient(135deg, $accent-purple, $accent-blue) !important;
+  border: none !important;
+  color: white !important;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, $accent-green, #22c55e) !important;
+  border: none !important;
+  color: white !important;
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, $accent-red, #f43f5e) !important;
+  border: none !important;
+  color: white !important;
+}
+
+.btn-outline-primary {
+  color: $accent-blue !important;
+  border-color: $accent-blue !important;
 
   &:hover {
-    background: rgba($accent-pink, 0.1) !important;
+    background: rgba(59,130,246,0.1);
   }
+}
+
+.btn-outline-danger {
+  color: $accent-red !important;
+  border-color: $accent-red !important;
 }
 
 .btn-outline-success {
   color: $accent-green !important;
-  border-color: rgba($accent-green, 0.4) !important;
-
-  &:hover {
-    background: rgba($accent-green, 0.1) !important;
-  }
-}
-
-.btn-outline-primary {
-  color: $accent-cyan !important;
-  border-color: rgba($accent-cyan, 0.4) !important;
-
-  &:hover {
-    background: rgba($accent-cyan, 0.1) !important;
-  }
+  border-color: $accent-green !important;
 }
 
 .btn-outline-info {
-  color: $accent-cyan !important;
-  border-color: rgba($accent-cyan, 0.3) !important;
-
-  &:hover {
-    background: rgba($accent-cyan, 0.1) !important;
-  }
+  color: $accent-blue !important;
+  border-color: rgba(59,130,246,0.4);
 }
 
-.btn-primary {
-  background: linear-gradient(135deg, $accent-purple, $accent-cyan) !important;
-  border: none !important;
-  color: $bg-dark !important;
-  font-weight: 700;
-}
-
-.btn-success {
-  background: linear-gradient(135deg, $accent-green, #34d399) !important;
-  border: none !important;
-  color: $bg-dark !important;
-}
-
-.btn-danger {
-  background: linear-gradient(135deg, #ef4444, $accent-pink) !important;
-  border: none !important;
-}
-
+// ═══════════════════════════
+// BADGES
+// ═══════════════════════════
 .badge {
   font-weight: 600;
-  letter-spacing: 0.5px;
 }

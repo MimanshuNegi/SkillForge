@@ -1,17 +1,19 @@
 // ─── Variables ───
-$bg-dark: #0a0a1a;
-$gradient-primary: linear-gradient(135deg, #00f0ff, #7b2ff7, #ff2d95);
-$glass-bg: rgba(255, 255, 255, 0.05);
-$glass-border: rgba(255, 255, 255, 0.1);
-$text-primary: #ffffff;
-$text-muted: #8a8aa3;
-$accent-cyan: #00f0ff;
-$accent-purple: #7b2ff7;
-$accent-pink: #ff2d95;
-$accent-green: #10b981;
+
+$bg-dark: #f0f2f5;
+$gradient-primary: linear-gradient(135deg, #14a800, #1dbf73);
+$glass-bg: rgba(255, 255, 255, 0.85);
+$glass-border: rgba(0, 0, 0, 0.08);
+$text-primary: #1a1a2e;
+$text-muted: #6b7280;
+$accent-cyan: #14a800;
+$accent-purple: #1dbf73;
+$accent-pink: #ef4444;
+$accent-green: #14a800;
 $radius-lg: 24px;
 $radius-md: 14px;
 $radius-sm: 10px;
+
 
 // ─── Mixins ───
 @mixin glass($blur: 20px) {
@@ -23,7 +25,7 @@ $radius-sm: 10px;
 
 @mixin glow($color, $spread: 30px) {
   box-shadow: 0 0 $spread rgba($color, 0.3),
-              0 0 ($spread * 2) rgba($color, 0.1);
+    0 0 ($spread * 2) rgba($color, 0.1);
 }
 
 // ─── Auth Wrapper ───
@@ -50,7 +52,7 @@ $radius-sm: 10px;
   &::before {
     width: 500px;
     height: 500px;
-    background: $accent-purple;
+    background: rgba(20, 168, 0, 0.15);
     top: -150px;
     right: -100px;
   }
@@ -58,7 +60,7 @@ $radius-sm: 10px;
   &::after {
     width: 400px;
     height: 400px;
-    background: $accent-pink;
+    background: rgba(29, 191, 115, 0.1);
     bottom: -100px;
     left: -80px;
     animation-delay: 2s;
@@ -134,9 +136,11 @@ $radius-sm: 10px;
     &::-webkit-scrollbar {
       width: 4px;
     }
+
     &::-webkit-scrollbar-track {
       background: transparent;
     }
+
     &::-webkit-scrollbar-thumb {
       background: rgba($accent-purple, 0.4);
       border-radius: 4px;
@@ -227,7 +231,7 @@ $radius-sm: 10px;
     font-family: inherit;
 
     &::placeholder {
-      color: rgba(255, 255, 255, 0.2);
+      color: rgba(0, 0, 0, 0.3);
     }
 
     &:focus {
@@ -247,8 +251,10 @@ $radius-sm: 10px;
     padding-right: 36px;
 
     option {
-      background: #1a1a2e;
-      color: $text-primary;
+
+      background: #ffffff;
+      color: #1a1a2e;
+
     }
   }
 
@@ -298,12 +304,10 @@ button[type='submit'] {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.15),
-      transparent
-    );
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(255, 255, 255, 0.15),
+        transparent);
     transition: left 0.5s ease;
   }
 
@@ -370,7 +374,7 @@ button[type='submit'] {
 // ─── Right Side (Design Panel) ───
 .right-side {
   flex: 0.8;
-  background: linear-gradient(160deg, $accent-pink, $accent-purple, $accent-cyan);
+  background: linear-gradient(160deg, #14a800, #1dbf73, #0077b5);
   position: relative;
   overflow: hidden;
   display: flex;
@@ -383,8 +387,8 @@ button[type='submit'] {
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+      linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
     background-size: 40px 40px;
     animation: gridMove 20s linear infinite;
   }
@@ -396,7 +400,7 @@ button[type='submit'] {
     width: 220px;
     height: 220px;
     border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.12);
+    border: 2px solid rgba(255, 255, 255, 0.12);
     box-shadow:
       0 0 60px rgba($accent-cyan, 0.25),
       inset 0 0 60px rgba($accent-pink, 0.15);
@@ -422,7 +426,7 @@ button[type='submit'] {
   font-size: 1.8rem;
   z-index: 2;
   opacity: 0.7;
-  filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
 
   &.icon1 {
     top: 50px;
@@ -447,52 +451,121 @@ button[type='submit'] {
 
 // ─── Keyframes ───
 @keyframes floatOrb {
-  0%   { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(40px, 30px) scale(1.15); }
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  100% {
+    transform: translate(40px, 30px) scale(1.15);
+  }
 }
 
 @keyframes gradientShift {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 @keyframes shakeIn {
-  0%   { transform: translateX(-8px); opacity: 0; }
-  50%  { transform: translateX(4px); }
-  100% { transform: translateX(0); opacity: 1; }
+  0% {
+    transform: translateX(-8px);
+    opacity: 0;
+  }
+
+  50% {
+    transform: translateX(4px);
+  }
+
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 @keyframes fadeSlideIn {
-  0%   { transform: translateY(-10px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
+  0% {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @keyframes progressBar {
-  0%   { width: 0%; }
-  100% { width: 100%; }
+  0% {
+    width: 0%;
+  }
+
+  100% {
+    width: 100%;
+  }
 }
 
 @keyframes morphBlob {
-  0%   { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; transform: rotate(0deg); }
-  33%  { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-  66%  { border-radius: 40% 60% 60% 40% / 40% 70% 30% 60%; }
-  100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; transform: rotate(360deg); }
+  0% {
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    transform: rotate(0deg);
+  }
+
+  33% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  }
+
+  66% {
+    border-radius: 40% 60% 60% 40% / 40% 70% 30% 60%;
+  }
+
+  100% {
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes pulseRing {
-  0%, 100% { transform: scale(1); opacity: 0.6; }
-  50%      { transform: scale(1.12); opacity: 0.3; }
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: scale(1.12);
+    opacity: 0.3;
+  }
 }
 
 @keyframes floatCard {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-14px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-14px);
+  }
 }
 
 @keyframes gridMove {
-  0%   { transform: translate(0, 0); }
-  100% { transform: translate(40px, 40px); }
+  0% {
+    transform: translate(0, 0);
+  }
+
+  100% {
+    transform: translate(40px, 40px);
+  }
 }
 
 // ─── Responsive ───
@@ -510,20 +583,44 @@ button[type='submit'] {
   }
 
   .left-side {
-    h2 { padding: 24px 24px 4px; font-size: 1.4rem; }
-    .subtitle { padding: 0 24px 12px; }
-    form { padding: 8px 24px 24px; }
+    h2 {
+      padding: 24px 24px 4px;
+      font-size: 1.4rem;
+    }
+
+    .subtitle {
+      padding: 0 24px 12px;
+    }
+
+    form {
+      padding: 8px 24px 24px;
+    }
   }
 
-  .overlay-shape { width: 90px; height: 90px; }
-  .floating-icon { font-size: 1.2rem; }
+  .overlay-shape {
+    width: 90px;
+    height: 90px;
+  }
+
+  .floating-icon {
+    font-size: 1.2rem;
+  }
 }
 
 @media (max-width: 480px) {
   .left-side {
-    h2 { font-size: 1.25rem; padding: 20px 18px 4px; }
-    .subtitle { padding: 0 18px 10px; }
-    form { padding: 6px 18px 20px; }
+    h2 {
+      font-size: 1.25rem;
+      padding: 20px 18px 4px;
+    }
+
+    .subtitle {
+      padding: 0 18px 10px;
+    }
+
+    form {
+      padding: 6px 18px 20px;
+    }
   }
 
   .form-group input,
@@ -537,14 +634,17 @@ button[type='submit'] {
     padding: 12px;
     font-size: 0.88rem;
   }
-  
+
 }
+
 // ─── Password Checklist ───
 .password-checklist {
   margin-top: 8px;
   padding: 10px 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+
   border-radius: 8px;
 
   .check-item {
@@ -586,7 +686,7 @@ button[type='submit'] {
   .strength-bar {
     flex: 1;
     height: 5px;
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(0, 0, 0, 0.06);
     border-radius: 4px;
     overflow: hidden;
   }

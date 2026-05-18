@@ -19,7 +19,7 @@
       <div class="form-group">
         <label>Description</label>
         <textarea rows="4" formControlName="description"
-                  placeholder="Describe the job requirements, skills needed..."></textarea>
+          placeholder="Describe the job requirements, skills needed..."></textarea>
         <small *ngIf="jobForm.controls['description']?.touched && jobForm.controls['description']?.invalid">
           Description is required
         </small>
