@@ -1,500 +1,85 @@
-// ─── Variables ───
-
-// ─── Variables — LIGHT THEME ───
-$bg-dark: #f0f2f5;
-$gradient-primary: linear-gradient(135deg, #14a800, #1dbf73);
-$glass-bg: rgba(255, 255, 255, 0.85);
-$glass-border: rgba(0, 0, 0, 0.08);
-$text-primary: #1a1a2e;
-$text-muted: #6b7280;
-$accent-cyan: #14a800;
-$accent-purple: #1dbf73;
-$accent-pink: #ef4444;
-$radius-lg: 24px;
-$radius-md: 14px;
-$radius-sm: 10px;
-
-
-// ─── Mixins ───
-@mixin glass($blur: 20px) {
-  background: $glass-bg;
-  backdrop-filter: blur($blur);
-  -webkit-backdrop-filter: blur($blur);
-  border: 1px solid $glass-border;
-}
-
-@mixin glow($color, $spread: 30px) {
-  box-shadow: 0 0 $spread rgba($color, 0.3),
-              0 0 ($spread * 2) rgba($color, 0.1);
-}
-
-// ─── Auth Wrapper ───
-.auth-wrapper {
+/* ─── MODE SWITCH ─── */
+.mode-toggle {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background: $bg-dark;
-  padding: 20px;
-  position: relative;
-  overflow: hidden;
-
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(120px);
-    opacity: 0.4;
-    animation: floatOrb 8s ease-in-out infinite alternate;
-  }
-
-  &::before {
-    width: 500px;
-    height: 500px;
-    background: rgba(20, 168, 0, 0.15);
-    top: -150px;
-    left: -100px;
-  }
-
-  &::after {
-    width: 400px;
-    height: 400px;
-    background: rgba(29, 191, 115, 0.1);
-    bottom: -100px;
-    right: -80px;
-    animation-delay: 2s;
-  }
-}
-
-// ─── Auth Card ───
-.auth-card {
-  display: flex;
-  width: 900px;
-  max-width: 95vw;
-  //  FIX: constrain height — prevents overflow
-  max-height: 92vh;
-  min-height: 480px;
-  border-radius: $radius-lg;
-  overflow: hidden;
-  @include glass(24px);
-  box-shadow:
-    0 25px 60px rgba(0, 0, 0, 0.5),
-    0 0 80px rgba($accent-cyan, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  position: relative;
-  z-index: 1;
-  //  FIX: removed perspective/rotateY — was clipping right panel corner
-  transition: transform 0.5s ease, box-shadow 0.5s ease;
-
-  &:hover {
-    //  FIX: clean translateY only — no 3D tilt
-    transform: translateY(-4px);
-    box-shadow:
-      0 30px 80px rgba(0, 0, 0, 0.6),
-      0 0 100px rgba($accent-cyan, 0.08);
-  }
-}
-
-// ─── Left Side (Form) ───
-.left-side {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  //  FIX: contained padding, scrollable if needed
-  padding: 44px 42px;
-  overflow-y: auto;
-
-  &::-webkit-scrollbar {
-    width: 4px;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: rgba($accent-purple, 0.4);
-    border-radius: 4px;
-  }
-
-  h2 {
-    font-size: 1.9rem;
-    font-weight: 700;
-    color: $text-primary;
-    margin-bottom: 6px;
-    letter-spacing: -0.5px;
-    background: $gradient-primary;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .subtitle {
-    color: $text-muted;
-    font-size: 0.92rem;
-    margin-bottom: 32px;
-    font-weight: 400;
-  }
-}
-
-// ─── Form Group ───
-.form-group {
+  gap: 10px;
   margin-bottom: 20px;
-  position: relative;
 
-  label {
-    display: block;
-    color: $text-muted;
-    font-size: 0.78rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 7px;
-  }
-
-  input {
-    width: 100%;
-    padding: 13px 16px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: $radius-sm;
-    color: $text-primary;
-    font-size: 0.93rem;
-    outline: none;
-    transition: all 0.3s ease;
-    box-sizing: border-box;
-
-    &::placeholder {
-      color: rgba(0, 0, 0, 0.3);
-    }
-
-    &:focus {
-      border-color: $accent-cyan;
-      background: rgba($accent-cyan, 0.04);
-      @include glow($accent-cyan, 10px);
-    }
-  }
-
-  small {
-    color: $accent-pink;
-    font-size: 0.73rem;
-    margin-top: 5px;
-    display: block;
-    animation: shakeIn 0.3s ease;
-  }
-}
-
-// ─── Password Wrapper ───
-.password-wrapper {
-  position: relative;
-
-  span {
-    position: absolute;
-    right: 16px;
-    //  FIX: vertically center the show/hide toggle with the input
-    top: 38px;
-    color: $accent-cyan;
-    font-size: 0.78rem;
+  button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,0.08);
+    background: rgba(255,255,255,0.6);
     cursor: pointer;
     font-weight: 600;
-    user-select: none;
-    transition: color 0.2s ease;
+    transition: 0.3s;
+  }
 
-    &:hover {
-      color: lighten($accent-cyan, 10%);
-      text-shadow: 0 0 8px rgba($accent-cyan, 0.5);
-    }
+  button.active {
+    background: linear-gradient(135deg, #14a800, #1dbf73);
+    color: white;
+    box-shadow: 0 0 15px rgba(29,191,115,0.4);
   }
 }
 
-// ─── Error Message ───
-.error-message {
-  background: rgba($accent-pink, 0.1);
-  border: 1px solid rgba($accent-pink, 0.3);
-  border-radius: $radius-md;
-  padding: 12px 16px;
-  color: $accent-pink;
-  font-size: 0.85rem;
-  margin-bottom: 18px;
-  animation: shakeIn 0.4s ease;
-}
-
-// ─── Submit Button ───
-button[type='submit'] {
+/* ─── OTP BUTTON ─── */
+.otp-btn {
   width: 100%;
-  padding: 14px;
-  border: none;
-  border-radius: $radius-sm;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #fff;
+  padding: 12px;
+  border-radius: 10px;
+  border: 2px dashed #14a800;
+  background: rgba(20,168,0,0.1);
+  color: #14a800;
+  font-weight: bold;
   cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  background: $gradient-primary;
-  background-size: 200% 200%;
-  animation: gradientShift 4s ease infinite;
-  transition: all 0.3s ease;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.15),
-      transparent
-    );
-    transition: left 0.5s ease;
-  }
-
-  &:hover:not(:disabled) {
-    transform: translateY(-2px);
-    @include glow($accent-purple, 20px);
-
-    &::before {
-      left: 100%;
-    }
-  }
-
-  &:active:not(:disabled) {
-    transform: translateY(0);
-  }
-
-  &:disabled {
-    opacity: 0.35;
-    cursor: not-allowed;
-    filter: grayscale(0.3);
-  }
-}
-
-// ─── Register Link ───
-.register-link {
-  text-align: center;
-  margin-top: 24px;
-  font-size: 0.86rem;
-
-  span {
-    color: $text-muted;
-  }
-
-  a {
-    color: $accent-cyan;
-    text-decoration: none;
-    font-weight: 600;
-    margin-left: 6px;
-    position: relative;
-    transition: all 0.2s ease;
-
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: $accent-cyan;
-      transition: width 0.3s ease;
-    }
-
-    &:hover {
-      text-shadow: 0 0 10px rgba($accent-cyan, 0.4);
-
-      &::after {
-        width: 100%;
-      }
-    }
-  }
-}
-
-// ─── Right Side (Design Panel) ───
-.right-side {
-  flex: 1;
-   background: linear-gradient(160deg, #14a800, #1dbf73, #0077b5);
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  // Grid mesh
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-    background-size: 40px 40px;
-    animation: gridMove 20s linear infinite;
-  }
-
-  // Glow ring
-  &::after {
-    content: '';
-    position: absolute;
-    width: 260px;
-    height: 260px;
-    border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.15);
-    box-shadow:
-      0 0 60px rgba($accent-cyan, 0.3),
-      inset 0 0 60px rgba($accent-purple, 0.2);
-    animation: pulseRing 4s ease-in-out infinite;
-  }
-}
-
-.overlay-shape {
-  width: 180px;
-  height: 180px;
-  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  animation: morphBlob 8s ease-in-out infinite;
-  position: relative;
-  z-index: 1;
-}
-
-// ─── Floating Cards (uncomment in HTML to use) ───
-.card-box {
-  position: absolute;
-  @include glass(16px);
-  border-radius: $radius-md;
-  padding: 18px 22px;
-  color: $text-primary;
-  z-index: 2;
-  transition: transform 0.3s ease;
-
-  h4 {
-    font-size: 0.9rem;
-    font-weight: 700;
-    margin: 0 0 4px;
-  }
-
-  p {
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.6);
-    margin: 0;
-  }
+  margin-bottom: 10px;
+  transition: 0.3s;
 
   &:hover {
-    transform: translateY(-4px) scale(1.03);
-  }
-
-  &.card1 {
-    top: 60px;
-    right: 40px;
-    animation: floatCard 6s ease-in-out infinite;
-  }
-
-  &.card2 {
-    bottom: 120px;
-    left: 30px;
-    animation: floatCard 6s ease-in-out infinite 1s;
-  }
-
-  &.card3 {
-    bottom: 50px;
-    right: 50px;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    font-weight: 700;
-    border-radius: 50%;
-    animation: floatCard 6s ease-in-out infinite 2s;
+    background: rgba(20,168,0,0.2);
   }
 }
 
-// ─── Keyframes ───
-@keyframes floatOrb {
-  0%   { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(40px, 30px) scale(1.15); }
+/* ─── OTP SECTION ─── */
+.otp-section {
+  animation: fadeIn 0.3s ease;
 }
 
-@keyframes gradientShift {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+/* ─── OTP INPUT ─── */
+.otp-input {
+  text-align: center;
+  font-size: 1.6rem !important;
+  letter-spacing: 12px;
+  font-weight: bold;
 }
 
-@keyframes shakeIn {
-  0%   { transform: translateX(-8px); opacity: 0; }
-  50%  { transform: translateX(4px); }
-  100% { transform: translateX(0); opacity: 1; }
+/* ─── OTP META ─── */
+.otp-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 0.85rem;
 }
 
-@keyframes morphBlob {
-  0%   { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; transform: rotate(0deg); }
-  33%  { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-  66%  { border-radius: 40% 60% 60% 40% / 40% 70% 30% 60%; }
-  100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; transform: rotate(360deg); }
+.expired {
+  color: red;
 }
 
-@keyframes pulseRing {
-  0%, 100% { transform: scale(1); opacity: 0.6; }
-  50%      { transform: scale(1.12); opacity: 0.3; }
-}
+/* ─── RESEND BTN ─── */
+.resend {
+  margin-top: 10px;
+  background: transparent;
+  border: none;
+  color: #14a800;
+  cursor: pointer;
 
-@keyframes floatCard {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-12px); }
-}
-
-@keyframes gridMove {
-  0%   { transform: translate(0, 0); }
-  100% { transform: translate(40px, 40px); }
-}
-
-// ─── Responsive ───
-@media (max-width: 768px) {
-  .auth-card {
-    flex-direction: column;
-    max-width: 420px;
-    max-height: 95vh;
-  }
-
-  .right-side {
-    min-height: 180px;
-    order: -1;
-    border-radius: $radius-lg $radius-lg 0 0;
-    flex: none;
-  }
-
-  .left-side {
-    padding: 32px 26px;
-  }
-
-  .overlay-shape {
-    width: 100px;
-    height: 100px;
+  &:hover {
+    text-decoration: underline;
   }
 }
 
-@media (max-width: 480px) {
-  .left-side {
-    padding: 24px 20px;
-
-    h2 {
-      font-size: 1.5rem;
-    }
-
-    .subtitle {
-      margin-bottom: 24px;
-    }
-  }
-
-  button[type='submit'] {
-    padding: 12px;
-    font-size: 0.88rem;
-  }
+/* ─── ANIMATION ─── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
 }

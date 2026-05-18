@@ -157,4 +157,37 @@ export class AuthService {
     { headers: this.getAuthHeaders() }
   );
 }
+
+// ✅ Send OTP
+sendOtp(username: string): Observable<any> {
+  if (!this.http) throw new Error('HttpClient not available');
+
+  return this.http.post(
+    `${this.baseUrl}/api/auth/send-otp`,
+    { username },
+    { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+  );
 }
+
+// ✅ Verify OTP (same response as login)
+verifyOtp(username: string, otp: string): Observable<any> {
+  if (!this.http) throw new Error('HttpClient not available');
+
+  return this.http.post(
+    `${this.baseUrl}/api/auth/verify-otp`,
+    { username, otp },
+    { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+  ).pipe(
+    tap((res: any) => {
+      this.saveToken(res.token);
+      this.setRole(res.role);
+
+      if (res.userId) this.saveUserId(res.userId);
+      if (res.username) localStorage.setItem('username', res.username);
+    })
+  );
+}
+
+}
+
+

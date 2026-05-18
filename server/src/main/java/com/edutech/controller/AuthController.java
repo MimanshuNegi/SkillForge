@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.edutech.entity.User;
 import com.edutech.util.JwtUtil;
+import com.edutech.service.EmailService;
+import com.edutech.service.OtpService;
 import com.edutech.service.UserService;
 
 @RestController
@@ -29,6 +31,11 @@ public class AuthController {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    
+@Autowired private OtpService otpService;
+@Autowired private EmailService emailService;
+
 
     // 1. POST /api/auth/register — Register new user (201 Created)
     @PostMapping("/register")
@@ -104,4 +111,64 @@ public ResponseEntity<User> updateUser(@PathVariable Long userId,
     return ResponseEntity.ok(user);
 }
 
+@PostMapping("/send-otp")
+public ResponseEntity<?> sendOtp(@RequestBody Map<String, String> body) {
+    String username = body.get("username");
+
+    if (username == null || username.isBlank()) {
+        return ResponseEntity.badRequest().body(Map.of("message", "Username is required"));
+    }
+
+    try {
+        User user = userService.getUserByUsername(username);
+
+        if (user.getEmail() == null || user.getEmail().isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "No email linked to this account"));
+        }
+
+        String otp = otpService.generate(username);
+        emailService.sendOtp(user.getEmail(), otp);
+
+        return ResponseEntity.ok(Map.of(
+            "message", "OTP sent",
+            "email", maskEmail(user.getEmail())
+        ));
+    } catch (Exception e) {
+        // safer response (optional): don't reveal if user exists
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User not found"));
+    }
+}
+
+@PostMapping("/verify-otp")
+public ResponseEntity<?> verifyOtp(@RequestBody Map<String, String> body) {
+    String username = body.get("username");
+    String otp = body.get("otp");
+
+    if (username == null || otp == null) {
+        return ResponseEntity.badRequest().body(Map.of("message", "Username and OTP are required"));
+    }
+
+    boolean ok = otpService.verify(username, otp);
+    if (!ok) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid or expired OTP"));
+    }
+
+    // OTP valid -> issue JWT (same as /login)
+    String token = jwtUtil.generateToken(username);
+    User user = userService.getUserByUsername(username);
+
+    Map<String, Object> response = new HashMap<>();
+    response.put("token", token);
+    response.put("role", user.getRole());
+    response.put("userId", user.getId());
+    response.put("username", user.getUsername());
+
+    return ResponseEntity.ok(response);
+}
+
+private String maskEmail(String email) {
+    int at = email.indexOf('@');
+    if (at <= 2) return email;
+    return email.substring(0, 1) + "***" + email.substring(at - 1);
+}
 }

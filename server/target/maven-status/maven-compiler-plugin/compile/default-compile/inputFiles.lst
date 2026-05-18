@@ -12,6 +12,7 @@
 /home/coder/app/server/src/main/java/com/edutech/util/JwtUtil.java
 /home/coder/app/server/src/main/java/com/edutech/controller/AuthController.java
 /home/coder/app/server/src/main/java/com/edutech/repository/UserRepository.java
+/home/coder/app/server/src/main/java/com/edutech/service/OtpService.java
 /home/coder/app/server/src/main/java/com/edutech/service/ProposalService.java
 /home/coder/app/server/src/main/java/com/edutech/service/JobService.java
 /home/coder/app/server/src/main/java/com/edutech/service/UserService.java
@@ -19,4 +20,5 @@
 /home/coder/app/server/src/main/java/com/edutech/repository/JobRepository.java
 /home/coder/app/server/src/main/java/com/edutech/dto/JobDTO.java
 /home/coder/app/server/src/main/java/com/edutech/util/JwtRequestFilter.java
+/home/coder/app/server/src/main/java/com/edutech/service/EmailService.java
 /home/coder/app/server/src/main/java/com/edutech/config/SecurityConfig.java
