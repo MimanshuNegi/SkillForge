@@ -1,16 +1,19 @@
 // ─── Variables ───
-$bg-dark: #0a0a1a;
-$gradient-primary: linear-gradient(135deg, #00f0ff, #7b2ff7, #ff2d95);
-$glass-bg: rgba(255, 255, 255, 0.05);
-$glass-border: rgba(255, 255, 255, 0.1);
-$text-primary: #ffffff;
-$text-muted: #8a8aa3;
-$accent-cyan: #00f0ff;
-$accent-purple: #7b2ff7;
-$accent-pink: #ff2d95;
+
+// ─── Variables — LIGHT THEME ───
+$bg-dark: #f0f2f5;
+$gradient-primary: linear-gradient(135deg, #14a800, #1dbf73);
+$glass-bg: rgba(255, 255, 255, 0.85);
+$glass-border: rgba(0, 0, 0, 0.08);
+$text-primary: #1a1a2e;
+$text-muted: #6b7280;
+$accent-cyan: #14a800;
+$accent-purple: #1dbf73;
+$accent-pink: #ef4444;
 $radius-lg: 24px;
 $radius-md: 14px;
 $radius-sm: 10px;
+
 
 // ─── Mixins ───
 @mixin glass($blur: 20px) {
@@ -49,7 +52,7 @@ $radius-sm: 10px;
   &::before {
     width: 500px;
     height: 500px;
-    background: $accent-purple;
+    background: rgba(20, 168, 0, 0.15);
     top: -150px;
     left: -100px;
   }
@@ -57,7 +60,7 @@ $radius-sm: 10px;
   &::after {
     width: 400px;
     height: 400px;
-    background: $accent-cyan;
+    background: rgba(29, 191, 115, 0.1);
     bottom: -100px;
     right: -80px;
     animation-delay: 2s;
@@ -162,7 +165,7 @@ $radius-sm: 10px;
     box-sizing: border-box;
 
     &::placeholder {
-      color: rgba(255, 255, 255, 0.2);
+      color: rgba(0, 0, 0, 0.3);
     }
 
     &:focus {
@@ -313,7 +316,7 @@ button[type='submit'] {
 // ─── Right Side (Design Panel) ───
 .right-side {
   flex: 1;
-  background: linear-gradient(160deg, $accent-purple, $accent-cyan);
+   background: linear-gradient(160deg, #14a800, #1dbf73, #0077b5);
   position: relative;
   overflow: hidden;
   display: flex;

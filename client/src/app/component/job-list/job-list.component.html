@@ -25,11 +25,11 @@
 
   <!-- ✅ Loading Spinner -->
   <div *ngIf="isLoading" style="text-align: center; padding: 60px 0;">
-    <div class="spinner-border" style="color: #00f0ff; width: 3rem; height: 3rem;" role="status"></div>
-    <p style="color: #8a8aa3; margin-top: 12px; font-size: 0.9rem;">Loading jobs...</p>
+    <div class="spinner-border" style="color: #14a800; width: 3rem; height: 3rem;" role="status"></div>
+    <p style="color: #6b7280; margin-top: 12px; font-size: 0.9rem;">Loading jobs...</p>
   </div>
 
-  <!-- ✅ No Jobs (only after loading done) -->
+  <!-- ✅ No Jobs -->
   <div *ngIf="!isLoading && job.length === 0" class="text-center py-5">
     <div class="card shadow-sm border-0 mx-auto" style="max-width: 500px;">
       <div class="card-body py-5">
@@ -40,14 +40,14 @@
     </div>
   </div>
 
-  <!-- ✅ Job Count (only after loading done) -->
+  <!-- ✅ Job Count -->
   <div *ngIf="!isLoading && job.length > 0" class="mb-3">
     <span class="badge bg-primary rounded-pill px-3 py-2">
       {{ job.length }} {{ job.length === 1 ? 'Job' : 'Jobs' }}
     </span>
   </div>
 
-  <!-- ✅ Job Cards (only after loading done) -->
+  <!-- ✅ Job Cards -->
   <div class="row" *ngIf="!isLoading && job.length > 0">
     <div class="col-md-6 col-lg-4 mb-4" *ngFor="let j of job; let i=index">
 
@@ -108,27 +108,27 @@
             </button>
 
             <div *ngIf="showBidForm[j.id]"
-                 style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px; margin-bottom: 8px;">
+                 style="background: #ffffff; border: 1px solid rgba(0,0,0,0.08); border-radius: 12px; padding: 16px; margin-bottom: 8px;">
 
               <div style="margin-bottom: 12px;">
-                <label style="display: block; color: #8a8aa3; font-weight: 600; font-size: 0.8rem; margin-bottom: 4px;">💰 Your Bid ($)</label>
+                <label style="display: block; color: #6b7280; font-weight: 600; font-size: 0.8rem; margin-bottom: 4px;">💰 Your Bid ($)</label>
                 <input type="number" [(ngModel)]="bidAmount[j.id]" placeholder="e.g. 5000"
-                       style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.06); color: #ffffff; font-size: 0.9rem; box-sizing: border-box; outline: none;" />
+                       style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.1); background: #f9fafb; color: #1a1a2e; font-size: 0.9rem; box-sizing: border-box; outline: none;" />
               </div>
 
               <div style="margin-bottom: 12px;">
-                <label style="display: block; color: #8a8aa3; font-weight: 600; font-size: 0.8rem; margin-bottom: 4px;">📝 Proposal Message</label>
+                <label style="display: block; color: #6b7280; font-weight: 600; font-size: 0.8rem; margin-bottom: 4px;">📝 Proposal Message</label>
                 <textarea [(ngModel)]="bidMessage[j.id]" rows="3" placeholder="Why should the client hire you?"
-                          style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.06); color: #ffffff; font-size: 0.9rem; box-sizing: border-box; outline: none; resize: vertical;"></textarea>
+                          style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.1); background: #f9fafb; color: #1a1a2e; font-size: 0.9rem; box-sizing: border-box; outline: none; resize: vertical;"></textarea>
               </div>
 
               <div style="display: flex; gap: 8px;">
                 <button (click)="submitBid(j.id)"
-                        style="flex: 1; padding: 10px; border-radius: 10px; border: none; background: linear-gradient(135deg, #10b981, #34d399); color: #0a0a1a; font-weight: 700; cursor: pointer; font-size: 0.9rem;">
+                        style="flex: 1; padding: 10px; border-radius: 10px; border: none; background: #14a800; color: #ffffff; font-weight: 700; cursor: pointer; font-size: 0.9rem;">
                   🚀 Submit Bid
                 </button>
                 <button (click)="toggleBidForm(j.id)"
-                        style="flex: 1; padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: transparent; color: #8a8aa3; font-weight: 600; cursor: pointer; font-size: 0.9rem;">
+                        style="flex: 1; padding: 10px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.1); background: transparent; color: #6b7280; font-weight: 600; cursor: pointer; font-size: 0.9rem;">
                   ❌ Cancel
                 </button>
               </div>
@@ -139,7 +139,7 @@
           <!-- FREELANCER: Already Bid -->
           <div *ngIf="roleName === 'FREELANCER' && (isApplied(j.id) || j.status === 'APPLIED' || j.status === 'IN_PROGRESS')"
                class="text-center mb-2">
-            <span style="background: rgba(0,240,255,0.1); color: #00f0ff; padding: 8px 20px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid rgba(0,240,255,0.2);">
+            <span style="background: rgba(20,168,0,0.1); color: #14a800; padding: 8px 20px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid rgba(20,168,0,0.2);">
               ✅ Bid Submitted
             </span>
           </div>
@@ -147,7 +147,7 @@
           <!-- FREELANCER: Job Closed -->
           <div *ngIf="roleName === 'FREELANCER' && j.status === 'CLOSED'"
                class="text-center mb-2">
-            <span style="background: rgba(255,255,255,0.04); color: #8a8aa3; padding: 8px 20px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.08);">
+            <span style="background: rgba(0,0,0,0.04); color: #6b7280; padding: 8px 20px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid rgba(0,0,0,0.08);">
               🔒 Job Closed
             </span>
           </div>

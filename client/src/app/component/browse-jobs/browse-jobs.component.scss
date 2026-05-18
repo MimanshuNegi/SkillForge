@@ -1,48 +1,74 @@
+// ─── Variables — LIGHT THEME ───
+$primary: #14a800;
+$accent: #3c8dd4;
+$text-main: #1a1a2e;
+$text-muted: #6b7280;
+$bg-light: #f9fafb;
+$border-light: rgba(0, 0, 0, 0.06);
+
 .title {
   margin-bottom: 15px;
+  color: $text-main;
+  font-weight: 700;
 }
 
-/* Job Card */
 .job-card {
-  background: #f9fafb;
+  background: #ffffff;
   border-radius: 12px;
-  padding: 15px;
+  padding: 18px;
   margin-bottom: 12px;
-  border: 1px solid #eee;
-  transition: 0.3s;
+  border: 1px solid $border-light;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+    border-color: rgba($primary, 0.2);
+  }
+
+  h4 {
+    color: $text-main;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  p {
+    color: $text-muted;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+  }
+
+  strong {
+    color: $text-main;
+  }
 }
 
-.job-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-}
-
-/* Empty */
 .empty {
-  color: #888;
+  color: $text-muted;
   font-size: 14px;
+  text-align: center;
+  padding: 40px 0;
 }
 
-/* Status Badge */
 .status-badge {
-  padding: 3px 10px;
-  border-radius: 8px;
-  font-size: 12px;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
   font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
-/* Role-based styling (future-safe) */
 .OPEN {
-  background: #d1fae5;
-  color: #065f46;
+  background: rgba($primary, 0.1);
+  color: $primary;
 }
 
 .APPLIED {
-  background: #e0f2fe;
-  color: #0369a1;
+  background: rgba($accent, 0.1);
+  color: $accent;
 }
 
 .CLOSED {
-  background: #fee2e2;
-  color: #991b1b;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
 }
