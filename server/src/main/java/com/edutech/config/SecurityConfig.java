@@ -46,26 +46,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().and().csrf().disable()
                 .authorizeRequests()
 
-                //  6.4 AUTH
+                // 6.4 AUTH
                 .antMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/auth/send-otp").permitAll()//for otp
+                .antMatchers(HttpMethod.POST, "/api/auth/verify-otp").permitAll()//for otp
                 .antMatchers(HttpMethod.GET, "/api/auth/**").hasAnyAuthority("FREELANCER", "ADMIN", "CLIENT")
                 .antMatchers(HttpMethod.DELETE, "/api/auth/**").hasAnyAuthority("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/auth/**").authenticated()
 
-                //  6.4 JOBS
+                
+
+                // 6.4 JOBS
                 .antMatchers(HttpMethod.GET, "/api/jobs/**").hasAnyAuthority("CLIENT", "FREELANCER", "ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/jobs/**/apply").hasAnyAuthority("FREELANCER")
                 .antMatchers(HttpMethod.POST, "/api/jobs/**").hasAnyAuthority("CLIENT", "FREELANCER")
                 .antMatchers(HttpMethod.PUT, "/api/jobs/**").hasAnyAuthority("CLIENT")
                 .antMatchers(HttpMethod.DELETE, "/api/jobs/**").hasAnyAuthority("ADMIN", "CLIENT")
 
-                //  6.4 PROPOSALS
+                // 6.4 PROPOSALS
                 .antMatchers(HttpMethod.GET, "/api/proposals/**").hasAnyAuthority("FREELANCER")
-                .antMatchers(HttpMethod.POST, "/api/proposals/**").hasAnyAuthority("CLIENT","FREELANCER")
+                .antMatchers(HttpMethod.POST, "/api/proposals/**").hasAnyAuthority("CLIENT", "FREELANCER")
                 .antMatchers(HttpMethod.PUT, "/api/proposals/**").hasAnyAuthority("CLIENT")
 
-                //  All other requests - authenticated
+                // All other requests - authenticated
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

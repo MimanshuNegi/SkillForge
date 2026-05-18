@@ -10,7 +10,7 @@ import { Proposal } from '../../model/proposal';
 export class MyProposalComponent implements OnInit {
 
   proposals: any[] = [];
-  isLoading: boolean = true;  // ✅ ADD THIS
+  isLoading: boolean = true;  //   ADD THIS
 
   constructor(private service: ProposalService) {}
 
@@ -20,12 +20,12 @@ export class MyProposalComponent implements OnInit {
     this.service.getMyProposals().subscribe({
       next: (res: any) => {
         this.proposals = res || [];
-        this.isLoading = false;  // ✅
+        this.isLoading = false;  //  
       },
       error: (err: any) => {
         console.error('Error fetching proposals', err);
         this.proposals = [];
-        this.isLoading = false;  // ✅
+        this.isLoading = false;  //  
       }
     });
   }

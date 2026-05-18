@@ -51,24 +51,24 @@ $border-light: rgba(0, 0, 0, 0.06);
 }
 
 .status-badge {
-  padding: 3px 12px;
-  border-radius: 20px;
-  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 8px;
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.3px;
 }
 
+/* Role-based styling (future-safe) */
 .OPEN {
-  background: rgba($primary, 0.1);
-  color: $primary;
+  background: #d1fae5;
+  color: #065f46;
 }
 
 .APPLIED {
-  background: rgba($accent, 0.1);
-  color: $accent;
+  background: #e0f2fe;
+  color: #0369a1;
 }
 
 .CLOSED {
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
+  background: #fee2e2;
+  color: #991b1b;
 }

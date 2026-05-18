@@ -97,7 +97,7 @@ export class ProfileComponent implements OnInit {
       next: (res: any) => {
         this.profile = res;
         this.isEditing = false;
-        this.successMessage = '✅ Profile updated successfully!';
+        this.successMessage = '  Profile updated successfully!';
         this.errorMessage = '';
         if (res.username) {
           localStorage.setItem('username', res.username);

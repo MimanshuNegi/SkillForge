@@ -1,16 +1,27 @@
 <div class="auth-wrapper">
-
   <div class="auth-card">
 
-    <!-- LEFT SIDE (FORM) -->
+    <!-- LEFT SIDE -->
     <div class="left-side">
 
       <h2>Welcome Back 👋</h2>
       <p class="subtitle">Login to continue</p>
 
-      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      <!--   INFO -->
+      <div class="info-message" *ngIf="infoMessage">
+          {{ infoMessage }}
+      </div>
 
-        <!-- Username -->
+      <!-- ❗ ERROR -->
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <!-- ========================== -->
+      <!-- 🔐 STEP 1: PASSWORD LOGIN -->
+      <!-- ========================== -->
+      <form *ngIf="!otpStage" [formGroup]="loginForm" (ngSubmit)="onLogin()">
+
         <div class="form-group">
           <label>Username</label>
           <input type="text" formControlName="username" placeholder="Enter username" />
@@ -19,7 +30,6 @@
           </small>
         </div>
 
-        <!-- Password -->
         <div class="form-group password-wrapper">
           <label>🔒 Password</label>
           <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Enter password" />
@@ -31,44 +41,71 @@
           </small>
         </div>
 
-        <!-- Error -->
-        <div class="error-message" *ngIf="errorMessage">
-          {{ errorMessage }}
+        <button type="submit" [disabled]="loginForm.invalid || isLoading">
+          {{ isLoading ? 'Checking...' : 'Continue' }}
+        </button>
+      </form>
+
+      <!-- ========================== -->
+      <!-- 📱 STEP 2: OTP VERIFY -->
+      <!-- ========================== -->
+      <form *ngIf="otpStage" [formGroup]="otpForm" (ngSubmit)="verifyOtp()">
+
+        <div class="otp-header">
+          <h3>Enter OTP</h3>
+          <p class="otp-subtitle">
+            We sent a 6-digit code to your registered email
+            <span *ngIf="maskedEmail">({{ maskedEmail }})</span>
+          </p>
         </div>
 
-        <!-- Button -->
-        <button type="submit" [disabled]="loginForm.invalid || isLoading">
-          {{ isLoading ? 'Logging in...' : 'Login' }}
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" formControlName="username" readonly />
+        </div>
+
+        <div class="form-group">
+          <label>🔢 OTP</label>
+          <input type="text" formControlName="otp" maxlength="6" autocomplete="one-time-code" placeholder="------"
+            class="otp-input" />
+          <small *ngIf="o['otp']?.touched && o['otp']?.invalid">
+            Enter a valid 6-digit OTP
+          </small>
+        </div>
+
+        <div class="otp-meta">
+          <span *ngIf="otpTimer > 0" class="otp-timer">
+            ⏱ Expires in {{ formattedTimer }}
+          </span>
+          <span *ngIf="otpTimer === 0" class="otp-expired">
+            OTP expired — please resend
+          </span>
+        </div>
+
+        <button type="submit" [disabled]="otpForm.invalid || isLoading">
+          {{ isLoading ? 'Verifying...' : 'Verify & Login' }}
         </button>
 
-        <!-- Bottom -->
-        <div class="register-link">
-          <span>Don’t have an account?</span>
-          <a routerLink="/register">Register</a>
+        <div class="otp-actions">
+          <button type="button" class="link-btn" (click)="resendOtp()" [disabled]="isLoading">
+            Resend OTP
+          </button>
         </div>
 
       </form>
+
+      <!-- REGISTER LINK -->
+      <div class="register-link">
+        <span>Don’t have an account?</span>
+        <a routerLink="/register">Register</a>
+      </div>
+
     </div>
 
-    <!-- RIGHT SIDE (DESIGN PANEL) -->
+    <!-- RIGHT SIDE -->
     <div class="right-side">
-
       <div class="overlay-shape"></div>
-
-      <!-- Floating cards -->
-      <!-- <div class="card-box card1">
-        <h4>Projects</h4>
-        <p>Manage jobs</p>
-      </div>
-
-      <div class="card-box card2">
-        <h4>Test</h4>
-      </div>
-
-      <div class="card-box card3">+</div> -->
-
     </div>
 
   </div>
-
 </div>

@@ -155,7 +155,7 @@
                   <div *ngIf="p.status === 'PENDING' || p.status === 'APPLIED'">
                     <button class="btn btn-success btn-sm me-1"
                             (click)="acceptProposal(j, p)">
-                      ✅ Accept
+                        Accept
                     </button>
                     <button class="btn btn-outline-danger btn-sm"
                             (click)="rejectProposal(j, p)">
@@ -164,7 +164,7 @@
                   </div>
 
                   <span *ngIf="p.status === 'APPROVED'" class="text-success fw-bold small">
-                    ✅ Hired
+                      Hired
                   </span>
                   <span *ngIf="p.status === 'REJECTED'" class="text-danger fw-bold small">
                     Declined
@@ -239,7 +239,7 @@
           <div *ngIf="j.status === 'APPLIED'" class="d-flex gap-2">
             <button class="btn btn-success btn-sm flex-grow-1 rounded-pill"
                     (click)="updateStatus(j, 'ACCEPTED')">
-              ✅ Accept
+                Accept
             </button>
             <button class="btn btn-outline-danger btn-sm flex-grow-1 rounded-pill"
                     (click)="updateStatus(j, 'REJECTED')">

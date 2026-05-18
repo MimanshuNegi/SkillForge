@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.edutech.entity.User;
 import com.edutech.util.JwtUtil;
+import com.edutech.service.EmailService;
+import com.edutech.service.OtpService;
 import com.edutech.service.UserService;
 
 @RestController
@@ -30,6 +32,11 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    
+@Autowired private OtpService otpService;
+@Autowired private EmailService emailService;
+
+
     // 1. POST /api/auth/register — Register new user (201 Created)
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody User user) {
@@ -41,34 +48,37 @@ public class AuthController {
 
     // 2. POST /api/auth/login — Login, returns JWT token and role (200 OK)
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User loginRequest) {
+public ResponseEntity<?> login(@RequestBody User loginRequest) {
 
-        try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginRequest.getUsername(),
-                            loginRequest.getPassword()));
+    try {
+        //   Step 1: Validate username + password
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                loginRequest.getUsername(),
+                loginRequest.getPassword()
+            )
+        );
 
-            // Generate token
-            String token = jwtUtil.generateToken(loginRequest.getUsername());
+        //   Step 2: Get user
+        User user = userService.getUserByUsername(loginRequest.getUsername());
 
-            // Get role from DB
-            User user = userService.getUserByUsername(loginRequest.getUsername());
+        //   Step 3: Generate OTP
+        String otp = otpService.generate(loginRequest.getUsername());
 
-            // Build response with token + role
-            Map<String, Object> response = new HashMap<>();
-            response.put("token", token);
-            response.put("role", user.getRole());
-            response.put("userId", user.getId());
-            response.put("username", user.getUsername());
+        //   Step 4: Send email
+        emailService.sendOtp(user.getEmail(), otp);
 
-            return ResponseEntity.ok(response);
+        return ResponseEntity.ok(Map.of(
+            "message", "OTP sent",
+            "username", user.getUsername()
+        ));
 
-        } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("Invalid username or password");
-        }
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("message", "Invalid username or password"));
     }
+}
+
 
     // 3. GET /api/auth/user/{userId} — Get user profile by ID (200 OK)
     @GetMapping("/user/{userId}")
@@ -104,4 +114,61 @@ public ResponseEntity<User> updateUser(@PathVariable Long userId,
     return ResponseEntity.ok(user);
 }
 
+@PostMapping("/send-otp")
+public ResponseEntity<?> sendOtp(@RequestBody Map<String, String> body) {
+    String username = body.get("username");
+
+    if (username == null || username.isBlank()) {
+        return ResponseEntity.badRequest().body(Map.of("message", "Username is required"));
+    }
+
+    try {
+        User user = userService.getUserByUsername(username);
+
+        if (user.getEmail() == null || user.getEmail().isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "No email linked to this account"));
+        }
+
+        String otp = otpService.generate(username);
+        emailService.sendOtp(user.getEmail(), otp);
+
+        return ResponseEntity.ok(Map.of(
+            "message", "OTP sent",
+            "email", maskEmail(user.getEmail())
+        ));
+    } catch (Exception e) {
+        // safer response (optional): don't reveal if user exists
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User not found"));
+    }
+}
+
+@PostMapping("/verify-otp")
+public ResponseEntity<?> verifyOtp(@RequestBody Map<String, String> body) {
+
+    String username = body.get("username");
+    String otp = body.get("otp");
+
+    if (!otpService.verify(username, otp)) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("message", "Invalid OTP"));
+    }
+
+    //   Now issue JWT
+    String token = jwtUtil.generateToken(username);
+    User user = userService.getUserByUsername(username);
+
+    return ResponseEntity.ok(Map.of(
+        "token", token,
+        "role", user.getRole(),
+        "userId", user.getId(),
+        "username", user.getUsername()
+    ));
+}
+
+
+private String maskEmail(String email) {
+    int at = email.indexOf('@');
+    if (at <= 2) return email;
+    return email.substring(0, 1) + "***" + email.substring(at - 1);
+}
 }
