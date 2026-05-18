@@ -81,7 +81,7 @@
 
             <div class="check-item" [class.valid]="hasSpecialChar" [class.invalid]="!hasSpecialChar">
               <span class="check-icon">{{ hasSpecialChar ? '✅' : '❌' }}</span>
-              <span>One special character (adsad)</span>
+              <span>One special character</span>
             </div>
 
           </div>
@@ -105,9 +105,14 @@
 
         </div>
         <!-- Contact Number -->
+
         <div class="form-group">
           <label>📞 Contact Number</label>
-          <input type="text" formControlName="contactNumber" placeholder="Enter Your Mob Number" />
+          <input type="text" formControlName="contactNumber" placeholder="Enter 10 digit number" maxlength="10" />
+          <div *ngIf="f['contactNumber']?.touched && f['contactNumber']?.invalid" class="validation-errors">
+            <small *ngIf="f['contactNumber']?.errors?.['required']">Contact number is required</small>
+            <small *ngIf="f['contactNumber']?.errors?.['pattern']">Must be exactly 10 digits</small>
+          </div>
         </div>
 
         <!-- Role -->
