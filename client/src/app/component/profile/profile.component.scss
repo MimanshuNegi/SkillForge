@@ -1,17 +1,17 @@
-$bg-dark: #0a0a1a;
-$glass-bg: rgba(255, 255, 255, 0.04);
-$glass-border: rgba(255, 255, 255, 0.08);
-$text-primary: #ffffff;
-$text-muted: #8a8aa3;
-$accent-cyan: #00f0ff;
-$accent-purple: #7b2ff7;
-$accent-pink: #ff2d95;
-$accent-green: #10b981;
+$bg-light: #f0f2f5;
+$card-bg: #ffffff;
+$card-border: rgba(0, 0, 0, 0.08);
+$text-primary: #1a1a2e;
+$text-muted: #6b7280;
+$accent-green: #14a800;
+$accent-blue: #3c8dd4;
+$accent-red: #ef4444;
+$accent-orange: #f59e0b;
 
 :host {
   display: block;
   min-height: 100vh;
-  background: $bg-dark;
+  background: $bg-light;
   padding-bottom: 40px;
 }
 
@@ -24,7 +24,7 @@ h2, h4, h5 {
 }
 
 h2 {
-  background: linear-gradient(135deg, $accent-cyan, $accent-purple);
+  background: linear-gradient(135deg, $accent-green, $accent-blue);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -34,231 +34,81 @@ h2 {
 }
 
 hr {
-  border-color: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(0, 0, 0, 0.06) !important;
 }
 
 .card {
-  background: $glass-bg !important;
-  backdrop-filter: blur(14px);
-  border: 1px solid $glass-border !important;
+  background: $card-bg !important;
+  border: 1px solid $card-border !important;
   border-radius: 16px !important;
   color: $text-primary;
 }
 
-.profile-header {
-  background: linear-gradient(135deg, $accent-purple, $accent-cyan) !important;
-  color: white;
-  text-align: center;
-  padding: 30px 20px;
-}
-
-.avatar-circle {
-  width: 80px;
-  height: 80px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  font-weight: bold;
-  margin: 0 auto 12px;
-  border: 3px solid rgba(255, 255, 255, 0.4);
-  color: white;
-}
-
-.role-badge {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 4px 16px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  color: white;
-}
-
-.profile-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.profile-label {
-  font-weight: 600;
-  color: $text-muted;
-  font-size: 0.9rem;
-}
-
-.profile-value {
-  color: $text-primary;
-  font-size: 0.9rem;
-}
-
-.edit-header {
-  background: linear-gradient(135deg, #f59e0b, $accent-pink) !important;
-  color: white;
-  text-align: center;
-  padding: 24px 20px;
-}
-
-.form-group {
-  margin-bottom: 16px;
-}
-
-label {
-  display: block;
-  font-weight: 600;
-  color: $text-muted;
-  margin-bottom: 6px;
-  font-size: 0.85rem;
-}
-
-input, textarea {
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: 10px;
-  border: 1px solid $glass-border !important;
-  background: rgba(255, 255, 255, 0.06) !important;
-  color: $text-primary !important;
-  font-size: 0.9rem;
-  box-sizing: border-box;
-  outline: none;
-  transition: all 0.3s ease;
-
-  &::placeholder {
-    color: $text-muted !important;
-  }
-
-  &:focus {
-    border-color: $accent-cyan !important;
-    box-shadow: 0 0 0 3px rgba($accent-cyan, 0.15) !important;
-  }
-}
-
-textarea {
-  resize: vertical;
-}
-
-.success-msg {
-  background: rgba($accent-green, 0.1);
-  border: 1px solid rgba($accent-green, 0.3);
-  color: $accent-green;
-  padding: 14px 16px;
-  border-radius: 12px;
-  text-align: center;
-  margin-bottom: 20px;
-  font-weight: 600;
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.alert-danger {
-  background: rgba($accent-pink, 0.1) !important;
-  border: 1px solid rgba($accent-pink, 0.3) !important;
-  color: $accent-pink !important;
-}
-
-// ═══════════════════════════
-//  TABLE (ADMIN users list)
-// ═══════════════════════════
-.table {
-  color: $text-primary !important;
-  background: transparent !important;
-
-  thead {
-    background: rgba(255, 255, 255, 0.06) !important;
-
-    th {
-      color: $text-primary !important;
-      border-bottom: 1px solid $glass-border !important;
-      font-weight: 600;
-      font-size: 0.9rem;
-      background: transparent !important;
-    }
-  }
-
-  tbody {
-    tr {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.03) !important;
-      }
-    }
-
-    td {
-      border: none !important;
-      color: $text-primary !important;
-      font-size: 0.9rem;
-      vertical-align: middle;
-    }
-
-    //  Force text visibility
-    .fw-semibold {
-      color: $text-primary !important;
-    }
-
-    .text-muted {
-      color: $text-muted !important;
-    }
-  }
-}
-
-//  Avatar in table
-.avatar-sm {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: bold;
-  font-size: 0.8rem;
-  margin-right: 8px;
-  flex-shrink: 0;
-}
-
-// ═══════════════════════════
-//  BUTTONS
-// ═══════════════════════════
 .btn-primary {
-  background: linear-gradient(135deg, $accent-purple, $accent-cyan) !important;
+  background: $accent-green !important;
   border: none !important;
-  color: $bg-dark !important;
+  color: #ffffff !important;
   font-weight: 700;
 
   &:hover {
-    box-shadow: 0 4px 20px rgba($accent-cyan, 0.3);
+    box-shadow: 0 4px 15px rgba($accent-green, 0.25);
     transform: translateY(-2px);
   }
 }
 
 .btn-success {
-  background: linear-gradient(135deg, $accent-green, #34d399) !important;
+  background: $accent-green !important;
   border: none !important;
-  color: $bg-dark !important;
+  color: #ffffff !important;
 }
 
 .btn-outline-secondary {
   color: $text-muted !important;
-  border-color: $glass-border !important;
+  border-color: $card-border !important;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.06) !important;
+    background: rgba(0, 0, 0, 0.04) !important;
     color: $text-primary !important;
   }
 }
 
 .btn-outline-danger {
-  color: $accent-pink !important;
-  border-color: rgba($accent-pink, 0.4) !important;
+  color: $accent-red !important;
+  border-color: rgba($accent-red, 0.3) !important;
 
   &:hover {
-    background: rgba($accent-pink, 0.1) !important;
+    background: rgba($accent-red, 0.06) !important;
   }
 }
 
 .spinner-border {
-  color: $accent-cyan !important;
+  color: $accent-green !important;
+}
+
+.table {
+  color: $text-primary !important;
+
+  thead {
+    background: rgba(0, 0, 0, 0.03) !important;
+
+    th {
+      color: $text-primary !important;
+      border-bottom: 1px solid $card-border !important;
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.02) !important;
+      }
+    }
+
+    td {
+      border: none !important;
+      color: $text-primary;
+    }
+  }
 }

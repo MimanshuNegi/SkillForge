@@ -1,18 +1,18 @@
 // ═══════════════════════════
 // Variables
 // ═══════════════════════════
-$bg-dark: #0a0a1a;
-$bg-surface: rgba(255, 255, 255, 0.04);
-$glass-bg: rgba(255, 255, 255, 0.04);
-$glass-border: rgba(255, 255, 255, 0.08);
-$gradient-primary: linear-gradient(135deg, #00f0ff, #7b2ff7, #ff2d95);
-$text-primary: #ffffff;
-$text-secondary: #c4c4d4;
-$text-muted: #8a8aa3;
-$accent-cyan: #00f0ff;
-$accent-purple: #7b2ff7;
-$accent-pink: #ff2d95;
-$accent-green: #10b981;
+$bg-dark: #f0f2f5;
+$bg-surface: rgba(0, 0, 0, 0.02);
+$glass-bg: rgba(255, 255, 255, 0.85);
+$glass-border: rgba(0, 0, 0, 0.08);
+$gradient-primary: linear-gradient(135deg, #14a800, #1dbf73);
+$text-primary: #1a1a2e;
+$text-secondary: #4b5563;
+$text-muted: #6b7280;
+$accent-cyan: #14a800;
+$accent-purple: #6366f1;
+$accent-pink: #ef4444;
+$accent-green: #14a800;
 $accent-orange: #f59e0b;
 $accent-blue: #3b82f6;
 $radius-lg: 20px;
@@ -35,9 +35,11 @@ $radius-md: 14px;
     width: 600px;
     height: 600px;
     border-radius: 50%;
-    background: $accent-purple;
+
+    background: rgba(20, 168, 0, 0.08);
     filter: blur(140px);
     opacity: 0.15;
+
     top: -200px;
     right: -150px;
     pointer-events: none;
@@ -51,9 +53,11 @@ $radius-md: 14px;
     width: 500px;
     height: 500px;
     border-radius: 50%;
-    background: $accent-cyan;
+
+    background: rgba(99, 102, 241, 0.06);
     filter: blur(140px);
     opacity: 0.1;
+
     bottom: -150px;
     left: -100px;
     pointer-events: none;
@@ -63,8 +67,13 @@ $radius-md: 14px;
 }
 
 @keyframes floatOrb {
-  0%   { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(50px, 40px) scale(1.1); }
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  100% {
+    transform: translate(50px, 40px) scale(1.1);
+  }
 }
 
 // ═══════════════════════════
@@ -89,8 +98,15 @@ h2 {
 }
 
 @keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .text-muted {
@@ -109,8 +125,8 @@ h2 {
   position: relative;
   overflow: hidden;
   transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1),
-              box-shadow 0.35s ease,
-              border-color 0.35s ease;
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
 
   // Gradient accent line at top
   &::before {
@@ -134,12 +150,10 @@ h2 {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.03),
-      transparent
-    );
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(0, 0, 0, 0.02),
+        transparent);
     transition: left 0.6s ease;
     z-index: 1;
   }
@@ -148,7 +162,7 @@ h2 {
     transform: translateY(-6px);
     border-color: rgba($accent-purple, 0.3) !important;
     box-shadow: 0 0 25px rgba($accent-purple, 0.15),
-                0 20px 50px rgba(0, 0, 0, 0.2);
+      0 20px 50px rgba(0, 0, 0, 0.2);
 
     &::before {
       opacity: 1;
@@ -161,7 +175,7 @@ h2 {
 
   .card-header {
     background: transparent !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04) !important;
     position: relative;
     z-index: 2;
   }
@@ -183,7 +197,7 @@ h2 {
 
   .card-footer {
     background: transparent !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.04) !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.04) !important;
     position: relative;
     z-index: 2;
   }
@@ -208,8 +222,10 @@ h2 {
 // Search Input (Glass Style)
 // ═══════════════════════════
 .form-control {
-  background: rgba(255, 255, 255, 0.06) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  
+background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+
   color: $text-primary !important;
   border-radius: $radius-md !important;
   transition: all 0.3s ease;
@@ -221,7 +237,7 @@ h2 {
   &:focus {
     border-color: $accent-cyan !important;
     box-shadow: 0 0 0 3px rgba($accent-cyan, 0.15) !important;
-    background: rgba(255, 255, 255, 0.08) !important;
+    background: #ffffff !important;
   }
 }
 
@@ -231,7 +247,7 @@ h2 {
 .btn-primary {
   background: linear-gradient(135deg, $accent-purple, $accent-cyan) !important;
   border: none !important;
-  color: $bg-dark !important;
+  color: #ffffff !important;
   font-weight: 700;
   box-shadow: 0 4px 20px rgba($accent-purple, 0.3);
   transition: all 0.3s ease;
@@ -258,7 +274,7 @@ h2 {
 .btn-success {
   background: linear-gradient(135deg, $accent-green, #34d399) !important;
   border: none !important;
-  color: $bg-dark !important;
+  color: #ffffff !important;
   font-weight: 700;
   box-shadow: 0 4px 20px rgba($accent-green, 0.3);
   transition: all 0.3s ease;
@@ -287,7 +303,7 @@ h2 {
 .badge {
   font-weight: 600;
   letter-spacing: 0.5px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 // ═══════════════════════════
@@ -309,6 +325,7 @@ h2 {
 }
 
 @for $i from 1 through 12 {
+
   .col-md-6:nth-child(#{$i}) .job-card,
   .col-lg-4:nth-child(#{$i}) .job-card {
     animation-delay: #{$i * 0.08}s;
@@ -316,8 +333,15 @@ h2 {
 }
 
 @keyframes fadeIn {
-  0%   { opacity: 0; transform: translateY(16px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 // ═══════════════════════════
