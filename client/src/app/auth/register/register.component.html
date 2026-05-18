@@ -60,27 +60,27 @@
           <div class="password-checklist" *ngIf="passwordValue.length > 0">
 
             <div class="check-item" [class.valid]="hasMinLength" [class.invalid]="!hasMinLength">
-              <span class="check-icon">{{ hasMinLength ? '✅' : '❌' }}</span>
+              <span class="check-icon">{{ hasMinLength ? ' ' : '❌' }}</span>
               <span>At least 8 characters</span>
             </div>
 
             <div class="check-item" [class.valid]="hasUppercase" [class.invalid]="!hasUppercase">
-              <span class="check-icon">{{ hasUppercase ? '✅' : '❌' }}</span>
+              <span class="check-icon">{{ hasUppercase ? ' ' : '❌' }}</span>
               <span>One uppercase letter (A-Z)</span>
             </div>
 
             <div class="check-item" [class.valid]="hasLowercase" [class.invalid]="!hasLowercase">
-              <span class="check-icon">{{ hasLowercase ? '✅' : '❌' }}</span>
+              <span class="check-icon">{{ hasLowercase ? ' ' : '❌' }}</span>
               <span>One lowercase letter (a-z)</span>
             </div>
 
             <div class="check-item" [class.valid]="hasNumber" [class.invalid]="!hasNumber">
-              <span class="check-icon">{{ hasNumber ? '✅' : '❌' }}</span>
+              <span class="check-icon">{{ hasNumber ? ' ' : '❌' }}</span>
               <span>One number (0-9)</span>
             </div>
 
             <div class="check-item" [class.valid]="hasSpecialChar" [class.invalid]="!hasSpecialChar">
-              <span class="check-icon">{{ hasSpecialChar ? '✅' : '❌' }}</span>
+              <span class="check-icon">{{ hasSpecialChar ? ' ' : '❌' }}</span>
               <span>One special character</span>
             </div>
 

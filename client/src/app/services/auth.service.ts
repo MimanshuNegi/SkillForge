@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { LoginRequest } from '../model/loginrequest';
-import { LoginResponse } from '../model/login-response';
 import { Role, User } from '../model/user';
 
 @Injectable({
@@ -18,6 +17,7 @@ export class AuthService {
 
   private getAuthHeaders(): HttpHeaders {
     const token = this.getToken();
+
     let headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
@@ -29,8 +29,10 @@ export class AuthService {
     return headers;
   }
 
+  //   REGISTER (unchanged)
   registerUser(user: User): Observable<User> {
     if (!this.http) throw new Error('HttpClient not available');
+
     return this.http.post<User>(
       `${this.baseUrl}/api/auth/register`,
       user,
@@ -38,32 +40,53 @@ export class AuthService {
     );
   }
 
-  login(loginRequest: LoginRequest): Observable<LoginResponse> {
+  // 🔥 🔥 STEP 1: LOGIN (PASSWORD CHECK + SEND OTP)
+  // ❌ NO TOKEN HERE
+  login(loginRequest: LoginRequest): Observable<any> {
     if (!this.http) throw new Error('HttpClient not available');
-    return this.http.post<LoginResponse>(
+
+    return this.http.post(
       `${this.baseUrl}/api/auth/login`,
       loginRequest,
-      { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json'
+        })
+      }
+    );
+  }
+
+  // 🔥 🔥 STEP 2: VERIFY OTP → LOGIN SUCCESS
+  verifyOtp(username: string, otp: string): Observable<any> {
+    if (!this.http) throw new Error('HttpClient not available');
+
+    return this.http.post(
+      `${this.baseUrl}/api/auth/verify-otp`,
+      { username, otp },
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json'
+        })
+      }
     ).pipe(
-      tap((res: LoginResponse) => {
+      tap((res: any) => {
+
+        //   SAVE TOKEN HERE ONLY (FINAL AUTH)
         this.saveToken(res.token);
-        this.setRole(res.role as Role);
+        this.setRole(res.role);
 
-        const anyRes: any = res as any;
-
-        //  Save userId
-        if (anyRes.userId !== undefined && anyRes.userId !== null) {
-          this.saveUserId(Number(anyRes.userId));
+        if (res.userId) {
+          this.saveUserId(Number(res.userId));
         }
 
-        //  Save username
-        if (anyRes.username) {
-          localStorage.setItem('username', anyRes.username);
+        if (res.username) {
+          localStorage.setItem('username', res.username);
         }
       })
     );
   }
 
+  //   TOKEN MANAGEMENT
   saveToken(token: string): void {
     this.token = token;
     localStorage.setItem('token', token);
@@ -95,7 +118,6 @@ export class AuthService {
     return !!this.getToken();
   }
 
-  //  Clear username on logout
   logout(): void {
     this.token = null;
     localStorage.removeItem('token');
@@ -104,6 +126,7 @@ export class AuthService {
     localStorage.removeItem('username');
   }
 
+  //   ROLE HELPERS
   isAdmin(): boolean {
     return this.getRole() === 'ADMIN';
   }
@@ -116,78 +139,51 @@ export class AuthService {
     return this.getRole() === 'FREELANCER';
   }
 
+  //   GET USER
   getLoggedInUser(userId: number): Observable<User> {
     if (!this.http) throw new Error('HttpClient not available');
+
     return this.http.get<User>(
       `${this.baseUrl}/api/auth/user/${userId}`,
       { headers: this.getAuthHeaders() }
     );
   }
 
+  //   GET USERS
   getUsers(): Observable<User[]> {
     if (!this.http) throw new Error('HttpClient not available');
+
     return this.http.get<User[]>(
       `${this.baseUrl}/api/auth`,
       { headers: this.getAuthHeaders() }
     );
   }
 
+  //   DELETE USER
   deleteUser(userId: number): Observable<any> {
     if (!this.http) throw new Error('HttpClient not available');
+
     return this.http.delete(
       `${this.baseUrl}/api/auth/user/${userId}`,
       { headers: this.getAuthHeaders() }
     );
   }
 
+  //   UPDATE USER
   updateUser(userId: number, userData: any): Observable<any> {
-  if (!this.http) throw new Error('HttpClient not available');
+    if (!this.http) throw new Error('HttpClient not available');
 
-  //  Only send editable fields (not password, role, etc.)
-  const body: any = {};
-  if (userData.username) body.username = userData.username;
-  if (userData.email) body.email = userData.email;
-  if (userData.contactNumber !== undefined) body.contactNumber = userData.contactNumber;
-  if (userData.skills !== undefined) body.skills = userData.skills;
-  if (userData.bio !== undefined) body.bio = userData.bio;
+    const body: any = {};
+    if (userData.username) body.username = userData.username;
+    if (userData.email) body.email = userData.email;
+    if (userData.contactNumber !== undefined) body.contactNumber = userData.contactNumber;
+    if (userData.skills !== undefined) body.skills = userData.skills;
+    if (userData.bio !== undefined) body.bio = userData.bio;
 
-  return this.http.put<any>(
-    `${this.baseUrl}/api/auth/user/${userId}`,
-    body,
-    { headers: this.getAuthHeaders() }
-  );
+    return this.http.put(
+      `${this.baseUrl}/api/auth/user/${userId}`,
+      body,
+      { headers: this.getAuthHeaders() }
+    );
+  }
 }
-
-// ✅ Send OTP
-sendOtp(username: string): Observable<any> {
-  if (!this.http) throw new Error('HttpClient not available');
-
-  return this.http.post(
-    `${this.baseUrl}/api/auth/send-otp`,
-    { username },
-    { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
-  );
-}
-
-// ✅ Verify OTP (same response as login)
-verifyOtp(username: string, otp: string): Observable<any> {
-  if (!this.http) throw new Error('HttpClient not available');
-
-  return this.http.post(
-    `${this.baseUrl}/api/auth/verify-otp`,
-    { username, otp },
-    { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
-  ).pipe(
-    tap((res: any) => {
-      this.saveToken(res.token);
-      this.setRole(res.role);
-
-      if (res.userId) this.saveUserId(res.userId);
-      if (res.username) localStorage.setItem('username', res.username);
-    })
-  );
-}
-
-}
-
-

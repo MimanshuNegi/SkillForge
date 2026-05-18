@@ -7,19 +7,9 @@
       <h2>Welcome Back 👋</h2>
       <p class="subtitle">Login to continue</p>
 
-      <!-- 🔄 MODE SWITCH -->
-      <div class="mode-toggle">
-        <button
-          [class.active]="loginMode === 'password'"
-          (click)="loginMode='password'">
-          🔑 Password
-        </button>
-
-        <button
-          [class.active]="loginMode === 'otp'"
-          (click)="loginMode='otp'">
-          📱 OTP
-        </button>
+      <!--   INFO -->
+      <div class="info-message" *ngIf="infoMessage">
+          {{ infoMessage }}
       </div>
 
       <!-- ❗ ERROR -->
@@ -28,90 +18,78 @@
       </div>
 
       <!-- ========================== -->
-      <!-- 🔐 PASSWORD LOGIN -->
+      <!-- 🔐 STEP 1: PASSWORD LOGIN -->
       <!-- ========================== -->
-      <form *ngIf="loginMode==='password'"
-            [formGroup]="loginForm"
-            (ngSubmit)="onLogin()">
+      <form *ngIf="!otpStage" [formGroup]="loginForm" (ngSubmit)="onLogin()">
 
         <div class="form-group">
           <label>Username</label>
-          <input type="text" formControlName="username" placeholder="Enter username"/>
+          <input type="text" formControlName="username" placeholder="Enter username" />
+          <small *ngIf="f['username']?.touched && f['username']?.invalid">
+            Username is required
+          </small>
         </div>
 
         <div class="form-group password-wrapper">
-          <label>Password</label>
-          <input
-            [type]="showPassword ? 'text' : 'password'"
-            formControlName="password"
-            placeholder="Enter password"/>
+          <label>🔒 Password</label>
+          <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Enter password" />
           <span (click)="showPassword = !showPassword">
-            {{ showPassword ? 'Hide' : 'Show' }}
+            {{ showPassword ? '🙈 Hide' : '👁️ Show' }}
           </span>
+          <small *ngIf="f['password']?.touched && f['password']?.invalid">
+            Password is required
+          </small>
         </div>
 
-        <button type="submit" [disabled]="isLoading">
-          {{ isLoading ? 'Logging in...' : 'Login' }}
+        <button type="submit" [disabled]="loginForm.invalid || isLoading">
+          {{ isLoading ? 'Checking...' : 'Continue' }}
         </button>
       </form>
 
       <!-- ========================== -->
-      <!-- 📱 OTP LOGIN -->
+      <!-- 📱 STEP 2: OTP VERIFY -->
       <!-- ========================== -->
-      <form *ngIf="loginMode==='otp'" [formGroup]="otpForm">
+      <form *ngIf="otpStage" [formGroup]="otpForm" (ngSubmit)="verifyOtp()">
 
-        <!-- Username -->
-        <div class="form-group">
-          <label>Username</label>
-          <input
-            type="text"
-            formControlName="username"
-            [readonly]="otpSent"
-            placeholder="Enter username"/>
+        <div class="otp-header">
+          <h3>Enter OTP</h3>
+          <p class="otp-subtitle">
+            We sent a 6-digit code to your registered email
+            <span *ngIf="maskedEmail">({{ maskedEmail }})</span>
+          </p>
         </div>
 
-        <!-- SEND OTP -->
-        <button
-          *ngIf="!otpSent"
-          type="button"
-          class="otp-btn"
-          (click)="sendOtp()">
-          {{ otpSending ? 'Sending OTP...' : 'Send OTP' }}
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" formControlName="username" readonly />
+        </div>
+
+        <div class="form-group">
+          <label>🔢 OTP</label>
+          <input type="text" formControlName="otp" maxlength="6" autocomplete="one-time-code" placeholder="------"
+            class="otp-input" />
+          <small *ngIf="o['otp']?.touched && o['otp']?.invalid">
+            Enter a valid 6-digit OTP
+          </small>
+        </div>
+
+        <div class="otp-meta">
+          <span *ngIf="otpTimer > 0" class="otp-timer">
+            ⏱ Expires in {{ formattedTimer }}
+          </span>
+          <span *ngIf="otpTimer === 0" class="otp-expired">
+            OTP expired — please resend
+          </span>
+        </div>
+
+        <button type="submit" [disabled]="otpForm.invalid || isLoading">
+          {{ isLoading ? 'Verifying...' : 'Verify & Login' }}
         </button>
 
-        <!-- OTP INPUT -->
-        <div *ngIf="otpSent" class="otp-section">
-
-          <div class="form-group">
-            <label>Enter OTP</label>
-            <input
-              type="text"
-              formControlName="otp"
-              maxlength="6"
-              placeholder="------"
-              class="otp-input"/>
-          </div>
-
-          <!-- Timer -->
-          <div class="otp-meta">
-            <span *ngIf="otpTimer > 0">
-              ⏱ {{ otpTimer }}s
-            </span>
-            <span *ngIf="otpTimer === 0" class="expired">
-              OTP expired
-            </span>
-          </div>
-
-          <button type="button" (click)="verifyOtp()">
-            ✅ Verify & Login
-          </button>
-
-          <button type="button"
-                  class="resend"
-                  (click)="sendOtp()">
+        <div class="otp-actions">
+          <button type="button" class="link-btn" (click)="resendOtp()" [disabled]="isLoading">
             Resend OTP
           </button>
-
         </div>
 
       </form>
