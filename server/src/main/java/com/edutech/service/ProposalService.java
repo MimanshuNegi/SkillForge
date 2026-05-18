@@ -83,4 +83,30 @@ public Proposal createProposal(Long freelancerId, Proposal proposal) {
 
         return proposalRepository.findByFreelancerId(freelancer.getId());
     }
+
+    //  Freelancer bids on a job
+public Proposal bidOnJob(Long jobId, Long freelancerId, Proposal req) {
+
+    Job job = jobRepository.findById(jobId)
+            .orElseThrow(() -> new RuntimeException("Job not found"));
+
+    User freelancer = userRepository.findById(freelancerId)
+            .orElseThrow(() -> new RuntimeException("Freelancer not found"));
+
+    // Prevent duplicate bid
+    if (proposalRepository.existsByJobIdAndFreelancerId(jobId, freelancerId)) {
+        throw new RuntimeException("Already Applied.");
+    }
+
+    Proposal p = new Proposal();
+    p.setJob(job);
+    p.setFreelancer(freelancer);
+    p.setBidAmount(req.getBidAmount() != null ? req.getBidAmount() : 0.0);
+    p.setMessage(req.getMessage());
+    p.setStatus("PENDING");
+    p.setAppliedAt(LocalDateTime.now());
+
+    return proposalRepository.save(p);
+}
+
 }

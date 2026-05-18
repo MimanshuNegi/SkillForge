@@ -5,7 +5,8 @@ import { ProposalService } from '../../services/proposal.service';
 
 @Component({
   selector: 'app-job-list',
-  templateUrl: './job-list.component.html'
+  templateUrl: './job-list.component.html',
+  styleUrls: ['./job-list.component.scss']
 })
 export class JobListComponent implements OnInit {
 
@@ -13,61 +14,77 @@ export class JobListComponent implements OnInit {
   allJobs: any[] = [];
   roleName: string | null = '';
   searchTitle: string = '';
-  appliedJobIds: Set<number> = new Set(); // ✅ Track applied jobs
+  appliedJobIds: Set<number> = new Set();
+  isLoading: boolean = true;
+  //  Bid form state
+  showBidForm: { [jobId: number]: boolean } = {};
+  bidAmount: { [jobId: number]: number } = {};
+  bidMessage: { [jobId: number]: string } = {};
 
   constructor(
     private service: JobService,
     private auth: AuthService,
-    private proposalService: ProposalService  // ✅ Inject ProposalService
-  ) {}
+    private proposalService: ProposalService
+  ) { }
 
   ngOnInit(): void {
     this.roleName = this.auth.getRole();
 
-    // ✅ Step 1: If FREELANCER, fetch their proposals first
+    // If FREELANCER, fetch their proposals first to know which jobs they applied to
     if (this.roleName === 'FREELANCER') {
-      this.proposalService.getMyProposals().subscribe({
-        next: (proposals: any[]) => {
-          // ✅ Collect all job IDs the freelancer has applied to
-          (proposals || []).forEach((p: any) => {
-            if (p.job?.id) {
-              this.appliedJobIds.add(p.job.id);
-            }
-          });
+      const proposals$ = (this.proposalService as any).getMyProposals?.();
 
-          // ✅ Then fetch jobs
-          this.fetchJobs();
-        },
-        error: () => {
-          // If proposals fail, still fetch jobs
-          this.fetchJobs();
-        }
-      });
+      if (proposals$ && typeof proposals$.subscribe === 'function') {
+        proposals$.subscribe({
+          next: (proposals: any[]) => {
+            (proposals || []).forEach((p: any) => {
+              if (p.job?.id) {
+                this.appliedJobIds.add(p.job.id);
+              }
+            });
+            this.fetchJobs();
+          },
+          error: () => {
+            this.fetchJobs();
+          }
+        });
+      } else {
+        this.fetchJobs();
+      }
     } else {
       this.fetchJobs();
     }
   }
 
-  // ✅ Fetch jobs and mark applied ones
+  //  Fetch jobs WITHOUT adding extra properties
   fetchJobs(): void {
+    this.isLoading = true;
     this.service.getJobList().subscribe({
       next: (data: any) => {
         const list = data || [];
 
-        // ✅ Mark jobs that freelancer already applied to
-        this.job = list.map((j: any) => ({
-          ...j,
-          applied: this.appliedJobIds.has(j.id)
-        }));
+        //  Filter out test users' jobs
+        this.job = list.filter((j: any) =>
+          !j.clientName?.endsWith('_test') &&
+          j.clientName !== 'newuser_reg'
+        );
 
         this.allJobs = [...this.job];
+        this.isLoading = false;
+
       },
       error: (err: any) => {
         console.error('Error fetching jobs', err);
         this.job = [];
         this.allJobs = [];
+        this.isLoading = false;
       }
     });
+  }
+
+  //  Check if freelancer already applied (without modifying job object)
+  isApplied(jobId: number): boolean {
+    return this.appliedJobIds.has(jobId);
   }
 
   applyJob(jobId: number): void {
@@ -81,20 +98,18 @@ export class JobListComponent implements OnInit {
         const msg = res?.message ?? res;
         alert(msg);
 
-        // ✅ Mark as applied locally + in tracking set
+        // Track applied status
+        this.appliedJobIds.add(jobId);
+
+        // Update job status in list
         const found = this.job.find(j => j.id === jobId);
         if (found) {
-          found.applied = true;
           found.status = 'APPLIED';
         }
-        this.appliedJobIds.add(jobId);
       },
       error: (err: any) => {
         if (err?.status === 409) {
           alert('You have already applied to this job.');
-
-          const found = this.job.find(j => j.id === jobId);
-          if (found) found.applied = true;
           this.appliedJobIds.add(jobId);
         } else {
           alert('Failed to apply. Please try again.');
@@ -104,15 +119,32 @@ export class JobListComponent implements OnInit {
     });
   }
 
+  // searchJobs(): void {
+  //   if (!this.searchTitle || this.searchTitle.trim() === '') {
+  //     this.job = this.allJobs;
+  //     return;
+  //   }
+
+  //   const term = this.searchTitle.toLowerCase();
+  //   this.job = this.allJobs.filter(j =>
+  //     (j.title || '').toLowerCase().includes(term)
+  //   );
+  // }
+
   searchJobs(): void {
     if (!this.searchTitle || this.searchTitle.trim() === '') {
       this.job = this.allJobs;
       return;
     }
 
-    const term = this.searchTitle.toLowerCase();
+    const term = this.searchTitle.toLowerCase().trim();
+
     this.job = this.allJobs.filter(j =>
-      (j.title || '').toLowerCase().includes(term)
+      (j.title || '').toLowerCase().includes(term) ||
+      (j.description || '').toLowerCase().includes(term) ||
+      (j.clientName || '').toLowerCase().includes(term) ||
+      (j.status || '').toLowerCase().includes(term) ||
+      (j.budget?.toString() || '').includes(term)
     );
   }
 
@@ -128,6 +160,40 @@ export class JobListComponent implements OnInit {
       error: (err: any) => {
         console.error('Error deleting job:', err);
         alert('Failed to delete job.');
+      }
+    });
+  }
+
+  //  Toggle bid form
+  toggleBidForm(jobId: number): void {
+    this.showBidForm[jobId] = !this.showBidForm[jobId];
+  }
+
+  //  Submit bid
+  submitBid(jobId: number): void {
+    const freelancerId = Number(localStorage.getItem('userId') || 0);
+
+    const body = {
+      bidAmount: this.bidAmount[jobId] || 0,
+      message: this.bidMessage[jobId] || ''
+    };
+
+    this.proposalService.bidOnJob(jobId, freelancerId, body).subscribe({
+      next: (res: any) => {
+        const msg = res?.message ?? 'Bid submitted!';
+        alert(msg);
+
+        this.appliedJobIds.add(jobId);
+        this.showBidForm[jobId] = false;
+      },
+      error: (err: any) => {
+        if (err?.error?.message?.includes('Already Applied')) {
+          this.appliedJobIds.add(jobId);
+          alert('⚠️ You already bid on this job.');
+        } else {
+          alert('❌ Failed to submit bid.');
+          console.error(err);
+        }
       }
     });
   }

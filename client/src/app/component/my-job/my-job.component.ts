@@ -36,7 +36,7 @@ export class MyJobComponent implements OnInit {
                 next: (proposals: any[]) => {
                   job.proposals = (proposals || []).map((p: any) => ({
                     ...p,
-                    showProfile: false  // ✅ profile toggle per applicant
+                    showProfile: false  //  profile toggle per applicant
                   }));
                 },
                 error: () => {
@@ -62,7 +62,7 @@ export class MyJobComponent implements OnInit {
     job.showApplicants = !job.showApplicants;
   }
 
-  // ✅ Toggle freelancer profile
+  //  Toggle freelancer profile
   toggleProfile(proposal: any): void {
     proposal.showProfile = !proposal.showProfile;
   }
@@ -71,7 +71,7 @@ export class MyJobComponent implements OnInit {
     this.service.updateProposalStatus(proposal.id, 'APPROVED').subscribe({
       next: () => {
         proposal.status = 'COMPLETED';
-        alert('Freelancer accepted! ✅');
+        alert('Freelancer accepted! ');
       },
       error: (err: any) => {
         console.error('Failed to accept:', err);
@@ -93,10 +93,10 @@ export class MyJobComponent implements OnInit {
     });
   }
 
-  // ✅ Pass the job object directly (not just jobId)
+  //  Pass the job object directly (not just jobId)
 
   updateStatus(jobOrId: any, status: string): void {
-    // ✅ Handle both: tests pass number, UI passes object
+    //  Handle both: tests pass number, UI passes object
     let jobId: number;
     let jobObj: any = null;
 

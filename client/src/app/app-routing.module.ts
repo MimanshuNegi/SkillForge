@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-// ✅ Components
+//  Components
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { DashboardComponent } from './component/dashboard/dashboard.component';
@@ -12,16 +12,16 @@ import { MyProposalComponent } from './component/my-proposal/my-proposal.compone
 import { ProfileComponent } from './component/profile/profile.component';
 import { ReportComponent } from './component/report/report.component';
 
-// ✅ Guard
+//  Guard
 import { AuthGuard } from './auth.guard';
 import { LandingPageComponent } from './component/landing-page/landing-page.component';
 
 const routes: Routes = [
-  // ✅ Open Routes
+  //  Open Routes
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
 
-  // ✅ Protected Routes
+  //  Protected Routes
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'job-list', component: JobListComponent, canActivate: [AuthGuard] },
   { path: 'job-create', component: JobCreateComponent, canActivate: [AuthGuard] },
@@ -32,10 +32,10 @@ const routes: Routes = [
   { path: 'reports', component: ReportComponent, canActivate: [AuthGuard] },
   { path: 'landing', component: LandingPageComponent},
 
-  // ✅ Default route
+  //  Default route
   { path: '', redirectTo: '/landing', pathMatch: 'full' },
 
-  // ✅ Wildcard route
+  //  Wildcard route
   { path: '**', redirectTo: '/landing' }
 ];
 

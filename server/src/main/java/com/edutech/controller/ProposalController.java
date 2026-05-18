@@ -47,27 +47,27 @@ public class ProposalController {
         return ResponseEntity.ok(proposal);
     }
 
-   //  Update a proposal (accepts partial body like { "status": "APPROVED" })
-@PutMapping("/{id}")
-public ResponseEntity<Proposal> updateProposal(
-        @PathVariable Long id,
-        @RequestBody Map<String, Object> body) {
+    //  Update a proposal (accepts partial body like { "status": "APPROVED" })
+    @PutMapping("/{id}")
+    public ResponseEntity<Proposal> updateProposal(
+            @PathVariable Long id,
+            @RequestBody Map<String, Object> body) {
 
-    Proposal proposal = proposalService.getProposalById(id)
-            .orElseThrow(() -> new RuntimeException("Proposal not found"));
+        Proposal proposal = proposalService.getProposalById(id)
+                .orElseThrow(() -> new RuntimeException("Proposal not found"));
 
-    // Update fields if present in body
-    if (body.containsKey("status")) {
-        proposal.setStatus((String) body.get("status"));
+        // Update fields if present in body
+        if (body.containsKey("status")) {
+            proposal.setStatus((String) body.get("status"));
+        }
+        if (body.containsKey("bidAmount")) {
+            proposal.setBidAmount(Double.valueOf(body.get("bidAmount").toString()));
+        }
+
+        Proposal updated = proposalService.updateProposal(id, proposal);
+
+        return ResponseEntity.ok(updated);
     }
-    if (body.containsKey("bidAmount")) {
-        proposal.setBidAmount(Double.valueOf(body.get("bidAmount").toString()));
-    }
-
-    Proposal updated = proposalService.updateProposal(id, proposal);
-
-    return ResponseEntity.ok(updated);
-}
 
     // 5. DELETE /api/proposals/{id} - Delete a proposal
     @DeleteMapping("/{id}")
@@ -86,11 +86,41 @@ public ResponseEntity<Proposal> updateProposal(
         String username = SecurityContextHolder
                 .getContext()
                 .getAuthentication()
-                .getName(); // ✅ gets username from JWT
+                .getName(); //  gets username from JWT
 
         List<Proposal> proposals = proposalService
                 .getProposalsByFreelancerUsername(username);
         return ResponseEntity.ok(proposals);
 
+    }
+
+    //  Freelancer bids on a job
+    @PostMapping("/job/{jobId}/freelancer/{freelancerId}")
+    public ResponseEntity<?> bidOnJob(
+            @PathVariable Long jobId,
+            @PathVariable Long freelancerId,
+            @RequestBody Map<String, Object> body) {
+
+        try {
+            Proposal req = new Proposal();
+            if (body.containsKey("bidAmount") && body.get("bidAmount") != null) {
+                req.setBidAmount(Double.valueOf(body.get("bidAmount").toString()));
+            }
+            if (body.containsKey("message") && body.get("message") != null) {
+                req.setMessage((String) body.get("message"));
+            }
+
+            Proposal created = proposalService.bidOnJob(jobId, freelancerId, req);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Bid submitted successfully!");
+            response.put("proposal", created);
+            return ResponseEntity.ok(response);
+
+        } catch (RuntimeException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("message", e.getMessage());
+            return ResponseEntity.ok(error);
+        }
     }
 }

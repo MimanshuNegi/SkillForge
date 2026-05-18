@@ -1,25 +1,30 @@
-<div class="container mt-4">
+<div class="container">
 
   <!-- ✅ Header -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="d-flex justify-content-between align-items-center mb-4" style="padding-top: 24px;">
     <div>
       <h2 class="fw-bold mb-1">📝 My Proposals</h2>
       <p class="text-muted mb-0">Track all your submitted proposals and their status</p>
     </div>
 
-    <!-- Proposal Count -->
-    <span *ngIf="proposals.length > 0" class="badge bg-primary rounded-pill px-3 py-2 fs-6">
+    <span *ngIf="!isLoading && proposals.length > 0" class="badge bg-primary rounded-pill px-3 py-2 fs-6">
       {{ proposals.length }} {{ proposals.length === 1 ? 'Proposal' : 'Proposals' }}
     </span>
   </div>
 
-  <!-- ✅ No Proposals Message -->
-  <div *ngIf="proposals.length === 0" class="text-center py-5">
+  <!-- ✅ Loading Spinner -->
+  <div *ngIf="isLoading" style="text-align: center; padding: 60px 0;">
+    <div class="spinner-border" style="color: #00f0ff; width: 3rem; height: 3rem;" role="status"></div>
+    <p style="color: #8a8aa3; margin-top: 12px; font-size: 0.9rem;">Loading proposals...</p>
+  </div>
+
+  <!-- ✅ No Proposals (only after loading done) -->
+  <div *ngIf="!isLoading && proposals.length === 0" class="text-center py-5">
     <div class="card shadow-sm border-0 mx-auto" style="max-width: 500px;">
       <div class="card-body py-5">
         <h1 class="mb-3">📭</h1>
         <h5 class="text-muted fw-bold">No proposals found.</h5>
-        <p class="text-secondary mb-3">
+        <p class="text-muted mb-3">
           You haven't submitted any proposals yet. Start browsing jobs!
         </p>
         <a routerLink="/job-list" class="btn btn-primary rounded-pill px-4">
@@ -29,16 +34,14 @@
     </div>
   </div>
 
-  <!-- ✅ Proposal Cards -->
-  <div class="row" *ngIf="proposals.length > 0">
+  <!-- ✅ Proposal Cards (only after loading done) -->
+  <div class="row" *ngIf="!isLoading && proposals.length > 0">
     <div class="col-md-6 col-lg-4 mb-4" *ngFor="let p of proposals">
 
       <div class="card h-100 shadow-sm border-0 proposal-card">
 
         <!-- Card Header -->
-        <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center pt-3">
-
-          <!-- Status Badge -->
+        <div class="card-header border-0 d-flex justify-content-between align-items-center pt-3">
           <span class="badge rounded-pill px-3 py-1"
                 [ngClass]="{
                   'bg-warning text-dark': p.status === 'PENDING',
@@ -53,24 +56,19 @@
             <span *ngIf="p.status === 'APPLIED'">📤</span>
             {{ p.status || 'N/A' }}
           </span>
-
           <span class="text-muted small">#{{ p.id }}</span>
         </div>
 
         <!-- Card Body -->
         <div class="card-body">
-
-          <!-- Job Title -->
           <h5 class="card-title fw-bold mb-2">
             🏷️ {{ p.job?.title || 'Untitled Job' }}
           </h5>
 
-          <!-- Job Description -->
-          <p class="card-text text-secondary description-clamp">
+          <p class="card-text description-clamp">
             {{ p.job?.description || 'No description available.' }}
           </p>
 
-          <!-- Bid Amount -->
           <div *ngIf="p.bidAmount" class="d-flex align-items-center mb-2">
             <span class="me-2">💰</span>
             <span class="fw-semibold text-success fs-5">
@@ -78,47 +76,42 @@
             </span>
           </div>
 
-          <!-- Applied At -->
+          <div *ngIf="p.message" style="margin-bottom: 8px; padding: 8px 12px; background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 3px solid #00f0ff;">
+            <span style="color: #c4c4d4; font-size: 0.85rem; font-style: italic;">
+              📝 "{{ p.message }}"
+            </span>
+          </div>
+
           <div class="d-flex align-items-center text-muted small">
             <span class="me-2">📅</span>
             <span>
               Applied: {{ p.appliedAt ? (p.appliedAt | date:'medium') : 'N/A' }}
             </span>
           </div>
-
         </div>
 
         <!-- Card Footer -->
-        <div class="card-footer bg-white border-0 pb-3">
-
-          <!-- Approved -->
+        <div class="card-footer border-0 pb-3">
           <div *ngIf="p.status === 'APPROVED'" class="text-center">
             <span class="text-success fw-bold small">
               🎉 Congratulations! Your proposal was approved.
             </span>
           </div>
-
-          <!-- Pending -->
           <div *ngIf="p.status === 'PENDING'" class="text-center">
             <span class="text-warning fw-bold small">
               ⏳ Waiting for client's response...
             </span>
           </div>
-
-          <!-- Rejected -->
           <div *ngIf="p.status === 'REJECTED'" class="text-center">
             <span class="text-danger fw-bold small">
               This proposal was not selected.
             </span>
           </div>
-
-          <!-- Applied -->
           <div *ngIf="p.status === 'APPLIED'" class="text-center">
             <span class="text-info fw-bold small">
-              📤 Application submitted successfully.
+              📤 Bid submitted successfully.
             </span>
           </div>
-
         </div>
 
       </div>

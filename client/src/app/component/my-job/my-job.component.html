@@ -1,15 +1,15 @@
-<div class="container mt-4">
+<div class="container">
 
-  <!-- ✅ Header -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
+  <!--  Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4" style="padding-top: 24px;">
     <div>
       <h2 class="fw-bold">
         <span *ngIf="roleName === 'CLIENT'">📁 My Posted Jobs</span>
         <span *ngIf="roleName !== 'CLIENT'">📋 My Applied Jobs</span>
       </h2>
       <p class="text-muted mb-0">
-        <span *ngIf="roleName === 'CLIENT'">Manage your jobs, view applicants, and accept freelancers</span>
-        <span *ngIf="roleName !== 'CLIENT'">Track your applications and respond to offers</span>
+        <span *ngIf="roleName === 'CLIENT'">Manage your jobs, view bids, and accept freelancers</span>
+        <span *ngIf="roleName !== 'CLIENT'">Track your bids and respond to offers</span>
       </p>
     </div>
 
@@ -18,7 +18,7 @@
     </span>
   </div>
 
-  <!-- ✅ No Jobs -->
+  <!--  No Jobs -->
   <div *ngIf="jobs.length === 0" class="text-center py-5">
     <div class="card shadow-sm border-0 mx-auto" style="max-width: 500px;">
       <div class="card-body py-5">
@@ -35,9 +35,9 @@
     </div>
   </div>
 
-  <!-- ✅ Job Cards -->
+  <!--  Job Cards -->
   <div *ngIf="jobs.length > 0">
-    <div class="card shadow-sm border-0 mb-4" style="border-radius: 12px;" *ngFor="let j of jobs">
+    <div class="card shadow-sm border-0 mb-4" *ngFor="let j of jobs">
 
       <div class="card-body">
 
@@ -45,9 +45,10 @@
         <div class="d-flex justify-content-between align-items-start mb-3">
           <div>
             <h5 class="fw-bold mb-1">{{ j.title || 'Untitled Job' }}</h5>
-            <p class="text-secondary mb-0 small">{{ j.description || 'No description' }}</p>
+            <p class="text-muted mb-0 small">{{ j.description || 'No description' }}</p>
           </div>
-          <span class="badge rounded-pill px-3 py-1" [ngClass]="{
+          <span class="badge rounded-pill px-3 py-1"
+                [ngClass]="{
                   'bg-success': j.status === 'OPEN',
                   'bg-info text-dark': j.status === 'IN_PROGRESS' || j.status === 'APPLIED',
                   'bg-danger': j.status === 'CLOSED',
@@ -65,67 +66,81 @@
         </div>
 
         <!-- ═══════════════════════════════ -->
-        <!-- ✅ CLIENT: Job Management       -->
+        <!--  CLIENT: Job Management       -->
         <!-- ═══════════════════════════════ -->
         <div *ngIf="roleName === 'CLIENT'">
 
-          <!-- Action Buttons -->
           <div class="d-flex gap-2 mb-3 flex-wrap">
 
-            <!-- Close/Reopen -->
             <button *ngIf="j.status === 'OPEN' || j.status === 'IN_PROGRESS'"
-              class="btn btn-outline-danger btn-sm rounded-pill" (click)="updateStatus(j, 'CLOSED')">
+                    class="btn btn-outline-danger btn-sm rounded-pill"
+                    (click)="updateStatus(j, 'CLOSED')">
               🔒 Close Job
             </button>
 
-            <button *ngIf="j.status === 'CLOSED'" class="btn btn-outline-success btn-sm rounded-pill"
-              (click)="updateStatus(j, 'OPEN')">
+            <button *ngIf="j.status === 'CLOSED'"
+                    class="btn btn-outline-success btn-sm rounded-pill"
+                    (click)="updateStatus(j, 'OPEN')">
               🔓 Reopen
             </button>
 
-            <button class="btn btn-outline-primary btn-sm rounded-pill" (click)="toggleApplicants(j)">
-              👥 {{ j.showApplicants ? 'Hide' : 'View' }} Applicants
+            <button class="btn btn-outline-primary btn-sm rounded-pill"
+                    (click)="toggleApplicants(j)">
+              💰 {{ j.showApplicants ? 'Hide' : 'View' }} Bids
               <span *ngIf="j.proposals?.length > 0" class="badge bg-danger ms-1">
                 {{ j.proposals.length }}
               </span>
             </button>
 
-            <button class="btn btn-danger btn-sm rounded-pill" (click)="deleteJob(j.id)">
+            <button class="btn btn-danger btn-sm rounded-pill"
+                    (click)="deleteJob(j.id)">
               🗑️ Delete Job
             </button>
           </div>
 
-          <!-- ✅ Applicants Section -->
-          <div *ngIf="j.showApplicants"
-            style="background: #f8f9fa; border-radius: 12px; padding: 16px; margin-top: 8px;">
+          <!--  Bids/Applicants Section -->
+          <div *ngIf="j.showApplicants" class="applicants-section" style="padding: 16px; margin-top: 8px;">
 
-            <h6 class="fw-bold mb-3">👥 Applicants ({{ j.proposals?.length || 0 }})</h6>
+            <h6 class="fw-bold mb-3">💰 Bids ({{ j.proposals?.length || 0 }})</h6>
 
-            <!-- No applicants -->
             <div *ngIf="!j.proposals || j.proposals.length === 0" class="text-muted text-center py-3">
-              No one has applied yet.
+              No bids received yet.
             </div>
 
-            <!-- ✅ Each Applicant -->
-            <div *ngFor="let p of j.proposals"
-              style="background: white; border-radius: 10px; padding: 14px 16px; border: 1px solid #e9ecef; margin-bottom: 12px;">
+            <!-- Each Bid -->
+            <div *ngFor="let p of j.proposals" class="applicant-card" style="padding: 14px 16px; margin-bottom: 12px;">
 
-              <!-- Applicant Header Row -->
-              <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex justify-content-between align-items-start">
 
-                <div>
+                <div style="flex: 1;">
                   <span class="fw-semibold">👤 {{ p.freelancer?.username || 'Unknown' }}</span>
                   <span class="text-muted ms-2 small">📧 {{ p.freelancer?.email || '' }}</span>
-                  <br>
-                  <span class="small text-muted">
-                    📅 Applied: {{ p.appliedAt ? (p.appliedAt | date:'medium') : 'N/A' }}
-                  </span>
+
+                  <!--  Bid Amount -->
+                  <div *ngIf="p.bidAmount" style="margin-top: 8px;">
+                    <span style="color: #10b981; font-weight: 700; font-size: 1.1rem;">
+                      💰 Bid: ${{ p.bidAmount }}
+                    </span>
+                  </div>
+
+                  <!--  Proposal Message -->
+                  <div *ngIf="p.message" style="margin-top: 6px; padding: 8px 12px; background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 3px solid #00f0ff;">
+                    <span style="color: #c4c4d4; font-size: 0.85rem; line-height: 1.5; font-style: italic;">
+                      📝 "{{ p.message }}"
+                    </span>
+                  </div>
+
+                  <div style="margin-top: 6px;">
+                    <span class="small text-muted">
+                      📅 Submitted: {{ p.appliedAt ? (p.appliedAt | date:'medium') : 'N/A' }}
+                    </span>
+                  </div>
                 </div>
 
-                <div class="d-flex gap-2 align-items-center">
+                <div class="d-flex gap-2 align-items-center" style="flex-shrink: 0; margin-left: 12px;">
 
-                  <!-- Status Badge -->
-                  <span class="badge rounded-pill px-2" [ngClass]="{
+                  <span class="badge rounded-pill px-2"
+                        [ngClass]="{
                           'bg-warning text-dark': p.status === 'PENDING' || p.status === 'APPLIED',
                           'bg-success': p.status === 'APPROVED',
                           'bg-danger': p.status === 'REJECTED'
@@ -133,112 +148,94 @@
                     {{ p.status }}
                   </span>
 
-                  <!-- ✅ View Profile Button -->
-                  <button class="btn btn-outline-info btn-sm rounded-pill" (click)="toggleProfile(p)">
+                  <button class="btn btn-outline-info btn-sm rounded-pill"
+                          (click)="toggleProfile(p)">
                     {{ p.showProfile ? '🔽 Hide' : '👤 View' }} Profile
                   </button>
 
-                  <!-- Accept/Reject -->
                   <div *ngIf="p.status === 'PENDING' || p.status === 'APPLIED'">
                     <button class="btn btn-success btn-sm me-1" (click)="acceptProposal(j, p)">
-                      ✅ Accept
+                       Accept
                     </button>
                     <button class="btn btn-outline-danger btn-sm" (click)="rejectProposal(j, p)">
                       ❌ Reject
                     </button>
                   </div>
 
-                  <span *ngIf="p.status === 'APPROVED'" class="text-success fw-bold small">Hired ✅</span>
+                  <span *ngIf="p.status === 'APPROVED'" class="text-success fw-bold small">Hired </span>
                   <span *ngIf="p.status === 'REJECTED'" class="text-danger fw-bold small">Declined</span>
+
                 </div>
 
               </div>
 
-              <!-- ✅ Freelancer Profile Card (expandable) -->
-              <div *ngIf="p.showProfile"
-                style="margin-top: 12px; background: linear-gradient(135deg, #f0f4ff, #e8eaf6); border-radius: 10px; padding: 16px; border: 1px solid #d1d5db;">
+              <!-- Freelancer Profile (expandable) -->
+              <div *ngIf="p.showProfile" class="profile-card-expand" style="margin-top: 12px; padding: 16px;">
 
-                <h6 class="fw-bold mb-3" style="color: #1a73e8;">
+                <h6 class="fw-bold mb-3" style="color: #00f0ff;">
                   📋 {{ p.freelancer?.username }}'s Profile
                 </h6>
 
                 <div class="row">
-
-                  <!-- Left Column -->
                   <div class="col-md-6">
                     <div style="margin-bottom: 10px;">
-                      <span style="font-weight: 600; color: #555; font-size: 0.85rem;">👤 Username</span>
+                      <span class="profile-label">👤 Username</span>
                       <p class="mb-0">{{ p.freelancer?.username || 'N/A' }}</p>
                     </div>
-
                     <div style="margin-bottom: 10px;">
-                      <span style="font-weight: 600; color: #555; font-size: 0.85rem;">📧 Email</span>
+                      <span class="profile-label">📧 Email</span>
                       <p class="mb-0">{{ p.freelancer?.email || 'N/A' }}</p>
                     </div>
-
                     <div style="margin-bottom: 10px;">
-                      <span style="font-weight: 600; color: #555; font-size: 0.85rem;">📞 Contact</span>
+                      <span class="profile-label">📞 Contact</span>
                       <p class="mb-0">{{ p.freelancer?.contactNumber || 'Not provided' }}</p>
                     </div>
                   </div>
-
-                  <!-- Right Column -->
                   <div class="col-md-6">
                     <div style="margin-bottom: 10px;">
-                      <span style="font-weight: 600; color: #555; font-size: 0.85rem;">🛠️ Skills</span>
+                      <span class="profile-label">🛠️ Skills</span>
                       <p class="mb-0">
                         <span *ngIf="p.freelancer?.skills">
-                          <span *ngFor="let skill of p.freelancer.skills.split(',')"
-                            style="display: inline-block; background: #e0e7ff; color: #3730a3; padding: 2px 10px; border-radius: 20px; font-size: 0.8rem; margin: 2px 4px 2px 0;">
+                          <span *ngFor="let skill of p.freelancer.skills.split(',')" class="skill-tag">
                             {{ skill.trim() }}
                           </span>
                         </span>
                         <span *ngIf="!p.freelancer?.skills" class="text-muted">Not provided</span>
                       </p>
                     </div>
-
                     <div style="margin-bottom: 10px;">
-                      <span style="font-weight: 600; color: #555; font-size: 0.85rem;">📝 Bio</span>
-                      <p class="mb-0" style="font-size: 0.9rem; line-height: 1.5;">
+                      <span class="profile-label">📝 Bio</span>
+                      <p class="mb-0" style="font-size: 0.9rem;">
                         {{ p.freelancer?.bio || 'No bio added yet.' }}
                       </p>
                     </div>
                   </div>
-
                 </div>
 
-                <!-- ✅ Quick Assessment -->
-                <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #d1d5db;">
+                <div class="assessment-bar">
                   <div class="d-flex gap-3 flex-wrap">
-                    <span style="font-size: 0.85rem;">
-                      <strong>🏷️ Role:</strong> {{ p.freelancer?.role || 'FREELANCER' }}
-                    </span>
-                    <span style="font-size: 0.85rem;">
-                      <strong>📅 Applied:</strong> {{ p.appliedAt ? (p.appliedAt | date:'mediumDate') : 'N/A' }}
-                    </span>
-                    <span *ngIf="p.freelancer?.skills" style="font-size: 0.85rem;">
-                      <strong>🔢 Skills:</strong> {{ p.freelancer.skills.split(',').length }} listed
-                    </span>
+                    <span><strong>🏷️ Role:</strong> {{ p.freelancer?.role || 'FREELANCER' }}</span>
+                    <span><strong>📅 Bid Date:</strong> {{ p.appliedAt ? (p.appliedAt | date:'mediumDate') : 'N/A' }}</span>
+                    <span *ngIf="p.freelancer?.skills"><strong>🔢 Skills:</strong> {{ p.freelancer.skills.split(',').length }} listed</span>
                   </div>
                 </div>
 
               </div>
-
             </div>
           </div>
-
         </div>
 
         <!-- ═══════════════════════════════ -->
-        <!-- ✅ FREELANCER: Accept/Reject    -->
+        <!--  FREELANCER: Accept/Reject    -->
         <!-- ═══════════════════════════════ -->
         <div *ngIf="roleName !== 'CLIENT'">
           <div *ngIf="j.status === 'APPLIED'" class="d-flex gap-2">
-            <button class="btn btn-success btn-sm flex-grow-1 rounded-pill" (click)="updateStatus(j.id, 'ACCEPTED')">
-              ✅ Accept
+            <button class="btn btn-success btn-sm flex-grow-1 rounded-pill"
+                    (click)="updateStatus(j, 'ACCEPTED')">
+               Accept
             </button>
             <button class="btn btn-outline-danger btn-sm flex-grow-1 rounded-pill"
-              (click)="updateStatus(j.id, 'REJECTED')">
+                    (click)="updateStatus(j, 'REJECTED')">
               ❌ Reject
             </button>
           </div>

@@ -1,1 +1,97 @@
+<!-- ✅ Navbar (only when logged in) -->
+<nav *ngIf="isLoggedIn()"
+     style="position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 12px 24px; background: rgba(10, 10, 26, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.06);">
+
+  <!-- ✅ Brand -->
+  <a [routerLink]="isLoggedIn() ? (role === 'ADMIN' ? '/dashboard' : role === 'CLIENT' ? '/dashboard' : '/dashboard') : '/landing'"
+     style="text-decoration: none; font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 6px; color: #ffffff; cursor: pointer;">
+    <span style="color: #00f0ff; filter: drop-shadow(0 0 6px rgba(0,240,255,0.4)); font-size: 1.1rem;">⬡</span>
+    SkillForge
+  </a>
+
+  <!-- ✅ Nav Links -->
+  <div style="display: flex; align-items: center; gap: 6px;">
+
+    <!-- ADMIN -->
+    <a *ngIf="role === 'ADMIN'" routerLink="/users" routerLinkActive="active-link"
+       style="padding: 6px 14px; border-radius: 8px; color: #8a8aa3; text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;"
+       onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.color='#ffffff'"
+       onmouseout="this.style.background='transparent'; this.style.color='#8a8aa3'">
+      👥 Users
+    </a>
+    <a *ngIf="role === 'ADMIN'" routerLink="/job-list" routerLinkActive="active-link"
+       style="padding: 6px 14px; border-radius: 8px; color: #8a8aa3; text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;"
+       onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.color='#ffffff'"
+       onmouseout="this.style.background='transparent'; this.style.color='#8a8aa3'">
+      💼 Jobs
+    </a>
+    <a *ngIf="role === 'ADMIN'" routerLink="/reports" routerLinkActive="active-link"
+       style="padding: 6px 14px; border-radius: 8px; color: #8a8aa3; text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;"
+       onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.color='#ffffff'"
+       onmouseout="this.style.background='transparent'; this.style.color='#8a8aa3'">
+      📊 Reports
+    </a>
+
+    <!-- CLIENT -->
+    <a *ngIf="role === 'CLIENT'" routerLink="/job-create" routerLinkActive="active-link"
+       style="padding: 6px 14px; border-radius: 8px; color: #8a8aa3; text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;"
+       onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.color='#ffffff'"
+       onmouseout="this.style.background='transparent'; this.style.color='#8a8aa3'">
+      ➕ Post Job
+    </a>
+    <a *ngIf="role === 'CLIENT'" routerLink="/job-list" routerLinkActive="active-link"
+       style="padding: 6px 14px; border-radius: 8px; color: #8a8aa3; text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;"
+       onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.color='#ffffff'"
+       onmouseout="this.style.background='transparent'; this.style.color='#8a8aa3'">
+      💼 View Jobs
+    </a>
+    <a *ngIf="role === 'CLIENT'" routerLink="/my-job" routerLinkActive="active-link"
+       style="padding: 6px 14px; border-radius: 8px; color: #8a8aa3; text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;"
+       onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.color='#ffffff'"
+       onmouseout="this.style.background='transparent'; this.style.color='#8a8aa3'">
+      📁 My Jobs
+    </a>
+
+    <!-- FREELANCER -->
+    <a *ngIf="role === 'FREELANCER'" routerLink="/job-list" routerLinkActive="active-link"
+       style="padding: 6px 14px; border-radius: 8px; color: #8a8aa3; text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;"
+       onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.color='#ffffff'"
+       onmouseout="this.style.background='transparent'; this.style.color='#8a8aa3'">
+      🔍 Browse Jobs
+    </a>
+    <a *ngIf="role === 'FREELANCER'" routerLink="/my-proposals" routerLinkActive="active-link"
+       style="padding: 6px 14px; border-radius: 8px; color: #8a8aa3; text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;"
+       onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.color='#ffffff'"
+       onmouseout="this.style.background='transparent'; this.style.color='#8a8aa3'">
+      📝 My Proposals
+    </a>
+
+    <!-- Common: Profile -->
+    <a routerLink="/my-profile" routerLinkActive="active-link"
+       style="padding: 6px 14px; border-radius: 8px; color: #8a8aa3; text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;"
+       onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.color='#ffffff'"
+       onmouseout="this.style.background='transparent'; this.style.color='#8a8aa3'">
+      👤 Profile
+    </a>
+
+  </div>
+
+  <!-- ✅ Right: Role Badge + Logout -->
+  <div style="display: flex; align-items: center; gap: 12px;">
+
+    <span style="background: linear-gradient(135deg, #7b2ff7, #00f0ff); color: #0a0a1a; padding: 4px 14px; border-radius: 20px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">
+      {{ role }}
+    </span>
+
+    <button (click)="logout()"
+            style="padding: 6px 16px; border-radius: 8px; border: 1px solid rgba(255,45,149,0.4); background: transparent; color: #ff2d95; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s;"
+            onmouseover="this.style.background='rgba(255,45,149,0.1)'"
+            onmouseout="this.style.background='transparent'">
+      🚪 Logout
+    </button>
+
+  </div>
+
+</nav>
+
 <router-outlet></router-outlet>

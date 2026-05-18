@@ -43,7 +43,7 @@ public class JobController {
         return ResponseEntity.ok(jobService.getJobById(id));
     }
 
-    //  FIXED: Update Job Status (returns String as expected by tests)
+    //   FIXED: Update Job Status (returns String as expected by tests)
     @PutMapping("/status/{jobId}")
     public ResponseEntity<String> updateJobStatus(@PathVariable Long jobId,
             @RequestParam String status) {
