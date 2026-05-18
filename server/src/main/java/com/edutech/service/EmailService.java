@@ -14,7 +14,7 @@ public class EmailService {
     public void sendOtp(String to, String otp) {
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setTo(to);
-        msg.setSubject("Your EduTech OTP");
+        msg.setSubject("Your SkillForge OTP");
         msg.setText("Your OTP is: " + otp + "\nIt is valid for 5 minutes.");
         mailSender.send(msg);
     }
