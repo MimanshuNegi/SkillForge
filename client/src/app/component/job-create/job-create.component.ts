@@ -30,7 +30,7 @@ export class JobCreateComponent implements OnInit {
   ngOnInit(): void {
     this.clientId =
       (this.auth as any).getUserId?.() ??
-      Number(localStorage.getItem('userId') || 0);
+      Number(sessionStorage.getItem('userId') || 0);
   }
 
   onSubmit(): void {

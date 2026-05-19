@@ -13,7 +13,7 @@ export class ProposalService {
   constructor(@Optional() private http?: HttpClient, @Optional() private authService?: AuthService) {}
 
   private getHeaders(): HttpHeaders {
-    const token = this.authService?.getToken?.() || localStorage.getItem('token');
+    const token = this.authService?.getToken?.() || sessionStorage.getItem('token');
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     if (token) headers = headers.set('Authorization', `Bearer ${token}`);
     return headers;

@@ -13,7 +13,7 @@ export class AuthService {
   private token: string | null = null;
   private baseUrl: string = environment.apiUrl;
 
-  constructor(@Optional() private http?: HttpClient) {}
+  constructor(@Optional() private http?: HttpClient) { }
 
   private getAuthHeaders(): HttpHeaders {
     const token = this.getToken();
@@ -80,7 +80,7 @@ export class AuthService {
         }
 
         if (res.username) {
-          localStorage.setItem('username', res.username);
+          sessionStorage.setItem('username', res.username);
         }
       })
     );
@@ -89,28 +89,28 @@ export class AuthService {
   //   TOKEN MANAGEMENT
   saveToken(token: string): void {
     this.token = token;
-    localStorage.setItem('token', token);
+    sessionStorage.setItem('token', token);
   }
 
   getToken(): string | null {
-    return this.token || localStorage.getItem('token');
+    return this.token || sessionStorage.getItem('token');
   }
 
   setRole(role: Role): void {
-    localStorage.setItem('role', role);
+    sessionStorage.setItem('role', role);
   }
 
   getRole(): Role | null {
-    const role = localStorage.getItem('role');
+    const role = sessionStorage.getItem('role');
     return role ? (role as Role) : null;
   }
 
   saveUserId(userId: number): void {
-    localStorage.setItem('userId', String(userId));
+    sessionStorage.setItem('userId', String(userId));
   }
 
   getUserId(): number | null {
-    const val = localStorage.getItem('userId');
+    const val = sessionStorage.getItem('userId');
     return val ? Number(val) : null;
   }
 
@@ -120,10 +120,10 @@ export class AuthService {
 
   logout(): void {
     this.token = null;
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('username');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('role');
+    sessionStorage.removeItem('userId');
+    sessionStorage.removeItem('username');
   }
 
   //   ROLE HELPERS
@@ -186,7 +186,7 @@ export class AuthService {
       { headers: this.getAuthHeaders() }
     );
   }
-  // ✅ Check if username is taken (no auth needed)
+  //  Check if username is taken (no auth needed)
   checkUsername(username: string): Observable<{ exists: boolean }> {
     if (!this.http) throw new Error('HttpClient not available');
 
@@ -195,7 +195,7 @@ export class AuthService {
     );
   }
 
-  // ✅ Check if email is taken (no auth needed)
+  //  Check if email is taken (no auth needed)
   checkEmail(email: string): Observable<{ exists: boolean }> {
     if (!this.http) throw new Error('HttpClient not available');
 
@@ -203,4 +203,53 @@ export class AuthService {
       `${this.baseUrl}/api/auth/check-email?email=${encodeURIComponent(email)}`
     );
   }
+
+  //  Registration OTP — Step 1: Validate + Send OTP
+  registerSendOtp(user: User): Observable<any> {
+    if (!this.http) throw new Error('HttpClient not available');
+
+    return this.http.post(
+      `${this.baseUrl}/api/auth/register/send-otp`,
+      user,
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+      }
+    );
+  }
+
+  //  Registration OTP — Step 2: Verify OTP + Create User
+  registerVerifyOtp(userData: any, otp: string): Observable<any> {
+    if (!this.http) throw new Error('HttpClient not available');
+
+    return this.http.post(
+      `${this.baseUrl}/api/auth/register/verify-otp`,
+      { ...userData, otp },
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+      }
+    );
+  }
+
+  //  Forgot Password — Step 1: Send OTP
+forgotPasswordSendOtp(username: string): Observable<any> {
+  if (!this.http) throw new Error('HttpClient not available');
+
+  return this.http.post(
+    `${this.baseUrl}/api/auth/forgot-password/send-otp`,
+    { username },
+    { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+  );
+}
+
+//  Forgot Password — Step 2: Verify OTP + Reset Password
+forgotPasswordReset(username: string, otp: string, newPassword: string): Observable<any> {
+  if (!this.http) throw new Error('HttpClient not available');
+
+  return this.http.post(
+    `${this.baseUrl}/api/auth/forgot-password/reset`,
+    { username, otp, newPassword },
+    { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+  );
+}
+
 }

@@ -33,7 +33,7 @@ export class ProfileComponent implements OnInit {
     this.roleName = this.auth.getRole();
 
     const fromService = (this.auth as any).getUserId?.() ?? null;
-    const stored = localStorage.getItem('userId');
+    const stored = sessionStorage.getItem('userId');
     const fromStorage = stored !== null ? Number(stored) : null;
     const userId = (fromService ?? fromStorage ?? 1);
 
@@ -89,26 +89,40 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  saveProfile(): void {
-    const userId = this.profile?.id;
-    if (!userId) return;
+ saveProfile(): void {
+  const userId = this.profile?.id;
+  if (!userId) return;
 
-    this.auth.updateUser(userId, this.editForm).subscribe({
-      next: (res: any) => {
-        this.profile = res;
-        this.isEditing = false;
-        this.successMessage = '  Profile updated successfully!';
-        this.errorMessage = '';
-        if (res.username) {
-          localStorage.setItem('username', res.username);
-        }
-        setTimeout(() => { this.successMessage = ''; }, 3000);
-      },
-      error: (err: any) => {
+  this.auth.updateUser(userId, this.editForm).subscribe({
+    next: (res: any) => {
+      this.profile = res;
+      this.isEditing = false;
+      this.successMessage = '✅ Profile updated successfully!';
+      this.errorMessage = '';
+
+      //  Save fresh token (so JWT matches new username)
+      if (res.token) {
+        this.auth.saveToken(res.token);
+      }
+
+      if (res.username) {
+        sessionStorage.setItem('username', res.username);
+      }
+
+      setTimeout(() => { this.successMessage = ''; }, 3000);
+    },
+    error: (err: any) => {
+      //  Show specific error messages
+      if (err?.status === 409) {
+        this.errorMessage = err?.error?.message || 'Username or email already taken.';
+      } else if (err?.status === 0) {
+        this.errorMessage = 'Server not reachable.';
+      } else {
         this.errorMessage = 'Failed to update profile. Please try again.';
       }
-    });
-  }
+    }
+  });
+}
 
   cancelEdit(): void {
     this.isEditing = false;

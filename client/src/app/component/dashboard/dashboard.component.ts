@@ -17,8 +17,8 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.roleName = this.auth.getRole();
 
-    // Try to get username from localStorage
-    this.username = localStorage.getItem('username') || 'User';
+    // Try to get username from sessionStorage
+    this.username = sessionStorage.getItem('username') || 'User';
   }
 
   logout(): void {

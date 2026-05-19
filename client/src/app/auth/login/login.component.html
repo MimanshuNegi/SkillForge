@@ -4,26 +4,47 @@
     <!-- LEFT SIDE -->
     <div class="left-side">
 
-      <h2>Welcome Back 👋</h2>
-      <p class="subtitle">Login to continue</p>
 
-      <!--   INFO -->
-      <div class="info-message" *ngIf="infoMessage">
-          {{ infoMessage }}
+      <div class="top-nav">
+        <a class="brand-badge">⚡ SkillForge</a>
+        <a class="home-link" routerLink="/">🏠 Home</a>
       </div>
 
-      <!-- ❗ ERROR -->
+      <h2 *ngIf="currentStep === 'login'">Welcome Back 👋</h2>
+      <h2 *ngIf="currentStep === 'otp'">Verify Identity 📱</h2>
+      <h2 *ngIf="currentStep.startsWith('forgot')">Reset Password 🔑</h2>
+
+      <p class="subtitle" *ngIf="currentStep === 'login'">Login to continue to your dashboard</p>
+      <p class="subtitle" *ngIf="currentStep === 'otp'">One more step to secure your account</p>
+      <p class="subtitle" *ngIf="currentStep === 'forgot-username'">Enter your username to receive a reset code</p>
+      <p class="subtitle" *ngIf="currentStep === 'forgot-otp'">Enter the OTP sent to your email</p>
+      <p class="subtitle" *ngIf="currentStep === 'forgot-reset'">Create a new secure password</p>
+
+      <!--  Success -->
+      <div class="success-message" *ngIf="successMessage">
+        <span class="msg-icon">🎉</span>
+        {{ successMessage }}
+      </div>
+
+      <!-- ℹ️ Info -->
+      <div class="info-message" *ngIf="infoMessage">
+        <span class="msg-icon">✉️</span>
+        {{ infoMessage }}
+      </div>
+
+      <!-- ❗ Error -->
       <div class="error-message" *ngIf="errorMessage">
+        <span class="msg-icon">⚠️</span>
         {{ errorMessage }}
       </div>
 
-      <!-- ========================== -->
-      <!-- 🔐 STEP 1: PASSWORD LOGIN -->
-      <!-- ========================== -->
-      <form *ngIf="!otpStage" [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      <!-- ══════════════════════════════ -->
+      <!-- 🔐 STEP: LOGIN (credentials)  -->
+      <!-- ══════════════════════════════ -->
+      <form *ngIf="currentStep === 'login'" [formGroup]="loginForm" (ngSubmit)="onLogin()" class="fade-in">
 
         <div class="form-group">
-          <label>Username</label>
+          <label>👤 Username</label>
           <input type="text" formControlName="username" placeholder="Enter username" />
           <small *ngIf="f['username']?.touched && f['username']?.invalid">
             Username is required
@@ -33,7 +54,7 @@
         <div class="form-group password-wrapper">
           <label>🔒 Password</label>
           <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Enter password" />
-          <span (click)="showPassword = !showPassword">
+          <span class="toggle-pwd" (click)="showPassword = !showPassword">
             {{ showPassword ? '🙈 Hide' : '👁️ Show' }}
           </span>
           <small *ngIf="f['password']?.touched && f['password']?.invalid">
@@ -41,32 +62,40 @@
           </small>
         </div>
 
+        <!--  Forgot Password Link -->
+        <div class="forgot-link">
+          <a (click)="goToForgotPassword()">Forgot Password?</a>
+        </div>
+
         <button type="submit" [disabled]="loginForm.invalid || isLoading">
-          {{ isLoading ? 'Checking...' : 'Continue' }}
+          <span class="btn-content">
+            {{ isLoading ? '⏳ Checking...' : '🚀 Continue' }}
+          </span>
         </button>
       </form>
 
-      <!-- ========================== -->
-      <!-- 📱 STEP 2: OTP VERIFY -->
-      <!-- ========================== -->
-      <form *ngIf="otpStage" [formGroup]="otpForm" (ngSubmit)="verifyOtp()">
+      <!-- ══════════════════════════════ -->
+      <!-- 📱 STEP: LOGIN OTP            -->
+      <!-- ══════════════════════════════ -->
+      <form *ngIf="currentStep === 'otp'" [formGroup]="otpForm" (ngSubmit)="verifyOtp()" class="fade-in">
 
         <div class="otp-header">
+          <div class="otp-icon-circle">📱</div>
           <h3>Enter OTP</h3>
           <p class="otp-subtitle">
             We sent a 6-digit code to your registered email
-            <span *ngIf="maskedEmail">({{ maskedEmail }})</span>
+            <strong *ngIf="maskedEmail">({{ maskedEmail }})</strong>
           </p>
         </div>
 
         <div class="form-group">
-          <label>Username</label>
+          <label>👤 Username</label>
           <input type="text" formControlName="username" readonly />
         </div>
 
         <div class="form-group">
-          <label>🔢 OTP</label>
-          <input type="text" formControlName="otp" maxlength="6" autocomplete="one-time-code" placeholder="------"
+          <label>🔢 Enter OTP</label>
+          <input type="text" formControlName="otp" maxlength="6" autocomplete="one-time-code" placeholder="• • • • • •"
             class="otp-input" />
           <small *ngIf="o['otp']?.touched && o['otp']?.invalid">
             Enter a valid 6-digit OTP
@@ -74,30 +103,187 @@
         </div>
 
         <div class="otp-meta">
-          <span *ngIf="otpTimer > 0" class="otp-timer">
-            ⏱ Expires in {{ formattedTimer }}
-          </span>
-          <span *ngIf="otpTimer === 0" class="otp-expired">
-            OTP expired — please resend
-          </span>
+          <span *ngIf="otpTimer > 0" class="otp-timer">⏱ Expires in {{ formattedTimer }}</span>
+          <span *ngIf="otpTimer === 0" class="otp-expired">⏰ OTP expired — please resend</span>
         </div>
 
         <button type="submit" [disabled]="otpForm.invalid || isLoading">
-          {{ isLoading ? 'Verifying...' : 'Verify & Login' }}
+          <span class="btn-content">
+            {{ isLoading ? '⏳ Verifying...' : '✅ Verify & Login' }}
+          </span>
         </button>
 
         <div class="otp-actions">
           <button type="button" class="link-btn" (click)="resendOtp()" [disabled]="isLoading">
-            Resend OTP
+            🔁 Resend OTP
+          </button>
+          <button type="button" class="link-btn danger" (click)="backToLogin()">
+            ← Back
           </button>
         </div>
+      </form>
 
+      <!-- ═══════════════════════════════════ -->
+      <!-- 🔑 FORGOT STEP 1: Enter Username   -->
+      <!-- ═══════════════════════════════════ -->
+      <form *ngIf="currentStep === 'forgot-username'" [formGroup]="forgotUsernameForm" (ngSubmit)="forgotSendOtp()"
+        class="fade-in">
+
+        <div class="otp-header">
+          <div class="otp-icon-circle">🔑</div>
+          <h3>Forgot Password</h3>
+          <p class="otp-subtitle">Enter your username and we'll send a reset code to your email</p>
+        </div>
+
+        <div class="form-group">
+          <label>👤 Username</label>
+          <input type="text" formControlName="username" placeholder="Enter your username" />
+          <small *ngIf="forgotUsernameForm.get('username')?.touched &&
+                        forgotUsernameForm.get('username')?.invalid">
+            Username is required
+          </small>
+        </div>
+
+        <button type="submit" [disabled]="forgotUsernameForm.invalid || isLoading">
+          <span class="btn-content">
+            {{ isLoading ? '⏳ Sending...' : '📧 Send Reset Code' }}
+          </span>
+        </button>
+
+        <div class="otp-actions">
+          <button type="button" class="link-btn danger" (click)="backToLogin()">
+            ← Back to Login
+          </button>
+        </div>
+      </form>
+
+      <!-- ═══════════════════════════════════ -->
+      <!-- 🔑 FORGOT STEP 2: Verify OTP       -->
+      <!-- ═══════════════════════════════════ -->
+      <form *ngIf="currentStep === 'forgot-otp'" [formGroup]="forgotOtpForm" (ngSubmit)="forgotVerifyOtp()"
+        class="fade-in">
+
+        <div class="otp-header">
+          <div class="otp-icon-circle">📧</div>
+          <h3>Enter Reset Code</h3>
+          <p class="otp-subtitle">
+            We sent a 6-digit code to
+            <strong *ngIf="maskedEmail">{{ maskedEmail }}</strong>
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label>🔢 Enter OTP</label>
+          <input type="text" formControlName="otp" maxlength="6" autocomplete="one-time-code" placeholder="• • • • • •"
+            class="otp-input" />
+          <small *ngIf="forgotOtpForm.get('otp')?.touched && forgotOtpForm.get('otp')?.invalid">
+            Enter a valid 6-digit OTP
+          </small>
+        </div>
+
+        <div class="otp-meta">
+          <span *ngIf="otpTimer > 0" class="otp-timer">⏱ Expires in {{ formattedTimer }}</span>
+          <span *ngIf="otpTimer === 0" class="otp-expired">⏰ OTP expired — please resend</span>
+        </div>
+
+        <button type="submit" [disabled]="forgotOtpForm.invalid || isLoading">
+          <span class="btn-content">✅ Verify Code</span>
+        </button>
+
+        <div class="otp-actions">
+          <button type="button" class="link-btn" (click)="forgotResendOtp()" [disabled]="isLoading">
+            🔁 Resend Code
+          </button>
+          <button type="button" class="link-btn danger" (click)="backToLogin()">
+            ← Back to Login
+          </button>
+        </div>
+      </form>
+
+      <!-- ═══════════════════════════════════ -->
+      <!-- 🔑 FORGOT STEP 3: New Password     -->
+      <!-- ═══════════════════════════════════ -->
+      <form *ngIf="currentStep === 'forgot-reset'" [formGroup]="forgotResetForm" (ngSubmit)="forgotResetPassword()"
+        class="fade-in">
+
+        <div class="otp-header">
+          <div class="otp-icon-circle">🔐</div>
+          <h3>Create New Password</h3>
+          <p class="otp-subtitle">Choose a strong password for your account</p>
+        </div>
+
+        <!-- New Password -->
+        <div class="form-group password-wrapper">
+          <label>🔒 New Password</label>
+          <input [type]="showNewPassword ? 'text' : 'password'" formControlName="newPassword"
+            placeholder="Min 8 chars, uppercase, number, special" />
+          <span class="toggle-pwd" (click)="showNewPassword = !showNewPassword">
+            {{ showNewPassword ? '🙈 Hide' : '👁️ Show' }}
+          </span>
+        </div>
+
+        <!-- Password Checklist -->
+        <div class="password-checklist" *ngIf="newPasswordValue.length > 0">
+          <div class="check-item" [class.valid]="rpHasMinLength" [class.invalid]="!rpHasMinLength">
+            <span class="check-icon">{{ rpHasMinLength ? '✅' : '❌' }}</span>
+            <span>At least 8 characters</span>
+          </div>
+          <div class="check-item" [class.valid]="rpHasUppercase" [class.invalid]="!rpHasUppercase">
+            <span class="check-icon">{{ rpHasUppercase ? '✅' : '❌' }}</span>
+            <span>One uppercase letter (A-Z)</span>
+          </div>
+          <div class="check-item" [class.valid]="rpHasLowercase" [class.invalid]="!rpHasLowercase">
+            <span class="check-icon">{{ rpHasLowercase ? '✅' : '❌' }}</span>
+            <span>One lowercase letter (a-z)</span>
+          </div>
+          <div class="check-item" [class.valid]="rpHasNumber" [class.invalid]="!rpHasNumber">
+            <span class="check-icon">{{ rpHasNumber ? '✅' : '❌' }}</span>
+            <span>One number (0-9)</span>
+          </div>
+          <div class="check-item" [class.valid]="rpHasSpecial" [class.invalid]="!rpHasSpecial">
+            <span class="check-icon">{{ rpHasSpecial ? '✅' : '❌' }}</span>
+            <span>One special character</span>
+          </div>
+        </div>
+
+        <!-- Strength Bar -->
+        <div class="password-strength" *ngIf="newPasswordValue.length > 0">
+          <div class="strength-bar">
+            <div class="strength-fill" [style.width]="rpStrengthWidth" [style.background]="rpStrengthColor"></div>
+          </div>
+          <small class="strength-text" [style.color]="rpStrengthColor">{{ rpStrengthLabel }}</small>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="form-group" style="margin-top: 18px;">
+          <label>🔒 Confirm Password</label>
+          <input type="password" formControlName="confirmPassword" placeholder="Re-enter your password" />
+          <small *ngIf="forgotResetForm.get('confirmPassword')?.dirty && !passwordsMatch" class="mismatch-error">
+            Passwords do not match
+          </small>
+          <small *ngIf="forgotResetForm.get('confirmPassword')?.dirty && passwordsMatch && newPasswordValue.length > 0"
+            class="match-success">
+             Passwords match
+          </small>
+        </div>
+
+        <button type="submit" [disabled]="forgotResetForm.invalid || !passwordsMatch || isLoading">
+          <span class="btn-content">
+            {{ isLoading ? '⏳ Resetting...' : '🔐 Reset Password' }}
+          </span>
+        </button>
+
+        <div class="otp-actions">
+          <button type="button" class="link-btn danger" (click)="backToLogin()">
+            ← Back to Login
+          </button>
+        </div>
       </form>
 
       <!-- REGISTER LINK -->
       <div class="register-link">
-        <span>Don’t have an account?</span>
-        <a routerLink="/register">Register</a>
+        <span>Don't have an account?</span>
+        <a routerLink="/register">Create one →</a>
       </div>
 
     </div>
@@ -105,6 +291,13 @@
     <!-- RIGHT SIDE -->
     <div class="right-side">
       <div class="overlay-shape"></div>
+      <div class="floating-icon icon1">🔐</div>
+      <div class="floating-icon icon2">💼</div>
+      <div class="floating-icon icon3">⚡</div>
+      <div class="right-text">
+        <h3>Secure Login</h3>
+        <p>2-Factor Authentication Enabled</p>
+      </div>
     </div>
 
   </div>

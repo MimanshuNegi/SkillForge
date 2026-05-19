@@ -18,7 +18,7 @@ export class MyJobComponent implements OnInit {
   ngOnInit(): void {
     this.roleName = this.auth.getRole();
 
-    const stored = localStorage.getItem('userId');
+    const stored = sessionStorage.getItem('userId');
     const fromStorage = stored !== null ? Number(stored) : null;
     const fromService = (this.auth as any).getUserId?.() ?? null;
     const userId = (fromStorage ?? fromService ?? 1);

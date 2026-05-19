@@ -1,15 +1,20 @@
 <div class="auth-wrapper">
-
   <div class="auth-card">
 
-    <!-- LEFT SIDE (FORM) -->
+    <!-- LEFT SIDE -->
     <div class="left-side">
 
-      <h2>📝 SKILLFORGE Registration</h2>
-      <p class="subtitle">Create your account and get started</p>
+     
+      <div class="top-nav">
+        <a class="brand-badge">⚡ SkillForge</a>
+        <a class="home-link" routerLink="/">🏠 Home</a>
+      </div>
+      <h2>Create Account 📝</h2>
+      <p class="subtitle">Join SkillForge and get started</p>
+      <a class="back-link" routerLink="/login">← Back to Login</a>
 
       <!--  Success Message -->
-      <div class="success-message" *ngIf="successMessage">
+      <div class="info-message" *ngIf="successMessage">
         {{ successMessage }}
         <div class="progress-bar-wrapper">
           <div class="progress-bar-track">
@@ -18,27 +23,30 @@
         </div>
       </div>
 
-      <!--  Error Message -->
+      <!-- ℹ️ Info Message (OTP sent) -->
+      <div class="info-message" *ngIf="infoMessage && !successMessage">
+        {{ infoMessage }}
+      </div>
+
+      <!-- ❗ Error Message -->
       <div class="error-message" *ngIf="errorMessage">
         {{ errorMessage }}
       </div>
 
-      <!-- Form -->
-      <form [formGroup]="freelancerForm" (ngSubmit)="onSubmit()" *ngIf="!successMessage">
+      <!-- ═══════════════════════════ -->
+      <!-- 📋 STEP 1: REGISTRATION FORM -->
+      <!-- ═══════════════════════════ -->
+      <form [formGroup]="freelancerForm" (ngSubmit)="onSubmit()" *ngIf="!otpStage && !successMessage">
 
-        <!-- ✅ Username (with async validation) -->
+        <!-- Username -->
         <div class="form-group">
-          <label>👤 User Name</label>
+          <label>Username</label>
           <div class="input-with-status">
             <input type="text" formControlName="username" placeholder="Enter your username" />
-            <!-- ✅ Loading spinner while checking -->
             <span class="input-status checking" *ngIf="f['username']?.pending">⏳</span>
-            <!-- ✅ Available -->
             <span class="input-status available"
               *ngIf="f['username']?.valid && f['username']?.dirty && !f['username']?.pending">✅</span>
-            <!-- ✅ Taken -->
-            <span class="input-status taken"
-              *ngIf="f['username']?.hasError('usernameTaken')">❌</span>
+            <span class="input-status taken" *ngIf="f['username']?.hasError('usernameTaken')">❌</span>
           </div>
           <small *ngIf="f['username']?.touched && f['username']?.hasError('required')">
             Username is required
@@ -50,23 +58,19 @@
             Only letters, numbers and underscore allowed
           </small>
           <small class="taken-error" *ngIf="f['username']?.hasError('usernameTaken')">
-            ⚠️ Username is already taken
+            Username is already taken
           </small>
         </div>
 
-        <!-- ✅ Email (with async validation) -->
+        <!-- Email -->
         <div class="form-group">
-          <label>📧 Email</label>
+          <label>Email</label>
           <div class="input-with-status">
             <input type="email" formControlName="email" placeholder="Enter your email" />
-            <!-- ✅ Loading spinner while checking -->
             <span class="input-status checking" *ngIf="f['email']?.pending">⏳</span>
-            <!-- ✅ Available -->
             <span class="input-status available"
               *ngIf="f['email']?.valid && f['email']?.dirty && !f['email']?.pending">✅</span>
-            <!-- ✅ Taken -->
-            <span class="input-status taken"
-              *ngIf="f['email']?.hasError('emailTaken')">❌</span>
+            <span class="input-status taken" *ngIf="f['email']?.hasError('emailTaken')">❌</span>
           </div>
           <small *ngIf="f['email']?.touched && f['email']?.hasError('required')">
             Email is required
@@ -75,41 +79,38 @@
             Valid email is required
           </small>
           <small class="taken-error" *ngIf="f['email']?.hasError('emailTaken')">
-            ⚠️ Email is already registered
+            Email is already registered
           </small>
         </div>
 
-        <!-- Password (UNCHANGED) -->
-        <div class="form-group">
+        <!-- Password -->
+        <div class="form-group password-wrapper">
           <label>🔒 Password</label>
-          <div style="position: relative;">
-            <input [type]="showPassword ? 'text' : 'password'" formControlName="password"
-              placeholder="Min 8 chars, uppercase, number, special" style="padding-right: 60px;" />
-            <span (click)="showPassword = !showPassword"
-              style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #8a8aa3; font-size: 0.8rem; font-weight: 600; user-select: none;">
-              {{ showPassword ? '🙈 Hide' : '👁️ Show' }}
-            </span>
-          </div>
+          <input [type]="showPassword ? 'text' : 'password'" formControlName="password"
+            placeholder="Min 8 chars, uppercase, number, special" />
+          <span (click)="showPassword = !showPassword">
+            {{ showPassword ? '🙈 Hide' : '👁️ Show' }}
+          </span>
 
           <div class="password-checklist" *ngIf="passwordValue.length > 0">
             <div class="check-item" [class.valid]="hasMinLength" [class.invalid]="!hasMinLength">
-              <span class="check-icon">{{ hasMinLength ? ' ' : '❌' }}</span>
+              <span class="check-icon">{{ hasMinLength ? '✅' : '❌' }}</span>
               <span>At least 8 characters</span>
             </div>
             <div class="check-item" [class.valid]="hasUppercase" [class.invalid]="!hasUppercase">
-              <span class="check-icon">{{ hasUppercase ? ' ' : '❌' }}</span>
+              <span class="check-icon">{{ hasUppercase ? '✅' : '❌' }}</span>
               <span>One uppercase letter (A-Z)</span>
             </div>
             <div class="check-item" [class.valid]="hasLowercase" [class.invalid]="!hasLowercase">
-              <span class="check-icon">{{ hasLowercase ? ' ' : '❌' }}</span>
+              <span class="check-icon">{{ hasLowercase ? '✅' : '❌' }}</span>
               <span>One lowercase letter (a-z)</span>
             </div>
             <div class="check-item" [class.valid]="hasNumber" [class.invalid]="!hasNumber">
-              <span class="check-icon">{{ hasNumber ? ' ' : '❌' }}</span>
+              <span class="check-icon">{{ hasNumber ? '✅' : '❌' }}</span>
               <span>One number (0-9)</span>
             </div>
             <div class="check-item" [class.valid]="hasSpecialChar" [class.invalid]="!hasSpecialChar">
-              <span class="check-icon">{{ hasSpecialChar ? ' ' : '❌' }}</span>
+              <span class="check-icon">{{ hasSpecialChar ? '✅' : '❌' }}</span>
               <span>One special character</span>
             </div>
           </div>
@@ -117,8 +118,7 @@
           <div class="password-strength" *ngIf="passwordValue.length > 0">
             <div class="strength-bar">
               <div class="strength-fill" [style.width]="passwordStrengthWidth"
-                [style.background]="passwordStrengthColor">
-              </div>
+                [style.background]="passwordStrengthColor"></div>
             </div>
             <small class="strength-text" [style.color]="passwordStrengthColor">
               {{ passwordStrengthLabel }}
@@ -130,9 +130,9 @@
           </div>
         </div>
 
-        <!-- Contact Number (UNCHANGED) -->
+        <!-- Contact Number -->
         <div class="form-group">
-          <label>📞 Contact Number</label>
+          <label>Contact Number</label>
           <input type="text" formControlName="contactNumber" placeholder="Enter 10 digit number" maxlength="10" />
           <div *ngIf="f['contactNumber']?.touched && f['contactNumber']?.invalid" class="validation-errors">
             <small *ngIf="f['contactNumber']?.errors?.['required']">Contact number is required</small>
@@ -140,49 +140,93 @@
           </div>
         </div>
 
-        <!-- Role (UNCHANGED) -->
+        <!-- Role -->
         <div class="form-group">
-          <label>🏷️ Role</label>
+          <label>Role</label>
           <select formControlName="role">
             <option value="">Select Role</option>
             <option value="ADMIN">🛡️ ADMIN</option>
             <option value="CLIENT">💼 CLIENT</option>
             <option value="FREELANCER">🛠️ FREELANCER</option>
           </select>
-          <small *ngIf="f['role']?.touched && f['role']?.invalid">
-            Role is required
-          </small>
+          <small *ngIf="f['role']?.touched && f['role']?.invalid">Role is required</small>
         </div>
 
-        <!-- Skills (FREELANCER only) (UNCHANGED) -->
+        <!-- Skills (FREELANCER only) -->
         <div class="form-group" *ngIf="isFreelancer">
-          <label>🛠️ Skills</label>
+          <label>Skills</label>
           <input type="text" formControlName="skills" placeholder="e.g. Angular, Java, Spring Boot" />
-          <small class="hint">Separate skills with commas</small>
+          <small class="hint-text">Separate skills with commas</small>
         </div>
 
-        <!-- Bio (FREELANCER only) (UNCHANGED) -->
+        <!-- Bio (FREELANCER only) -->
         <div class="form-group" *ngIf="isFreelancer">
-          <label>📝 Bio</label>
+          <label>Bio</label>
           <textarea formControlName="bio" rows="3" placeholder="Tell us about yourself..."></textarea>
         </div>
 
-        <!-- Submit Button (UNCHANGED) -->
+        <!-- Submit -->
         <button type="submit" [disabled]="freelancerForm.invalid || isLoading">
-          {{ isLoading ? '⏳ Registering...' : '🚀 Register' }}
+          {{ isLoading ? 'Sending OTP...' : 'Continue' }}
         </button>
 
       </form>
 
-      <!-- Login Link (UNCHANGED) -->
-      <div class="login-link" *ngIf="!successMessage">
+      <!-- ═══════════════════════════ -->
+      <!-- 📱 STEP 2: OTP VERIFICATION -->
+      <!-- ═══════════════════════════ -->
+      <form [formGroup]="otpForm" (ngSubmit)="verifyOtp()" *ngIf="otpStage && !successMessage">
+
+        <div class="otp-header">
+          <h3>Verify Your Email</h3>
+          <p class="otp-subtitle">
+            We sent a 6-digit code to your email
+            <span *ngIf="maskedEmail">({{ maskedEmail }})</span>
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label>🔢 OTP</label>
+          <input type="text" formControlName="otp" maxlength="6" autocomplete="one-time-code" placeholder="------"
+            class="otp-input" />
+          <small *ngIf="o['otp']?.touched && o['otp']?.invalid">
+            Enter a valid 6-digit OTP
+          </small>
+        </div>
+
+        <div class="otp-meta">
+          <span *ngIf="otpTimer > 0" class="otp-timer">
+            ⏱ Expires in {{ formattedTimer }}
+          </span>
+          <span *ngIf="otpTimer === 0" class="otp-expired">
+            OTP expired — please resend
+          </span>
+        </div>
+
+        <button type="submit" [disabled]="otpForm.invalid || isLoading">
+          {{ isLoading ? 'Verifying...' : 'Verify & Create Account' }}
+        </button>
+
+        <div class="otp-actions">
+          <button type="button" class="link-btn" (click)="resendOtp()" [disabled]="isLoading">
+            Resend OTP
+          </button>
+          <button type="button" class="link-btn danger" (click)="backToForm()">
+            ← Back to Form
+          </button>
+        </div>
+
+      </form>
+
+      <!-- Login Link -->
+      <div class="register-link" *ngIf="!successMessage">
         <span>Already have an account?</span>
         <a routerLink="/login">Login</a>
       </div>
 
     </div>
 
-    <!-- RIGHT SIDE (DESIGN PANEL) (UNCHANGED) -->
+    <!-- RIGHT SIDE -->
     <div class="right-side">
       <div class="overlay-shape"></div>
       <div class="floating-icon icon1">🚀</div>
@@ -191,5 +235,4 @@
     </div>
 
   </div>
-
 </div>
