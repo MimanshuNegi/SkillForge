@@ -48,18 +48,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 // 6.4 AUTH
                 .antMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/auth/forgot-password/send-otp").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/auth/forgot-password/reset").permitAll()
+
+                .antMatchers(HttpMethod.POST, "/api/auth/register/send-otp").permitAll() //  ADD
+                .antMatchers(HttpMethod.POST, "/api/auth/register/verify-otp").permitAll()
+
                 .antMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/auth/send-otp").permitAll()//for otp
-                .antMatchers(HttpMethod.POST, "/api/auth/verify-otp").permitAll()//for otp
-                
-.antMatchers(HttpMethod.GET, "/api/auth/check-username").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/auth/send-otp").permitAll()// for otp
+                .antMatchers(HttpMethod.POST, "/api/auth/verify-otp").permitAll()// for otp
+
+                .antMatchers(HttpMethod.GET, "/api/auth/check-username").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/auth/check-email").permitAll()
 
                 .antMatchers(HttpMethod.GET, "/api/auth/**").hasAnyAuthority("FREELANCER", "ADMIN", "CLIENT")
                 .antMatchers(HttpMethod.DELETE, "/api/auth/**").hasAnyAuthority("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/auth/**").authenticated()
-
-                
 
                 // 6.4 JOBS
                 .antMatchers(HttpMethod.GET, "/api/jobs/**").hasAnyAuthority("CLIENT", "FREELANCER", "ADMIN")

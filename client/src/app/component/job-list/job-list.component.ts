@@ -89,7 +89,7 @@ export class JobListComponent implements OnInit {
 
   applyJob(jobId: number): void {
     const fromService = (this.auth as any).getUserId?.();
-    const stored = localStorage.getItem('userId');
+    const stored = sessionStorage.getItem('userId');
     const fromStorage = stored !== null ? Number(stored) : null;
     const userId = (fromService ?? fromStorage ?? 1);
 
@@ -171,7 +171,7 @@ export class JobListComponent implements OnInit {
 
   //  Submit bid
   submitBid(jobId: number): void {
-    const freelancerId = Number(localStorage.getItem('userId') || 0);
+    const freelancerId = Number(sessionStorage.getItem('userId') || 0);
 
     const body = {
       bidAmount: this.bidAmount[jobId] || 0,

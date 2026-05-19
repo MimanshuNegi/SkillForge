@@ -36,7 +36,8 @@ public class OtpService {
 
     public boolean verify(String username, String otp) {
         OtpData data = store.get(key(username));
-        if (data == null) return false;
+        if (data == null)
+            return false;
 
         if (System.currentTimeMillis() > data.expiresAt) {
             store.remove(key(username));
@@ -58,7 +59,8 @@ public class OtpService {
 
     private String randomOtp() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < OTP_LENGTH; i++) sb.append(random.nextInt(10));
+        for (int i = 0; i < OTP_LENGTH; i++)
+            sb.append(random.nextInt(10));
         return sb.toString();
     }
 
