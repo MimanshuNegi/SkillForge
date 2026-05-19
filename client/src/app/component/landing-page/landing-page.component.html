@@ -1,159 +1,294 @@
 <div class="landing">
 
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <div class="logo">
-      <span class="logo-icon">⬡</span> SkillForge
-    </div>
-    <div class="nav-links">
-      <a routerLink="/login" class="btn login">Login</a>
-      <a routerLink="/register" class="btn signup">Sign Up</a>
+  <!-- ═══════════════════════ -->
+  <!--        NAVBAR           -->
+  <!-- ═══════════════════════ -->
+  <nav class="navbar" [class.scrolled]="scrollY > 50">
+    <div class="nav-inner">
+      <a routerLink="/" class="logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">SkillForge</span>
+      </a>
+
+      <!-- ✅ Nav Links (scroll to sections) -->
+      <div class="nav-center">
+        <a class="nav-link" (click)="scrollTo('features')">Features</a>
+        <a class="nav-link" (click)="scrollTo('how-it-works')">How It Works</a>
+        <a class="nav-link" (click)="scrollTo('roles')">For You</a>
+        <a class="nav-link" (click)="scrollTo('testimonials')">Reviews</a>
+        <a class="nav-link" (click)="scrollTo('support')">Support</a>
+      </div>
+
+      <div class="nav-right">
+        <ng-container *ngIf="!isLoggedIn">
+          <a routerLink="/login" class="btn-nav login">Login</a>
+          <a routerLink="/register" class="btn-nav signup">Get Started Free</a>
+        </ng-container>
+        <a *ngIf="isLoggedIn" routerLink="/dashboard" class="btn-nav signup">Go to Dashboard →</a>
+      </div>
     </div>
   </nav>
 
-  <!--   HERO WITH VIDEO BACKGROUND -->
-  <div class="hero video-hero">
-
-    <!-- VIDEO (CDN) -->
-    <video #bgVideo muted loop playsinline class="bg-video">
+  <!-- ═══════════════════════ -->
+  <!--     HERO + VIDEO        -->
+  <!-- ═══════════════════════ -->
+  <section class="hero">
+    <video #bgVideo muted loop playsinline class="hero-video">
       <source src="https://cdn.pixabay.com/video/2025/06/20/286884_large.mp4" type="video/mp4" />
     </video>
+    <div class="hero-overlay"></div>
 
-    <div class="video-overlay"></div>
-
-    <!-- HERO CONTENT -->
     <div class="hero-content">
-
-      <!-- LEFT -->
       <div class="hero-left">
-        <div class="badge">🚀 #1 Freelance Platform</div>
-
+        <div class="hero-badge">🚀 India's Growing Freelance Marketplace</div>
         <h1>
-          Unlock Your Business Potential With
-          <span class="gradient-text">Freelance Marketplace</span>
+          Find Expert Freelancers.
+          <span class="gradient-text">Build Amazing Projects.</span>
         </h1>
-
-        <p>
-          Connect with top freelancers and clients worldwide.
-          Build, manage, and grow your projects effortlessly.
+        <p class="hero-desc">
+          SkillForge connects businesses with verified freelancers across
+          web development, design, and more. Post a job, receive proposals,
+          and start working — all in one platform.
         </p>
-
-        <div class="hero-actions">
-          <a routerLink="/register" class="cta-btn">
-            Get Started <span class="arrow">→</span>
+        <div class="hero-cta">
+          <a routerLink="/register" class="cta-primary">
+            Create Free Account <span>→</span>
           </a>
+          <a class="cta-secondary" (click)="scrollTo('how-it-works')">
+            See How It Works ↓
+          </a>
+        </div>
+
+        <div class="hero-trust">
+          <div class="trust-item">
+            <span>🔒</span> OTP Verified Login
+          </div>
+          <div class="trust-item">
+            <span>⚡</span> Instant Job Matching
+          </div>
+          <div class="trust-item">
+            <span>🛡️</span> Admin Monitored
+          </div>
         </div>
       </div>
 
-      <!-- RIGHT -->
       <div class="hero-right">
-        <div class="scene-3d">
-
-          <div class="mock-box main-box">
-            <p>Project Dashboard</p>
-            <div class="bar-chart">
-              <span class="bar b1"></span>
-              <span class="bar b2"></span>
-              <span class="bar b3"></span>
-              <span class="bar b4"></span>
-              <span class="bar b5"></span>
+        <div class="hero-cards">
+          <div class="preview-card main-card">
+            <div class="preview-header">
+              <span class="dot green"></span>
+              <span class="dot yellow"></span>
+              <span class="dot red"></span>
+              <span class="preview-title">Project Dashboard</span>
+            </div>
+            <div class="preview-body">
+              <div class="preview-stat">
+                <span class="ps-label">Active Jobs</span>
+                <span class="ps-value">24</span>
+              </div>
+              <div class="preview-stat">
+                <span class="ps-label">Proposals</span>
+                <span class="ps-value">156</span>
+              </div>
+              <div class="preview-bar-chart">
+                <div class="pbar" style="height: 40%;"></div>
+                <div class="pbar" style="height: 65%;"></div>
+                <div class="pbar" style="height: 85%;"></div>
+                <div class="pbar" style="height: 55%;"></div>
+                <div class="pbar" style="height: 75%;"></div>
+                <div class="pbar" style="height: 90%;"></div>
+              </div>
             </div>
           </div>
 
-          <div class="mock-box small-box">
-            <p>📊 Analytics</p>
-            <span class="stat-num">+42%</span>
+          <div class="preview-card float-card notif-card">
+            <span class="fc-icon">📩</span>
+            <div>
+              <strong>New Proposal Received</strong>
+              <span>Sarah bid $500 on "Build Website"</span>
+            </div>
           </div>
 
-          <div class="mock-box tiny-box">
-            <p>  Tasks Done</p>
-            <span class="stat-num">128</span>
+          <div class="preview-card float-card status-card">
+            <span class="fc-icon">✅</span>
+            <div>
+              <strong>Proposal Accepted!</strong>
+              <span>Your bid for "API Development"</span>
+            </div>
           </div>
-
         </div>
       </div>
-
     </div>
-  </div>
 
-  <!-- TRUSTED -->
-  <div class="trusted">
-    <p>Trusted by teams at</p>
-    <div class="marquee-content">
-      <span>Google</span>
-      <span>Microsoft</span>
-      <span>Amazon</span>
-      <span>Meta</span>
-      <span>Netflix</span>
-      <span>Spotify</span>
+    <div class="scroll-indicator" (click)="scrollTo('stats')">
+      <div class="scroll-mouse">
+        <div class="scroll-dot"></div>
+      </div>
+      <span>Scroll to explore</span>
     </div>
-  </div>
+  </section>
 
-  <!-- STATS -->
-  <div class="stats">
-
-    <div class="stat" *ngFor="let s of [
-      { val: '1200+', label: 'Jobs Posted', icon: '💼' },
+  <!-- ═══════════════════════ -->
+  <!--        STATS BAR        -->
+  <!-- ═══════════════════════ -->
+  <section class="stats-bar" id="stats">
+    <div class="stat-item" *ngFor="let s of [
+      { val: '1,200+', label: 'Jobs Posted', icon: '💼' },
       { val: '800+', label: 'Freelancers', icon: '👩‍💻' },
-      { val: '$1M+', label: 'Transactions', icon: '💰' },
-      { val: '15+', label: 'Countries', icon: '🌍' }
+      { val: '3,500+', label: 'Proposals Sent', icon: '📝' },
+      { val: '15+', label: 'Skill Categories', icon: '🛠️' }
     ]">
       <span class="stat-icon">{{ s.icon }}</span>
-      <h3>{{ s.val }}</h3>
-      <p>{{ s.label }}</p>
+      <div>
+        <h3>{{ s.val }}</h3>
+        <p>{{ s.label }}</p>
+      </div>
     </div>
+  </section>
 
-  </div>
-
-  <!-- FEATURES -->
-  <div class="features">
-
+  <!-- ═══════════════════════ -->
+  <!--       FEATURES          -->
+  <!-- ═══════════════════════ -->
+  <section class="features" id="features">
     <div class="section-header">
-      <span class="section-badge">Features</span>
-      <h2>Everything You Need to
-        <span class="gradient-text">Succeed</span>
-      </h2>
-      <p>Powerful tools designed for freelancers and clients.</p>
+      <span class="section-badge">Platform Features</span>
+      <h2>Everything You Need to <span class="gradient-text">Succeed</span></h2>
+      <p>Built for both clients and freelancers with powerful tools</p>
     </div>
 
     <div class="features-grid">
-
       <div class="feature-card" *ngFor="let f of [
-        { icon: '🔍', title: 'Smart Matching', desc: 'Find best talent instantly.' },
-        { icon: '🔒', title: 'Secure Payments', desc: 'Safe escrow payments.' },
-        { icon: '💬', title: 'Real-time Chat', desc: 'Collaborate easily.' },
-        { icon: '📊', title: 'Analytics', desc: 'Track performance.' },
-        { icon: '⚡', title: 'Fast Proposals', desc: 'Apply quickly.' },
-        { icon: '🌐', title: 'Global Reach', desc: 'Work worldwide.' }
+        { icon: '📋', title: 'Job Posting', desc: 'Clients can create detailed job listings with required skills, budget, and deadlines. Reach the right freelancers instantly.' },
+        { icon: '📝', title: 'Smart Proposals', desc: 'Freelancers submit proposals with bid amounts and messages. Clients review, compare, and accept the best fit.' },
+        { icon: '🔍', title: 'Dynamic Search', desc: 'Filter jobs by title, skills, budget range, and more. Find exactly what you are looking for in seconds.' },
+        { icon: '🔔', title: 'Real-time Notifications', desc: 'Get instant alerts when proposals are submitted, accepted, or rejected. Never miss an update.' },
+        { icon: '🔒', title: '2-Factor Authentication', desc: 'Email OTP verification for login and registration. Your account security is our priority.' },
+        { icon: '👤', title: 'Rich Profiles', desc: 'Showcase your skills, bio, and experience. Build credibility and attract better opportunities.' }
       ]">
-
-        <div class="feature-icon">{{ f.icon }}</div>
+        <div class="feature-icon-wrapper">
+          <span class="feature-icon">{{ f.icon }}</span>
+        </div>
         <h3>{{ f.title }}</h3>
         <p>{{ f.desc }}</p>
+      </div>
+    </div>
+  </section>
 
+  <!-- ═══════════════════════ -->
+  <!--     HOW IT WORKS        -->
+  <!-- ═══════════════════════ -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="section-header">
+      <span class="section-badge">How It Works</span>
+      <h2>Get Started in <span class="gradient-text">3 Simple Steps</span></h2>
+      <p>Whether you're hiring or looking for work</p>
+    </div>
+
+    <div class="steps-container">
+      <div class="step-card" *ngFor="let step of [
+        { num: '01', icon: '📝', title: 'Create Your Account', desc: 'Sign up as a Client or Freelancer. Verify your email with OTP for secure access. Complete your profile with skills and bio.' },
+        { num: '02', icon: '🔍', title: 'Post or Browse Jobs', desc: 'Clients post job listings with details and budget. Freelancers browse available jobs, filter by skills, and submit proposals with bid amounts.' },
+        { num: '03', icon: '🤝', title: 'Collaborate &amp; Deliver', desc: 'Clients review proposals and accept the best. Track everything from your personalized dashboard. Get notified at every step.' }
+      ]">
+        <div class="step-number">{{ step.num }}</div>
+        <div class="step-icon">{{ step.icon }}</div>
+        <h3>{{ step.title }}</h3>
+        <p>{{ step.desc }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ -->
+  <!--   FOR CLIENTS / FREELANCERS -->
+  <!-- ═══════════════════════ -->
+  <section class="roles-section" id="roles">
+    <div class="section-header">
+      <span class="section-badge">For You</span>
+      <h2>Built for <span class="gradient-text">Every Role</span></h2>
+    </div>
+
+    <div class="roles-grid">
+      <div class="role-showcase client-showcase">
+        <div class="role-header">
+          <span class="role-emoji">💼</span>
+          <h3>For Clients</h3>
+          <p>Find and hire the best freelancers</p>
+        </div>
+        <ul class="role-features">
+          <li><span>✅</span> Post unlimited job listings</li>
+          <li><span>✅</span> Receive &amp; compare proposals</li>
+          <li><span>✅</span> Accept or reject bids</li>
+          <li><span>✅</span> Manage jobs from dashboard</li>
+          <li><span>✅</span> Real-time proposal notifications</li>
+          <li><span>✅</span> Edit profile &amp; track activity</li>
+        </ul>
+        <a routerLink="/register" class="role-cta client-cta">Start Hiring →</a>
       </div>
 
+      <div class="role-showcase freelancer-showcase">
+        <div class="role-header">
+          <span class="role-emoji">🛠️</span>
+          <h3>For Freelancers</h3>
+          <p>Find work that matches your skills</p>
+        </div>
+        <ul class="role-features">
+          <li><span>✅</span> Browse &amp; search jobs dynamically</li>
+          <li><span>✅</span> Submit proposals with custom bids</li>
+          <li><span>✅</span> Track proposal status live</li>
+          <li><span>✅</span> Showcase skills &amp; bio on profile</li>
+          <li><span>✅</span> Get notified on status changes</li>
+          <li><span>✅</span> OTP-secured account access</li>
+        </ul>
+        <a routerLink="/register" class="role-cta freelancer-cta">Start Working →</a>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <!-- TESTIMONIALS -->
-  <div class="testimonials">
+  <!-- ═══════════════════════ -->
+  <!--     TECH STACK          -->
+  <!-- ═══════════════════════ -->
+  <section class="tech-section" id="tech">
+    <div class="section-header">
+      <span class="section-badge">Technology</span>
+      <h2>Built With <span class="gradient-text">Modern Stack</span></h2>
+    </div>
 
+    <div class="tech-grid">
+      <div class="tech-item" *ngFor="let t of [
+        { icon: '☕', name: 'Spring Boot', desc: 'Backend API' },
+        { icon: '🅰️', name: 'Angular', desc: 'Frontend SPA' },
+        { icon: '🔐', name: 'JWT + OTP', desc: 'Authentication' },
+        { icon: '🗄️', name: 'JPA / Hibernate', desc: 'Database ORM' },
+        { icon: '📧', name: 'Email Service', desc: 'OTP Delivery' },
+        { icon: '🛡️', name: 'Spring Security', desc: 'Role-Based Access' }
+      ]">
+        <span class="tech-icon">{{ t.icon }}</span>
+        <strong>{{ t.name }}</strong>
+        <span class="tech-desc">{{ t.desc }}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ -->
+  <!--     TESTIMONIALS        -->
+  <!-- ═══════════════════════ -->
+  <section class="testimonials" id="testimonials">
     <div class="section-header">
       <span class="section-badge">Testimonials</span>
-      <h2>Loved by Users</h2>
+      <h2>What Our Users Say</h2>
     </div>
 
     <div class="testimonial-grid">
-
       <div class="testimonial-card" *ngFor="let t of [
-        { name: 'Sarah Chen', role: 'Designer', text: 'Amazing platform!', avatar: '👩‍🎨' },
-        { name: 'James', role: 'Developer', text: 'Best clients here!', avatar: '👨‍💻' },
-        { name: 'Priya', role: 'Manager', text: 'Super easy workflow!', avatar: '👩‍💼' }
+        { name: 'Aarav Sharma', role: 'Full-Stack Developer', text: 'SkillForge made it so easy to find clients. The proposal system is intuitive and I love the real-time notifications when my bid gets accepted!', avatar: '👨‍💻', rating: 5 },
+        { name: 'Priya Patel', role: 'Startup Founder', text: 'As a client, I posted a job and received 8 quality proposals within a day. The platform is clean, fast, and the OTP login gives me peace of mind.', avatar: '👩‍💼', rating: 5 },
+        { name: 'Rahul Verma', role: 'UI/UX Designer', text: 'The dynamic search and filtering makes browsing jobs a breeze. I can find projects that exactly match my skills. Great platform!', avatar: '🧑‍🎨', rating: 4 }
       ]">
-
+        <div class="stars">
+          <span *ngFor="let star of [1,2,3,4,5]"
+                [class.filled]="star <= t.rating">★</span>
+        </div>
         <p class="quote">"{{ t.text }}"</p>
-
         <div class="author">
           <span class="avatar">{{ t.avatar }}</span>
           <div>
@@ -161,36 +296,133 @@
             <span>{{ t.role }}</span>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
 
+  <!-- ═══════════════════════ -->
+  <!--    SUPPORT SECTION      -->
+  <!-- ═══════════════════════ -->
+  <section class="support-section" id="support">
+    <div class="section-header">
+      <span class="section-badge">Support</span>
+      <h2>We're Here to <span class="gradient-text">Help</span></h2>
+      <p>Reach out to us anytime — our team is ready to assist you</p>
+    </div>
+
+    <div class="support-grid">
+      <div class="support-card">
+        <div class="support-icon-wrap">
+          <span class="support-icon">📞</span>
+        </div>
+        <h3>Call Us</h3>
+        <p class="support-value">+91 98765 43210</p>
+        <p class="support-meta">Mon – Sat, 9:00 AM – 6:00 PM IST</p>
       </div>
 
+      <div class="support-card">
+        <div class="support-icon-wrap">
+          <span class="support-icon">📧</span>
+        </div>
+        <h3>Email Us</h3>
+        <p class="support-value">support&#64;skillforge.in</p>
+        <p class="support-meta">We reply within 24 hours</p>
+      </div>
+
+      <div class="support-card">
+        <div class="support-icon-wrap">
+          <span class="support-icon">📍</span>
+        </div>
+        <h3>Visit Us</h3>
+        <p class="support-value">Mahape, Navi Mumbai</p>
+        <p class="support-meta">Maharashtra, India — 400710</p>
+      </div>
+
+      <div class="support-card">
+        <div class="support-icon-wrap">
+          <span class="support-icon">💬</span>
+        </div>
+        <h3>Live Chat</h3>
+        <p class="support-value">Available on Dashboard</p>
+        <p class="support-meta">Instant help when you're logged in</p>
+      </div>
     </div>
-  </div>
 
-  <!-- CTA -->
-  <div class="cta-section">
-    <h2>Ready to Start?</h2>
-    <p>Join thousands building the future.</p>
+    <div class="faq-section">
+      <h3 class="faq-title">❓ Frequently Asked Questions</h3>
+      <div class="faq-grid">
+        <div class="faq-item" *ngFor="let faq of faqs">
+          <h4>{{ faq.q }}</h4>
+          <p>{{ faq.a }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <a routerLink="/register" class="cta-btn-large">
-      Create Free Account →
-    </a>
-  </div>
+  <!-- ═══════════════════════ -->
+  <!--        CTA              -->
+  <!-- ═══════════════════════ -->
+  <section class="cta-section">
+    <div class="cta-content">
+      <h2>Ready to Join <span class="gradient-text">SkillForge</span>?</h2>
+      <p>Create your free account today. No credit card required.<br/>Start hiring or finding work in minutes.</p>
+      <div class="cta-buttons">
+        <a routerLink="/register" class="cta-primary-lg">Create Free Account →</a>
+        <a routerLink="/login" class="cta-secondary-lg">Already a member? Login</a>
+      </div>
+      <div class="cta-trust">
+        <span>🔒 Email OTP Verified</span>
+        <span>⚡ Free Forever</span>
+        <span>🛡️ Admin Monitored</span>
+      </div>
+    </div>
+  </section>
 
-  <!-- FOOTER -->
+  <!-- ═══════════════════════ -->
+  <!--       FOOTER            -->
+  <!-- ═══════════════════════ -->
   <footer class="footer">
+    <div class="footer-content">
 
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <h3><span class="logo-icon">⬡</span> SkillForge</h3>
-        <p>Connecting talent since 2024.</p>
+      <div class="footer-main">
+        <div class="footer-brand">
+          <h3><span class="logo-icon">⬡</span> SkillForge</h3>
+          <p>Connecting talent with opportunity.<br/>Built with Spring Boot &amp; Angular.</p>
+        </div>
+
+        <div class="footer-links-group">
+          <div class="footer-col">
+            <h4>Get Started</h4>
+            <a routerLink="/register">Create Account</a>
+            <a routerLink="/login">Login</a>
+          </div>
+          <div class="footer-col">
+            <h4>Explore</h4>
+            <a (click)="scrollTo('features')">Features</a>
+            <a (click)="scrollTo('how-it-works')">How It Works</a>
+            <a (click)="scrollTo('testimonials')">Reviews</a>
+            <a (click)="scrollTo('support')">Support</a>
+          </div>
+          <div class="footer-col">
+            <h4>Contact</h4>
+            <a href="mailto:support@skillforge.in">support&#64;skillforge.in</a>
+            <a href="tel:+919876543210">+91 98765 43210</a>
+            <span class="footer-address">Mahape, Navi Mumbai</span>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div class="footer-bottom">
-      <p>© 2026 SkillForge. All rights reserved.</p>
-    </div>
+      <div class="footer-bottom">
+        <p>© 2026 SkillForge. All rights reserved.</p>
+        <div class="footer-tech">
+          <span>Spring Boot</span>
+          <span>Angular</span>
+          <span>JWT</span>
+          <span>OTP Auth</span>
+        </div>
+      </div>
 
+    </div>
   </footer>
 
 </div>

@@ -28,44 +28,67 @@ $radius-sm:        10px;
               0 0 ($spread * 2) rgba($color, 0.1);
 }
 
+// ─── Background Video ───
+.bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.video-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 0;
+  pointer-events: none;
+}
+
 // ─── Auth Wrapper ───
 .auth-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: $bg-dark;
+  background: transparent;
   padding: 20px;
   position: relative;
   overflow: hidden;
 
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(120px);
-    opacity: 0.4;
-    animation: floatOrb 8s ease-in-out infinite alternate;
-  }
+//   &::before,
+//   &::after {
+//     content: '';
+//     position: absolute;
+//     border-radius: 50%;
+//     filter: blur(120px);
+//     opacity: 0.4;
+//     animation: floatOrb 8s ease-in-out infinite alternate;
+//   }
 
-  &::before {
-    width: 500px;
-    height: 500px;
-    background: rgba(20, 168, 0, 0.15);
-    top: -150px;
-    left: -100px;
-  }
+//   &::before {
+//     width: 500px;
+//     height: 500px;
+//     background: rgba(20, 168, 0, 0.15);
+//     top: -150px;
+//     left: -100px;
+//   }
 
-  &::after {
-    width: 400px;
-    height: 400px;
-    background: rgba(29, 191, 115, 0.1);
-    bottom: -100px;
-    right: -80px;
-    animation-delay: 2s;
-  }
-}
+//   &::after {
+//     width: 400px;
+//     height: 400px;
+//     background: rgba(29, 191, 115, 0.1);
+//     bottom: -100px;
+//     right: -80px;
+//     animation-delay: 2s;
+//   }
+ }
 
 // ─── Auth Card ───
 .auth-card {
@@ -76,21 +99,21 @@ $radius-sm:        10px;
   min-height: 480px;
   border-radius: $radius-lg;
   overflow: hidden;
-  @include glass(24px);
+  @include glass(28px);  // ✅ increased blur
   box-shadow:
-    0 25px 60px rgba(0, 0, 0, 0.12),
-    0 0 80px rgba($accent-cyan, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    0 25px 60px rgba(0, 0, 0, 0.25),      // ✅ stronger shadow
+    0 0 80px rgba($accent-cyan, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
   position: relative;
-  z-index: 1;
+  z-index: 2;  // ✅ above video
   transition: transform 0.5s ease, box-shadow 0.5s ease;
 
   &:hover {
     transform: translateY(-4px);
     box-shadow:
-      0 30px 80px rgba(0, 0, 0, 0.16),
-      0 0 100px rgba($accent-cyan, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      0 30px 80px rgba(0, 0, 0, 0.3),
+      0 0 100px rgba($accent-cyan, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
   }
 }
 
@@ -524,9 +547,14 @@ button[type='submit'] {
 }
 
 // ─── Right Side ───
+// ═══════════════════════════════
+//   RIGHT SIDE — Login
+// ═══════════════════════════════
+
 .right-side {
-  flex: 1;
-  background: linear-gradient(160deg, #14a800, #1dbf73, #0077b5);
+  width: 400px;
+  min-width: 360px;
+  background: linear-gradient(160deg, #14a800, #1dbf73, #0a8f5a);
   position: relative;
   overflow: hidden;
   display: flex;
@@ -538,89 +566,197 @@ button[type='submit'] {
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-    background-size: 40px 40px;
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 36px 36px;
     animation: gridMove 20s linear infinite;
   }
-
-  &::after {
-    content: '';
-    position: absolute;
-    width: 260px;
-    height: 260px;
-    border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.15);
-    box-shadow:
-      0 0 60px rgba(20, 168, 0, 0.25),
-      inset 0 0 60px rgba(29, 191, 115, 0.20);
-    animation: pulseRing 4s ease-in-out infinite;
-  }
 }
 
-.overlay-shape {
-  width: 180px;
-  height: 180px;
-  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-  background: rgba(255, 255, 255, 0.10);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  animation: morphBlob 8s ease-in-out infinite;
+.right-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(255,255,255,0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0,0,0,0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.right-content {
   position: relative;
-  z-index: 1;
-}
-
-// ─── Floating Icons ───
-.floating-icon {
-  position: absolute;
-  font-size: 2rem;
   z-index: 2;
-  opacity: 0.8;
-  animation: floatIcon 6s ease-in-out infinite;
-
-  &.icon1 {
-    top: 16%;
-    left: 22%;
-    animation-delay: 0s;
-  }
-
-  &.icon2 {
-    top: 52%;
-    right: 18%;
-    animation-delay: 2s;
-  }
-
-  &.icon3 {
-    bottom: 16%;
-    left: 32%;
-    animation-delay: 4s;
-  }
+  padding: 36px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
 }
 
-// ─── Right Side Text ───
-.right-text {
-  position: absolute;
-  bottom: 32px;
-  left: 0;
-  right: 0;
-  text-align: center;
-  z-index: 3;
+// ─── Brand ───
+.right-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .brand-icon {
+    font-size: 1.6rem;
+    color: rgba(255,255,255,0.9);
+  }
 
   h3 {
-    color: #fff;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: 800;
-    margin: 0 0 4px;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    color: #fff;
+    margin: 0;
+    letter-spacing: 0.5px;
+  }
+}
+
+// ─── Tagline ───
+.right-tagline {
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.3;
+    margin: 0 0 8px;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.15);
   }
 
   p {
-    color: rgba(255, 255, 255, 0.75);
-    font-size: 0.8rem;
-    font-weight: 600;
+    color: rgba(255,255,255,0.7);
+    font-size: 0.82rem;
     margin: 0;
-    letter-spacing: 0.3px;
+    font-weight: 500;
   }
+}
+
+// ─── Mini Stats ───
+.right-stats {
+  display: flex;
+  gap: 12px;
+
+  .mini-stat {
+    flex: 1;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 12px 10px;
+    text-align: center;
+    backdrop-filter: blur(8px);
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+      background: rgba(255,255,255,0.18);
+    }
+
+    .mini-val {
+      display: block;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .mini-label {
+      display: block;
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.65);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+  }
+}
+
+// ─── Features List ───
+.right-features {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .r-feature {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    color: rgba(255,255,255,0.9);
+    font-size: 0.82rem;
+    font-weight: 600;
+    transition: all 0.25s ease;
+
+    &:hover {
+      background: rgba(255,255,255,0.14);
+      transform: translateX(4px);
+    }
+
+    .r-feature-icon {
+      font-size: 1.1rem;
+      width: 32px;
+      height: 32px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+  }
+}
+
+// // ─── Testimonial ───
+// .right-testimonial {
+//   background: rgba(255,255,255,0.1);
+//   border: 1px solid rgba(255,255,255,0.12);
+//   border-radius: 14px;
+//   padding: 16px 18px;
+//   backdrop-filter: blur(8px);
+
+//   p {
+//     color: rgba(255,255,255,0.9);
+//     font-size: 0.85rem;
+//     font-style: italic;
+//     font-weight: 500;
+//     line-height: 1.45;
+//     margin: 0 0 12px;
+//   }
+
+//   .testimonial-author {
+//     display: flex;
+//     align-items: center;
+//     gap: 10px;
+
+//     .t-avatar {
+//       font-size: 1.5rem;
+//       width: 36px;
+//       height: 36px;
+//       background: rgba(255,255,255,0.15);
+//       border-radius: 50%;
+//       display: flex;
+//       align-items: center;
+//       justify-content: center;
+//     }
+
+//     strong {
+//       display: block;
+//       color: #fff;
+//       font-size: 0.82rem;
+//       font-weight: 700;
+//     }
+
+//     span {
+//       color: rgba(255,255,255,0.55);
+//       font-size: 0.72rem;
+//       font-weight: 500;
+//     }
+//   }
+// }
+
+@keyframes gridMove {
+  0%   { transform: translate(0, 0); }
+  100% { transform: translate(36px, 36px); }
 }
 
 // ─── Animations ───
