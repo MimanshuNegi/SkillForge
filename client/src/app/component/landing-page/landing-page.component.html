@@ -161,7 +161,7 @@
         { icon: '📋', title: 'Job Posting', desc: 'Clients can create detailed job listings with required skills, budget, and deadlines. Reach the right freelancers instantly.' },
         { icon: '📝', title: 'Smart Proposals', desc: 'Freelancers submit proposals with bid amounts and messages. Clients review, compare, and accept the best fit.' },
         { icon: '🔍', title: 'Dynamic Search', desc: 'Filter jobs by title, skills, budget range, and more. Find exactly what you are looking for in seconds.' },
-        { icon: '🔔', title: 'Real-time Notifications', desc: 'Get instant alerts when proposals are submitted, accepted, or rejected. Never miss an update.' },
+        
         { icon: '🔒', title: '2-Factor Authentication', desc: 'Email OTP verification for login and registration. Your account security is our priority.' },
         { icon: '👤', title: 'Rich Profiles', desc: 'Showcase your skills, bio, and experience. Build credibility and attract better opportunities.' }
       ]">
@@ -188,7 +188,7 @@
       <div class="step-card" *ngFor="let step of [
         { num: '01', icon: '📝', title: 'Create Your Account', desc: 'Sign up as a Client or Freelancer. Verify your email with OTP for secure access. Complete your profile with skills and bio.' },
         { num: '02', icon: '🔍', title: 'Post or Browse Jobs', desc: 'Clients post job listings with details and budget. Freelancers browse available jobs, filter by skills, and submit proposals with bid amounts.' },
-        { num: '03', icon: '🤝', title: 'Collaborate &amp; Deliver', desc: 'Clients review proposals and accept the best. Track everything from your personalized dashboard. Get notified at every step.' }
+        { num: '03', icon: '🤝', title: 'Collaborate &amp; Deliver', desc: 'Clients review proposals and accept the best. Track everything from your personalized dashboard. ' }
       ]">
         <div class="step-number">{{ step.num }}</div>
         <div class="step-icon">{{ step.icon }}</div>
@@ -236,8 +236,9 @@
           <li><span>✅</span> Submit proposals with custom bids</li>
           <li><span>✅</span> Track proposal status live</li>
           <li><span>✅</span> Showcase skills &amp; bio on profile</li>
-          <li><span>✅</span> Get notified on status changes</li>
+          <!-- <li><span>✅</span> Get notified on status changes</li> -->
           <li><span>✅</span> OTP-secured account access</li>
+          <li><span>✅</span>Edit Profile & track activity</li>
         </ul>
         <a routerLink="/register" class="role-cta freelancer-cta">Start Working →</a>
       </div>

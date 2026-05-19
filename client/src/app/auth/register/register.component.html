@@ -151,7 +151,7 @@
           <label>Role</label>
           <select formControlName="role">
             <option value="">Select Role</option>
-            <option value="ADMIN">🛡️ ADMIN</option>
+            <!-- <option value="ADMIN">🛡️ ADMIN</option> -->
             <option value="CLIENT">💼 CLIENT</option>
             <option value="FREELANCER">🛠️ FREELANCER</option>
           </select>
@@ -181,48 +181,54 @@
       <!-- ═══════════════════════════ -->
       <!-- 📱 STEP 2: OTP VERIFICATION -->
       <!-- ═══════════════════════════ -->
-      <form [formGroup]="otpForm" (ngSubmit)="verifyOtp()" *ngIf="otpStage && !successMessage">
+      <form [formGroup]="otpForm" (ngSubmit)="verifyOtp()"
+      *ngIf="otpStage && !successMessage"
+      class="otp-stage fade-in">
 
-        <div class="otp-header">
-          <h3>Verify Your Email</h3>
-          <p class="otp-subtitle">
-            We sent a 6-digit code to your email
-            <span *ngIf="maskedEmail">({{ maskedEmail }})</span>
-          </p>
-        </div>
+  <div class="otp-header">
+    <div class="otp-icon-circle">📧</div>
+    <h3>Verify Your Email</h3>
+    <p class="otp-subtitle">
+      We sent a 6-digit code to
+      <strong *ngIf="maskedEmail">({{ maskedEmail }})</strong>
+    </p>
+  </div>
 
-        <div class="form-group">
-          <label>🔢 OTP</label>
-          <input type="text" formControlName="otp" maxlength="6" autocomplete="one-time-code" placeholder="------"
-            class="otp-input" />
-          <small *ngIf="o['otp']?.touched && o['otp']?.invalid">
-            Enter a valid 6-digit OTP
-          </small>
-        </div>
+  <div class="form-group">
+    <label>🔢 OTP</label>
+    <input
+      type="text"
+      formControlName="otp"
+      maxlength="6"
+      class="otp-input"
+      placeholder="• • • • • •"
+    />
+  </div>
 
-        <div class="otp-meta">
-          <span *ngIf="otpTimer > 0" class="otp-timer">
-            ⏱ Expires in {{ formattedTimer }}
-          </span>
-          <span *ngIf="otpTimer === 0" class="otp-expired">
-            OTP expired — please resend
-          </span>
-        </div>
+  <div class="otp-meta">
+    <span *ngIf="otpTimer > 0" class="otp-timer">
+      ⏱ Expires in {{ formattedTimer }}
+    </span>
 
-        <button type="submit" [disabled]="otpForm.invalid || isLoading">
-          {{ isLoading ? 'Verifying...' : 'Verify & Create Account' }}
-        </button>
+    <span *ngIf="otpTimer === 0" class="otp-expired">
+      ⏰ OTP expired — please resend
+    </span>
+  </div>
 
-        <div class="otp-actions">
-          <button type="button" class="link-btn" (click)="resendOtp()" [disabled]="isLoading">
-            Resend OTP
-          </button>
-          <button type="button" class="link-btn danger" (click)="backToForm()">
-            ← Back to Form
-          </button>
-        </div>
+  <button type="submit" [disabled]="otpForm.invalid || isLoading">
+    {{ isLoading ? 'Verifying...' : 'Verify & Create Account' }}
+  </button>
 
-      </form>
+  <div class="otp-actions">
+    <button type="button" class="link-btn" (click)="resendOtp()">
+      🔁 Resend OTP
+    </button>
+    <button type="button" class="link-btn danger" (click)="backToForm()">
+      ← Back to Form
+    </button>
+  </div>
+
+</form>
 
       <!-- Login Link -->
       <div class="register-link" *ngIf="!successMessage">
