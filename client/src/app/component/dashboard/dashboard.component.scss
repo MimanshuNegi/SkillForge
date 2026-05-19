@@ -1,23 +1,25 @@
+// ══════════════════════════════════════════════
+//  SKILLFORGE – Dashboard (Light Theme + Rich BG)
+// ══════════════════════════════════════════════
+
 // ─── Variables ───
-
-
-$bg-dark: #f0f2f5;
-$bg-surface: rgba(0, 0, 0, 0.02);
+$bg-base:          #f0f2f5;
+$bg-surface:       rgba(0, 0, 0, 0.02);
 $gradient-primary: linear-gradient(135deg, #14a800, #1dbf73);
-$glass-bg: rgba(255, 255, 255, 0.85);
-$glass-border: rgba(0, 0, 0, 0.08);
-$text-primary: #1a1a2e;
-$text-secondary: #4b5563;
-$text-muted: #6b7280;
-$accent-cyan: #14a800;
-$accent-purple: #6366f1;
-$accent-pink: #ef4444;
-$accent-green: #14a800;
-$accent-orange: #f59e0b;
-$accent-blue: #3b82f6;
-$radius-lg: 20px;
-$radius-md: 14px;
-$radius-sm: 10px;
+$glass-bg:         rgba(255, 255, 255, 0.82);
+$glass-border:     rgba(0, 0, 0, 0.07);
+$text-primary:     #1a1a2e;
+$text-secondary:   #4b5563;
+$text-muted:       #6b7280;
+$accent-cyan:      #14a800;
+$accent-purple:    #6366f1;
+$accent-pink:      #ef4444;
+$accent-green:     #14a800;
+$accent-orange:    #f59e0b;
+$accent-blue:      #3b82f6;
+$radius-lg:        20px;
+$radius-md:        14px;
+$radius-sm:        10px;
 
 // ─── Mixins ───
 @mixin glass($blur: 16px) {
@@ -29,63 +31,142 @@ $radius-sm: 10px;
 
 @mixin glow($color, $spread: 25px) {
   box-shadow: 0 0 $spread rgba($color, 0.25),
-    0 0 ($spread * 2) rgba($color, 0.08);
+              0 0 ($spread * 2) rgba($color, 0.08);
 }
 
 @mixin card-hover {
   transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
-
   &:hover {
     transform: translateY(-6px);
   }
 }
 
-// ─── Dashboard Wrapper ───
+// ═══════════════════════════════════
+//   DASHBOARD WRAPPER + BACKGROUND
+// ═══════════════════════════════════
+
 .dashboard-wrapper {
   min-height: 100vh;
-  background: $bg-dark;
   padding: 28px 36px 50px;
   position: relative;
-  overflow-x: hidden;
+  overflow: hidden;
 
-  // Ambient background orbs
-  &::before,
-  &::after {
-    content: '';
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(140px);
-    opacity: 0.25;
-    pointer-events: none;
-    z-index: 0;
-  }
+  // Multi-stop gradient background
+  background:
+    linear-gradient(180deg,
+      #f0f2f5 0%,
+      #e8f5e9 25%,
+      #f0f2f5 50%,
+      #e3f2fd 75%,
+      #f0f2f5 100%
+    );
+  background-attachment: fixed;
 
-  &::before {
-    width: 600px;
-    height: 600px;
-    background: rgba(20, 168, 0, 0.08);
-    top: -200px;
-    right: -150px;
-    animation: floatOrb 10s ease-in-out infinite alternate;
-  }
-
-  &::after {
-    width: 500px;
-    height: 500px;
-    background: rgba(99, 102, 241, 0.06);
-    bottom: -150px;
-    left: -100px;
-    animation: floatOrb 10s ease-in-out infinite alternate-reverse;
-  }
-
-  // Everything above orbs
-  >* {
+  > *:not(.bg-decorations) {
     position: relative;
-    z-index: 1;
+    z-index: 2;
   }
 }
 
-// ─── Welcome Banner ───
+// ─── Background Decorations Container ───
+.bg-decorations {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+// ─── Grid Pattern ───
+.bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(20, 168, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 168, 0, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 30%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 30%, transparent 70%);
+}
+
+// ─── Dot Pattern ───
+.bg-dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(20, 168, 0, 0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 70% 50% at 70% 60%, black 20%, transparent 60%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 50% at 70% 60%, black 20%, transparent 60%);
+}
+
+// ─── Floating Orbs ───
+.bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+  animation: floatOrb 12s ease-in-out infinite alternate;
+
+  &.orb-1 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(20, 168, 0, 0.12), rgba(29, 191, 115, 0.06));
+    top: -120px;
+    right: -80px;
+    animation-duration: 14s;
+  }
+
+  &.orb-2 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.1), rgba(99, 102, 241, 0.05));
+    bottom: -100px;
+    left: -60px;
+    animation-delay: 3s;
+    animation-duration: 16s;
+  }
+
+  &.orb-3 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(245, 158, 11, 0.08), rgba(251, 146, 60, 0.04));
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    animation-delay: 6s;
+    animation-duration: 18s;
+  }
+}
+
+// ─── Decorative Rings ───
+.bg-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(20, 168, 0, 0.06);
+  animation: pulseRing 8s ease-in-out infinite;
+
+  &.ring-1 {
+    width: 400px;
+    height: 400px;
+    top: 10%;
+    right: 5%;
+    border-color: rgba(20, 168, 0, 0.05);
+  }
+
+  &.ring-2 {
+    width: 280px;
+    height: 280px;
+    bottom: 15%;
+    left: 8%;
+    border-color: rgba(59, 130, 246, 0.05);
+    animation-delay: 4s;
+  }
+}
+
+// ═══════════════════════════════
+//   WELCOME BANNER
+// ═══════════════════════════════
+
 .welcome-banner {
   @include glass(20px);
   border-radius: $radius-lg;
@@ -93,8 +174,8 @@ $radius-sm: 10px;
   margin-bottom: 8px;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
 
-  // Gradient accent line at top
   &::before {
     content: '';
     position: absolute;
@@ -105,14 +186,13 @@ $radius-sm: 10px;
     background: $gradient-primary;
   }
 
-  // Subtle mesh overlay
   &::after {
     content: '';
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+      linear-gradient(rgba(0, 0, 0, 0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.015) 1px, transparent 1px);
     background-size: 30px 30px;
     pointer-events: none;
   }
@@ -155,9 +235,8 @@ $radius-sm: 10px;
       text-transform: uppercase;
       letter-spacing: 1.5px;
       color: $text-primary;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      @include glow($accent-purple, 12px);
+      background: rgba(20, 168, 0, 0.06);
+      border: 1px solid rgba(20, 168, 0, 0.12);
     }
   }
 }
@@ -171,7 +250,10 @@ $radius-sm: 10px;
   padding-left: 4px;
 }
 
-// ─── Action Cards ───
+// ═══════════════════════════════
+//   ACTION CARDS
+// ═══════════════════════════════
+
 .action-card {
   @include glass(14px);
   border-radius: $radius-lg;
@@ -184,8 +266,8 @@ $radius-sm: 10px;
   position: relative;
   overflow: hidden;
   @include card-hover;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.03);
 
-  // Accent glow bar at top
   &::before {
     content: '';
     position: absolute;
@@ -198,7 +280,6 @@ $radius-sm: 10px;
     transition: opacity 0.3s ease;
   }
 
-  // Hover shimmer
   &::after {
     content: '';
     position: absolute;
@@ -206,12 +287,7 @@ $radius-sm: 10px;
     left: -100%;
     width: 100%;
     height: 100%;
-
-    background: linear-gradient(90deg,
-        transparent,
-        rgba(0, 0, 0, 0.02),
-        transparent);
-
+    background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.015), transparent);
     transition: left 0.6s ease;
   }
 
@@ -226,7 +302,6 @@ $radius-sm: 10px;
   .card-icon {
     font-size: 2.2rem;
     margin-bottom: 14px;
-    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.15));
   }
 
   h5 {
@@ -246,7 +321,7 @@ $radius-sm: 10px;
   .card-arrow {
     align-self: flex-end;
     font-size: 1.3rem;
-    color: rgba(0, 0, 0, 0.2);
+    color: rgba(0, 0, 0, 0.15);
     margin-top: 12px;
     transition: all 0.3s ease;
   }
@@ -256,53 +331,44 @@ $radius-sm: 10px;
     transform: translateX(6px);
   }
 
-  // ─── Card Color Variants ───
+  // Color Variants
   &.card-purple {
-    &::before {
-      background: linear-gradient(90deg, $accent-purple, $accent-pink);
-    }
-
+    &::before { background: linear-gradient(90deg, $accent-purple, $accent-pink); }
     &:hover {
-      border-color: rgba($accent-purple, 0.3);
+      border-color: rgba($accent-purple, 0.2);
       @include glow($accent-purple, 20px);
     }
   }
 
   &.card-blue {
-    &::before {
-      background: linear-gradient(90deg, $accent-blue, $accent-cyan);
-    }
-
+    &::before { background: linear-gradient(90deg, $accent-blue, $accent-cyan); }
     &:hover {
-      border-color: rgba($accent-blue, 0.3);
+      border-color: rgba($accent-blue, 0.2);
       @include glow($accent-blue, 20px);
     }
   }
 
   &.card-green {
-    &::before {
-      background: linear-gradient(90deg, $accent-green, #34d399);
-    }
-
+    &::before { background: linear-gradient(90deg, $accent-green, #34d399); }
     &:hover {
-      border-color: rgba($accent-green, 0.3);
+      border-color: rgba($accent-green, 0.2);
       @include glow($accent-green, 20px);
     }
   }
 
   &.card-orange {
-    &::before {
-      background: linear-gradient(90deg, $accent-orange, #fb923c);
-    }
-
+    &::before { background: linear-gradient(90deg, $accent-orange, #fb923c); }
     &:hover {
-      border-color: rgba($accent-orange, 0.3);
+      border-color: rgba($accent-orange, 0.2);
       @include glow($accent-orange, 20px);
     }
   }
 }
 
-// ─── Stat Cards ───
+// ═══════════════════════════════
+//   STAT CARDS
+// ═══════════════════════════════
+
 .stat-card {
   @include glass(12px);
   border-radius: $radius-md;
@@ -311,9 +377,10 @@ $radius-sm: 10px;
   align-items: center;
   gap: 18px;
   @include card-hover;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
 
   &:hover {
-    border-color: rgba($accent-cyan, 0.2);
+    border-color: rgba($accent-cyan, 0.15);
     @include glow($accent-cyan, 12px);
   }
 
@@ -325,8 +392,8 @@ $radius-sm: 10px;
     align-items: center;
     justify-content: center;
     border-radius: 14px;
-    background: rgba(0, 0, 0, 0.04);
-    border: 1px solid rgba(0, 0, 0, 0.06);
+    background: rgba(20, 168, 0, 0.05);
+    border: 1px solid rgba(20, 168, 0, 0.08);
     flex-shrink: 0;
   }
 
@@ -345,10 +412,13 @@ $radius-sm: 10px;
   }
 }
 
-// ─── Tips Section ───
+// ═══════════════════════════════
+//   TIPS SECTION
+// ═══════════════════════════════
+
 .tips-section {
   padding-top: 12px;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .tip-card {
@@ -359,18 +429,16 @@ $radius-sm: 10px;
   @include card-hover;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
 
-  // Subtle gradient on hover
   &:hover {
-    border-color: rgba($accent-cyan, 0.15);
-    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba($accent-cyan, 0.12);
   }
 
   .tip-icon {
     font-size: 1.8rem;
     display: block;
     margin-bottom: 10px;
-    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.1));
   }
 
   h6 {
@@ -386,7 +454,10 @@ $radius-sm: 10px;
   }
 }
 
-// ─── Row / Grid Overrides (Bootstrap-compatible) ───
+// ═══════════════════════════════
+//   GRID / BOOTSTRAP OVERRIDES
+// ═══════════════════════════════
+
 .row {
   display: flex;
   flex-wrap: wrap;
@@ -410,71 +481,36 @@ $radius-sm: 10px;
 }
 
 // ─── Utility Classes ───
-.mt-2 {
-  margin-top: 0.5rem;
-}
+.mt-2  { margin-top: 0.5rem; }
+.mt-4  { margin-top: 1.5rem; }
+.mt-5  { margin-top: 2.5rem; }
+.mb-0  { margin-bottom: 0; }
+.mb-2  { margin-bottom: 0.5rem; }
+.mb-3  { margin-bottom: 1rem; }
+.mb-4  { margin-bottom: 1.5rem; }
+.fw-bold { font-weight: 700; }
+.text-muted { color: $text-muted; }
+.small { font-size: 0.85rem; }
+.opacity-75 { opacity: 0.75; }
 
-.mt-4 {
-  margin-top: 1.5rem;
-}
+// ═══════════════════════════════
+//   ANIMATIONS
+// ═══════════════════════════════
 
-.mt-5 {
-  margin-top: 2.5rem;
-}
-
-.mb-0 {
-  margin-bottom: 0;
-}
-
-.mb-2 {
-  margin-bottom: 0.5rem;
-}
-
-.mb-3 {
-  margin-bottom: 1rem;
-}
-
-.mb-4 {
-  margin-bottom: 1.5rem;
-}
-
-.fw-bold {
-  font-weight: 700;
-}
-
-.text-muted {
-  color: $text-muted;
-}
-
-.small {
-  font-size: 0.85rem;
-}
-
-.opacity-75 {
-  opacity: 0.75;
-}
-
-// ─── Keyframes ───
 @keyframes floatOrb {
-  0% {
-    transform: translate(0, 0) scale(1);
-  }
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(30px, -20px) scale(1.08); }
+  100% { transform: translate(-20px, 30px) scale(1.12); }
+}
 
-  100% {
-    transform: translate(50px, 40px) scale(1.1);
-  }
+@keyframes pulseRing {
+  0%, 100% { transform: scale(1); opacity: 0.4; }
+  50%      { transform: scale(1.08); opacity: 0.15; }
 }
 
 @keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  0%   { opacity: 0; transform: translateY(16px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 // ─── Entrance Animations ───
@@ -484,7 +520,6 @@ $radius-sm: 10px;
 
 .action-card {
   animation: fadeIn 0.5s ease both;
-
   @for $i from 1 through 6 {
     .col-md-4:nth-child(#{$i}) & {
       animation-delay: #{$i * 0.1}s;
@@ -499,7 +534,6 @@ $radius-sm: 10px;
 
 .tip-card {
   animation: fadeIn 0.5s ease both;
-
   @for $i from 1 through 3 {
     .col-md-4:nth-child(#{$i}) & {
       animation-delay: #{0.5 + $i * 0.1}s;
@@ -507,7 +541,10 @@ $radius-sm: 10px;
   }
 }
 
-// ─── Responsive ───
+// ═══════════════════════════════
+//   RESPONSIVE
+// ═══════════════════════════════
+
 @media (max-width: 992px) {
   .dashboard-wrapper {
     padding: 24px 20px 40px;
@@ -525,10 +562,7 @@ $radius-sm: 10px;
 
   .welcome-banner {
     padding: 26px 28px;
-
-    .banner-text h1 {
-      font-size: 1.5rem;
-    }
+    .banner-text h1 { font-size: 1.5rem; }
   }
 }
 
@@ -545,15 +579,11 @@ $radius-sm: 10px;
 
   .welcome-banner {
     padding: 22px 20px;
-
     .banner-content {
       flex-direction: column;
       text-align: center;
     }
-
-    .banner-text h1 {
-      font-size: 1.35rem;
-    }
+    .banner-text h1 { font-size: 1.35rem; }
   }
 
   .action-card {
@@ -564,6 +594,11 @@ $radius-sm: 10px;
   .section-title {
     text-align: center;
   }
+
+  .bg-grid,
+  .bg-dots {
+    opacity: 0.5;
+  }
 }
 
 @media (max-width: 480px) {
@@ -573,11 +608,7 @@ $radius-sm: 10px;
 
   .welcome-banner {
     padding: 18px 16px;
-
-    .banner-text h1 {
-      font-size: 1.2rem;
-    }
-
+    .banner-text h1 { font-size: 1.2rem; }
     .banner-badge .role-badge {
       font-size: 0.72rem;
       padding: 8px 16px;
@@ -587,28 +618,18 @@ $radius-sm: 10px;
   .action-card {
     min-height: 140px;
     padding: 18px 16px;
-
-    .card-icon {
-      font-size: 1.8rem;
-    }
-
-    h5 {
-      font-size: 0.95rem;
-    }
+    .card-icon { font-size: 1.8rem; }
+    h5 { font-size: 0.95rem; }
   }
 
   .stat-card {
     padding: 16px 18px;
-
     .stat-icon {
       width: 44px;
       height: 44px;
       font-size: 1.6rem;
     }
-
-    h4 {
-      font-size: 0.95rem;
-    }
+    h4 { font-size: 0.95rem; }
   }
 
   .tip-card {

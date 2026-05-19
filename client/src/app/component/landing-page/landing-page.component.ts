@@ -1,46 +1,51 @@
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild, AfterViewInit } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-my-landing',
   templateUrl: './landing-page.component.html',
   styleUrls: ['./landing-page.component.scss']
 })
-export class LandingPageComponent {
+export class LandingPageComponent implements AfterViewInit {
 
   scrollY = 0;
+  isLoggedIn = false;
 
-  features = [
-    {
-      title: 'Top Freelancers',
-      desc: 'Find highly skilled professionals worldwide'
-    },
-    {
-      title: 'Secure Payments',
-      desc: 'Safe and reliable transactions for every project'
-    },
-    {
-      title: 'Fast Hiring',
-      desc: 'Hire talent quickly with smart matching'
-    }
-  ];
+  @ViewChild('bgVideo') video!: ElementRef;
 
-  stats = [
-    { value: '1200+', label: 'Jobs Posted' },
-    { value: '800+', label: 'Freelancers' },
-    { value: '$1M+', label: 'Transactions' },
-    { value: '15+', label: 'Countries' }
-  ];
+  constructor(private auth: AuthService) {
+    this.isLoggedIn = this.auth.getLoginStatus();
+  }
 
   @HostListener('window:scroll', [])
   onScroll() {
     this.scrollY = window.scrollY;
   }
 
-  @ViewChild('bgVideo') video!: ElementRef;
-
   ngAfterViewInit() {
-    const vid = this.video.nativeElement;
-    vid.muted = true;
-    vid.play().catch(() => { });
+    const vid = this.video?.nativeElement;
+    if (vid) {
+      vid.muted = true;
+      vid.play().catch(() => {
+        setTimeout(() => { vid.play().catch(() => {}); }, 500);
+      });
+    }
   }
+
+  // ✅ Smooth scroll to section
+  scrollTo(sectionId: string): void {
+    const el = document.getElementById(sectionId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  faqs = [
+    { q: 'Is SkillForge free to use?', a: 'Yes! Creating an account and browsing jobs is completely free. No hidden charges.' },
+    { q: 'How does the OTP login work?', a: 'After entering your password, a 6-digit OTP is sent to your registered email. Enter it to verify your identity.' },
+    { q: 'Can I be both a Client and Freelancer?', a: 'Currently, each account is tied to a single role chosen during registration — Client, Freelancer, or Admin.' },
+    { q: 'How do I reset my password?', a: 'Click "Forgot Password" on the login page. Enter your username, verify via OTP, and set a new password.' },
+    { q: 'How are proposals managed?', a: 'Freelancers submit proposals with bid amounts. Clients can accept or reject proposals from their dashboard.' },
+    { q: 'Is my data secure?', a: 'Absolutely. We use JWT tokens, OTP verification, Spring Security, and role-based access control to protect your data.' }
+  ];
 }

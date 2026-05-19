@@ -1,4 +1,10 @@
 <div class="auth-wrapper">
+
+  <video class="bg-video" autoplay muted loop playsinline>
+    <source src="https://cdn.pixabay.com/video/2025/06/20/286884_large.mp4" type="video/mp4" />
+  </video>
+  <div class="video-overlay"></div>
+
   <div class="auth-card">
 
     <!-- LEFT SIDE -->
@@ -38,9 +44,9 @@
         {{ errorMessage }}
       </div>
 
-      <!-- ══════════════════════════════ -->
-      <!-- 🔐 STEP: LOGIN (credentials)  -->
-      <!-- ══════════════════════════════ -->
+
+      <!-- STEP: LOGIN (credentials)  -->
+
       <form *ngIf="currentStep === 'login'" [formGroup]="loginForm" (ngSubmit)="onLogin()" class="fade-in">
 
         <div class="form-group">
@@ -74,9 +80,9 @@
         </button>
       </form>
 
-      <!-- ══════════════════════════════ -->
+
       <!-- 📱 STEP: LOGIN OTP            -->
-      <!-- ══════════════════════════════ -->
+
       <form *ngIf="currentStep === 'otp'" [formGroup]="otpForm" (ngSubmit)="verifyOtp()" class="fade-in">
 
         <div class="otp-header">
@@ -123,9 +129,9 @@
         </div>
       </form>
 
-      <!-- ═══════════════════════════════════ -->
+
       <!-- 🔑 FORGOT STEP 1: Enter Username   -->
-      <!-- ═══════════════════════════════════ -->
+
       <form *ngIf="currentStep === 'forgot-username'" [formGroup]="forgotUsernameForm" (ngSubmit)="forgotSendOtp()"
         class="fade-in">
 
@@ -157,9 +163,9 @@
         </div>
       </form>
 
-      <!-- ═══════════════════════════════════ -->
+
       <!-- 🔑 FORGOT STEP 2: Verify OTP       -->
-      <!-- ═══════════════════════════════════ -->
+
       <form *ngIf="currentStep === 'forgot-otp'" [formGroup]="forgotOtpForm" (ngSubmit)="forgotVerifyOtp()"
         class="fade-in">
 
@@ -200,9 +206,9 @@
         </div>
       </form>
 
-      <!-- ═══════════════════════════════════ -->
+
       <!-- 🔑 FORGOT STEP 3: New Password     -->
-      <!-- ═══════════════════════════════════ -->
+
       <form *ngIf="currentStep === 'forgot-reset'" [formGroup]="forgotResetForm" (ngSubmit)="forgotResetPassword()"
         class="fade-in">
 
@@ -263,7 +269,7 @@
           </small>
           <small *ngIf="forgotResetForm.get('confirmPassword')?.dirty && passwordsMatch && newPasswordValue.length > 0"
             class="match-success">
-             Passwords match
+            Passwords match
           </small>
         </div>
 
@@ -288,15 +294,68 @@
 
     </div>
 
+
     <!-- RIGHT SIDE -->
     <div class="right-side">
-      <div class="overlay-shape"></div>
-      <div class="floating-icon icon1">🔐</div>
-      <div class="floating-icon icon2">💼</div>
-      <div class="floating-icon icon3">⚡</div>
-      <div class="right-text">
-        <h3>Secure Login</h3>
-        <p>2-Factor Authentication Enabled</p>
+      <div class="right-overlay"></div>
+
+      <!-- Platform Stats -->
+      <div class="right-content">
+
+        <div class="right-brand">
+          <span class="brand-icon">⬡</span>
+          <h3>SkillForge</h3>
+        </div>
+
+        <div class="right-tagline">
+          <h2>Where Talent<br />Meets Opportunity</h2>
+          <p>Secure 2-Factor Login • Trusted by 800+ Freelancers</p>
+        </div>
+
+        <!-- Mini Stats -->
+        <div class="right-stats">
+          <div class="mini-stat">
+            <span class="mini-val">1200+</span>
+            <span class="mini-label">Jobs Posted</span>
+          </div>
+          <div class="mini-stat">
+            <span class="mini-val">800+</span>
+            <span class="mini-label">Freelancers</span>
+          </div>
+          <div class="mini-stat">
+            <span class="mini-val">15+</span>
+            <span class="mini-label">Countries</span>
+          </div>
+        </div>
+
+        <!-- Features List -->
+        <div class="right-features">
+          <div class="r-feature">
+            <span class="r-feature-icon">🔒</span>
+            <span>OTP-Verified Secure Login</span>
+          </div>
+          <div class="r-feature">
+            <span class="r-feature-icon">⚡</span>
+            <span>Instant Job Matching</span>
+          </div>
+          <div class="r-feature">
+            <span class="r-feature-icon">💼</span>
+            <span>Client & Freelancer Dashboards</span>
+          </div>
+        </div>
+
+        <!-- Testimonial
+        <div class="right-testimonial">
+          <p>"SkillForge helped me land 3 projects in my first week!"</p>
+          <div class="testimonial-author">
+            <span class="t-avatar">👩‍💻</span>
+            <div>
+              <strong>Sarah Chen</strong>
+              <span>Full-Stack Developer</span>
+            </div>
+          </div>
+        </div> -->
+
       </div>
     </div>
 

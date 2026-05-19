@@ -1,4 +1,10 @@
 <div class="auth-wrapper">
+  
+<video class="bg-video" autoplay muted loop playsinline>
+    <source src="https://cdn.pixabay.com/video/2025/06/20/286884_large.mp4" type="video/mp4" />
+  </video>
+  <div class="video-overlay"></div>
+
   <div class="auth-card">
 
     <!-- LEFT SIDE -->
@@ -11,7 +17,7 @@
       </div>
       <h2>Create Account 📝</h2>
       <p class="subtitle">Join SkillForge and get started</p>
-      <a class="back-link" routerLink="/login">← Back to Login</a>
+      <!-- <a class="back-link" routerLink="/login">← Back to Login</a> -->
 
       <!--  Success Message -->
       <div class="info-message" *ngIf="successMessage">
@@ -227,12 +233,74 @@
     </div>
 
     <!-- RIGHT SIDE -->
-    <div class="right-side">
-      <div class="overlay-shape"></div>
-      <div class="floating-icon icon1">🚀</div>
-      <div class="floating-icon icon2">💼</div>
-      <div class="floating-icon icon3">⚡</div>
+   <!-- RIGHT SIDE -->
+<div class="right-side">
+  <div class="right-overlay"></div>
+
+  <div class="right-content">
+
+    <div class="right-brand">
+      <span class="brand-icon">⬡</span>
+      <h3>SkillForge</h3>
     </div>
+
+    <div class="right-tagline">
+      <h2>Start Your<br/>Freelance Journey</h2>
+      <p>Join a growing community of professionals</p>
+    </div>
+
+    <!-- How It Works -->
+    <div class="right-steps">
+      <div class="r-step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>Create Account</strong>
+          <span>Sign up as Client or Freelancer</span>
+        </div>
+      </div>
+      <div class="step-line"></div>
+      <div class="r-step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>Complete Profile</strong>
+          <span>Add skills, bio & portfolio</span>
+        </div>
+      </div>
+      <div class="step-line"></div>
+      <div class="r-step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>Start Working</strong>
+          <span>Browse jobs or post projects</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Role Cards -->
+    <div class="right-roles">
+      <div class="role-card">
+        <span class="role-icon">💼</span>
+        <div>
+          <strong>Client</strong>
+          <span>Post jobs & hire talent</span>
+        </div>
+      </div>
+      <div class="role-card">
+        <span class="role-icon">🛠️</span>
+        <div>
+          <strong>Freelancer</strong>
+          <span>Find work & grow career</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Trust -->
+    <!-- <div class="right-trust">
+      <span>🔒</span> Email verified registration with OTP
+    </div> -->
+
+  </div>
+</div>
 
   </div>
 </div>
