@@ -171,4 +171,17 @@ private String maskEmail(String email) {
     if (at <= 2) return email;
     return email.substring(0, 1) + "***" + email.substring(at - 1);
 }
+// ✅ GET /api/auth/check-username?username=xyz — Check if username exists
+    @GetMapping("/check-username")
+    public ResponseEntity<Map<String, Boolean>> checkUsername(@RequestParam String username) {
+        boolean exists = userService.isUsernameTaken(username);
+        return ResponseEntity.ok(Map.of("exists", exists));
+    }
+
+    // ✅ GET /api/auth/check-email?email=xyz — Check if email exists
+    @GetMapping("/check-email")
+    public ResponseEntity<Map<String, Boolean>> checkEmail(@RequestParam String email) {
+        boolean exists = userService.isEmailTaken(email);
+        return ResponseEntity.ok(Map.of("exists", exists));
+    }
 }

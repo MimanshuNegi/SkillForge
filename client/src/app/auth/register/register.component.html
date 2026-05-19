@@ -26,25 +26,60 @@
       <!-- Form -->
       <form [formGroup]="freelancerForm" (ngSubmit)="onSubmit()" *ngIf="!successMessage">
 
-        <!-- Username -->
+        <!-- ✅ Username (with async validation) -->
         <div class="form-group">
           <label>👤 User Name</label>
-          <input type="text" formControlName="username" placeholder="Enter your username" />
-          <small *ngIf="f['username']?.touched && f['username']?.invalid">
+          <div class="input-with-status">
+            <input type="text" formControlName="username" placeholder="Enter your username" />
+            <!-- ✅ Loading spinner while checking -->
+            <span class="input-status checking" *ngIf="f['username']?.pending">⏳</span>
+            <!-- ✅ Available -->
+            <span class="input-status available"
+              *ngIf="f['username']?.valid && f['username']?.dirty && !f['username']?.pending">✅</span>
+            <!-- ✅ Taken -->
+            <span class="input-status taken"
+              *ngIf="f['username']?.hasError('usernameTaken')">❌</span>
+          </div>
+          <small *ngIf="f['username']?.touched && f['username']?.hasError('required')">
             Username is required
           </small>
-        </div>
-
-        <!-- Email -->
-        <div class="form-group">
-          <label>📧 Email</label>
-          <input type="email" formControlName="email" placeholder="Enter your email" />
-          <small *ngIf="f['email']?.touched && f['email']?.invalid">
-            Valid email is required
+          <small *ngIf="f['username']?.touched && f['username']?.hasError('minlength')">
+            Minimum 3 characters
+          </small>
+          <small *ngIf="f['username']?.touched && f['username']?.hasError('pattern')">
+            Only letters, numbers and underscore allowed
+          </small>
+          <small class="taken-error" *ngIf="f['username']?.hasError('usernameTaken')">
+            ⚠️ Username is already taken
           </small>
         </div>
 
-        <!-- Password -->
+        <!-- ✅ Email (with async validation) -->
+        <div class="form-group">
+          <label>📧 Email</label>
+          <div class="input-with-status">
+            <input type="email" formControlName="email" placeholder="Enter your email" />
+            <!-- ✅ Loading spinner while checking -->
+            <span class="input-status checking" *ngIf="f['email']?.pending">⏳</span>
+            <!-- ✅ Available -->
+            <span class="input-status available"
+              *ngIf="f['email']?.valid && f['email']?.dirty && !f['email']?.pending">✅</span>
+            <!-- ✅ Taken -->
+            <span class="input-status taken"
+              *ngIf="f['email']?.hasError('emailTaken')">❌</span>
+          </div>
+          <small *ngIf="f['email']?.touched && f['email']?.hasError('required')">
+            Email is required
+          </small>
+          <small *ngIf="f['email']?.touched && f['email']?.hasError('email')">
+            Valid email is required
+          </small>
+          <small class="taken-error" *ngIf="f['email']?.hasError('emailTaken')">
+            ⚠️ Email is already registered
+          </small>
+        </div>
+
+        <!-- Password (UNCHANGED) -->
         <div class="form-group">
           <label>🔒 Password</label>
           <div style="position: relative;">
@@ -56,37 +91,29 @@
             </span>
           </div>
 
-          <!--  Password Requirements Checklist -->
           <div class="password-checklist" *ngIf="passwordValue.length > 0">
-
             <div class="check-item" [class.valid]="hasMinLength" [class.invalid]="!hasMinLength">
               <span class="check-icon">{{ hasMinLength ? ' ' : '❌' }}</span>
               <span>At least 8 characters</span>
             </div>
-
             <div class="check-item" [class.valid]="hasUppercase" [class.invalid]="!hasUppercase">
               <span class="check-icon">{{ hasUppercase ? ' ' : '❌' }}</span>
               <span>One uppercase letter (A-Z)</span>
             </div>
-
             <div class="check-item" [class.valid]="hasLowercase" [class.invalid]="!hasLowercase">
               <span class="check-icon">{{ hasLowercase ? ' ' : '❌' }}</span>
               <span>One lowercase letter (a-z)</span>
             </div>
-
             <div class="check-item" [class.valid]="hasNumber" [class.invalid]="!hasNumber">
               <span class="check-icon">{{ hasNumber ? ' ' : '❌' }}</span>
               <span>One number (0-9)</span>
             </div>
-
             <div class="check-item" [class.valid]="hasSpecialChar" [class.invalid]="!hasSpecialChar">
               <span class="check-icon">{{ hasSpecialChar ? ' ' : '❌' }}</span>
               <span>One special character</span>
             </div>
-
           </div>
 
-          <!--  Password Strength Bar -->
           <div class="password-strength" *ngIf="passwordValue.length > 0">
             <div class="strength-bar">
               <div class="strength-fill" [style.width]="passwordStrengthWidth"
@@ -98,14 +125,12 @@
             </small>
           </div>
 
-          <!--  Error when touched but empty -->
           <div *ngIf="f['password']?.touched && f['password']?.errors?.['required']" class="validation-errors">
             <small>Password is required</small>
           </div>
-
         </div>
-        <!-- Contact Number -->
 
+        <!-- Contact Number (UNCHANGED) -->
         <div class="form-group">
           <label>📞 Contact Number</label>
           <input type="text" formControlName="contactNumber" placeholder="Enter 10 digit number" maxlength="10" />
@@ -115,7 +140,7 @@
           </div>
         </div>
 
-        <!-- Role -->
+        <!-- Role (UNCHANGED) -->
         <div class="form-group">
           <label>🏷️ Role</label>
           <select formControlName="role">
@@ -129,27 +154,27 @@
           </small>
         </div>
 
-        <!--  Skills (FREELANCER only) -->
+        <!-- Skills (FREELANCER only) (UNCHANGED) -->
         <div class="form-group" *ngIf="isFreelancer">
           <label>🛠️ Skills</label>
           <input type="text" formControlName="skills" placeholder="e.g. Angular, Java, Spring Boot" />
           <small class="hint">Separate skills with commas</small>
         </div>
 
-        <!--  Bio (FREELANCER only) -->
+        <!-- Bio (FREELANCER only) (UNCHANGED) -->
         <div class="form-group" *ngIf="isFreelancer">
           <label>📝 Bio</label>
           <textarea formControlName="bio" rows="3" placeholder="Tell us about yourself..."></textarea>
         </div>
 
-        <!-- Submit Button -->
+        <!-- Submit Button (UNCHANGED) -->
         <button type="submit" [disabled]="freelancerForm.invalid || isLoading">
           {{ isLoading ? '⏳ Registering...' : '🚀 Register' }}
         </button>
 
       </form>
 
-      <!-- Login Link -->
+      <!-- Login Link (UNCHANGED) -->
       <div class="login-link" *ngIf="!successMessage">
         <span>Already have an account?</span>
         <a routerLink="/login">Login</a>
@@ -157,11 +182,9 @@
 
     </div>
 
-    <!-- RIGHT SIDE (DESIGN PANEL) -->
+    <!-- RIGHT SIDE (DESIGN PANEL) (UNCHANGED) -->
     <div class="right-side">
       <div class="overlay-shape"></div>
-
-      <!-- Floating decorative elements -->
       <div class="floating-icon icon1">🚀</div>
       <div class="floating-icon icon2">💼</div>
       <div class="floating-icon icon3">⚡</div>

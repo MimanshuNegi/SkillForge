@@ -153,4 +153,14 @@ public class UserService implements UserDetailsService {
 
         return userRepository.save(user);
     }
+
+    // ✅ Check if username already exists
+    public boolean isUsernameTaken(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    // ✅ Check if email already exists
+    public boolean isEmailTaken(String email) {
+        return userRepository.existsByEmail(email);
+    }
 }

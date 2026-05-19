@@ -51,6 +51,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/auth/send-otp").permitAll()//for otp
                 .antMatchers(HttpMethod.POST, "/api/auth/verify-otp").permitAll()//for otp
+                
+.antMatchers(HttpMethod.GET, "/api/auth/check-username").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/auth/check-email").permitAll()
+
                 .antMatchers(HttpMethod.GET, "/api/auth/**").hasAnyAuthority("FREELANCER", "ADMIN", "CLIENT")
                 .antMatchers(HttpMethod.DELETE, "/api/auth/**").hasAnyAuthority("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/auth/**").authenticated()

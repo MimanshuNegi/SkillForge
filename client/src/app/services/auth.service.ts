@@ -186,4 +186,21 @@ export class AuthService {
       { headers: this.getAuthHeaders() }
     );
   }
+  // ✅ Check if username is taken (no auth needed)
+  checkUsername(username: string): Observable<{ exists: boolean }> {
+    if (!this.http) throw new Error('HttpClient not available');
+
+    return this.http.get<{ exists: boolean }>(
+      `${this.baseUrl}/api/auth/check-username?username=${encodeURIComponent(username)}`
+    );
+  }
+
+  // ✅ Check if email is taken (no auth needed)
+  checkEmail(email: string): Observable<{ exists: boolean }> {
+    if (!this.http) throw new Error('HttpClient not available');
+
+    return this.http.get<{ exists: boolean }>(
+      `${this.baseUrl}/api/auth/check-email?email=${encodeURIComponent(email)}`
+    );
+  }
 }
