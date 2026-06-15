@@ -99,13 +99,13 @@ $radius-sm:        10px;
   min-height: 480px;
   border-radius: $radius-lg;
   overflow: hidden;
-  @include glass(28px);  // ✅ increased blur
+  @include glass(28px);  // increased blur
   box-shadow:
-    0 25px 60px rgba(0, 0, 0, 0.25),      // ✅ stronger shadow
+    0 25px 60px rgba(0, 0, 0, 0.25),      // stronger shadow
     0 0 80px rgba($accent-cyan, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
   position: relative;
-  z-index: 2;  // ✅ above video
+  z-index: 2;  // above video
   transition: transform 0.5s ease, box-shadow 0.5s ease;
 
   &:hover {

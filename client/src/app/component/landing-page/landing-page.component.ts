@@ -32,7 +32,7 @@ export class LandingPageComponent implements AfterViewInit {
     }
   }
 
-  // ✅ Smooth scroll to section
+  // Smooth scroll to section
   scrollTo(sectionId: string): void {
     const el = document.getElementById(sectionId);
     if (el) {
